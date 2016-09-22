@@ -1,0 +1,14 @@
+Prefix(owl:=w3.org/2002/07/owl#>)
+Prefix(rdf:=w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(xml:=w3.org/XML/1998/namespace>)
+Prefix(xsd:=w3.org/2001/XMLSchema#>)
+Prefix(rdfs:=w3.org/2000/01/rdf-schema#>)
+
+
+Ontology(semanticweb.org/boehme/ontologies/2016/6/untitled-ontology-6>
+Annotation(rdfs:label "TestLabel")
+
+Declaration(Class(semanticweb.org/boehme/ontologies/2016/6/untitled-ontology-6#NatType1>))
+Declaration(Class(semanticweb.org/boehme/ontologies/2016/6/untitled-ontology-6#NatType2>))
+DisjointClasses(semanticweb.org/boehme/ontologies/2016/6/untitled-ontology-6#NatType1> semanticweb.org/boehme/ontologies/2016/6/untitled-ontology-6#NatType2>)
+)
