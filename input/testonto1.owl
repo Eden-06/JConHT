@@ -1,0 +1,43 @@
+Prefix: owl: <http://www.w3.org/2002/07/owl#>
+Prefix: rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+Prefix: xml: <http://www.w3.org/XML/1998/namespace>
+Prefix: xsd: <http://www.w3.org/2001/XMLSchema#>
+Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+Prefix: rosi: <http://www.rosi-project.org/ontologies#>
+
+Ontology: <http://www.rosi-project.org/ontologies/2016/06/testonto1>
+
+AnnotationProperty: rdfs:label
+AnnotationProperty: rdfs:comment
+Datatype: rdf:PlainLiteral
+
+ObjectProperty: rosi:plays
+    Domain: rosi:NT
+    Range: rosi:RT
+    
+Class: rosi:RT1 SubClassOf: rosi:RT
+Class: rosi:RT2 SubClassOf: rosi:RT
+Class: rosi:RT3 SubClassOf: rosi:RT
+Class: rosi:RT4 SubClassOf: rosi:RT
+Class: rosi:RT  DisjointUnionOf: rosi:RT1, rosi:RT2, rosi:RT3, rosi:RT4
+                DisjointWith: rosi:NT, rosi:CT
+               
+Class: rosi:NT1 SubClassOf: rosi:NT, rosi:plays only (rosi:RT1 or rosi:RT2)
+                Annotations: rdfs:comment "test"   
+Class: rosi:NT2 SubClassOf: rosi:NT
+Class: rosi:NT3 SubClassOf: rosi:NT
+Class: rosi:NT4 SubClassOf: rosi:NT
+Class: rosi:NT  DisjointUnionOf: rosi:NT1, rosi:NT2, rosi:NT3, rosi:NT4
+                DisjointWith:  rosi:RT, rosi:CT
+
+
+Class: rosi:CT1 SubClassOf: Annotations: rdfs:label rosi:RT1 rosi:CT
+Class: rosi:CT2 SubClassOf: rosi:CT    
+Class: rosi:CT3 SubClassOf: rosi:CT
+Class: rosi:CT4 SubClassOf: rosi:CT 
+Class: rosi:CT  DisjointUnionOf: rosi:CT1, rosi:CT2, rosi:CT3, rosi:CT4
+                DisjointWith: rosi:NT, rosi:RT
+
+    
+Class: rosi:RT1Player EquivalentTo: rosi:plays some rosi:RT1
+Class: rosi:NT1Played EquivalentTo: rosi:plays only (rosi:RT1 or rosi:RT2)

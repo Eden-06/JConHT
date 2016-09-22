@@ -1,0 +1,65 @@
+Prefix: owl: <http://www.w3.org/2002/07/owl#>
+Prefix: rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+Prefix: xml: <http://www.w3.org/XML/1998/namespace>
+Prefix: xsd: <http://www.w3.org/2001/XMLSchema#>
+Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+
+
+Ontology: <http://www.rosi-project.org/ontologies/2016/9/hermit-testonto-5>
+
+
+AnnotationProperty: rdfs:isDefinedBy
+
+    
+Class: <rosi:meta_C>
+
+    SubClassOf: 
+        <rosi:meta_A1> or <rosi:meta_A3>
+    
+    
+Class: owl:Thing
+
+    
+Class: <rosi:obj_A>
+
+    SubClassOf: 
+        
+            Annotations: rdfs:isDefinedBy <rosi:meta_A1>
+        owl:Nothing
+    
+    
+Class: owl:Nothing
+
+    
+Class: <rosi:obj_B>
+
+    
+Class: <rosi:meta_A2>
+
+    
+Class: <rosi:meta_A1>
+
+    
+Class: <rosi:meta_A3>
+
+    
+Individual: <rosi:meta_c>
+
+    Types: 
+        <rosi:meta_C>,
+        <rosi:meta_A2>
+    
+    
+Individual: <rosi:obj_a>
+
+    Types: 
+        owl:Thing,
+        
+            Annotations: rdfs:isDefinedBy <rosi:meta_A3>
+        <rosi:obj_B>,
+        
+            Annotations: rdfs:isDefinedBy <rosi:meta_A2>
+        <rosi:obj_A>
+    
+    

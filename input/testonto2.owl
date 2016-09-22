@@ -1,0 +1,30 @@
+Prefix: owl: w3.org/2002/07/owl#>
+Prefix: rdf: w3.org/1999/02/22-rdf-syntax-ns#>
+Prefix: xml: w3.org/XML/1998/namespace>
+Prefix: xsd: w3.org/2001/XMLSchema#>
+Prefix: rdfs: w3.org/2000/01/rdf-schema#>
+Prefix: rosi: rosi-project.org/ontologies#>
+
+
+
+Ontology: rosi-project.org/ontologies/2016/6/testonto2>
+
+
+Class: rosi:D
+
+    
+Class: rosi:B
+
+    SubClassOf: 
+        rosi:C or rosi:D
+    
+    
+Class: rosi:C
+
+    
+Class: rosi:A
+
+    SubClassOf: 
+        rosi:B
+    
+    
