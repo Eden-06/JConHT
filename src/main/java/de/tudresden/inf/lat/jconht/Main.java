@@ -18,11 +18,12 @@ public class Main {
         IRI iri1 = IRI.create("file://" + inputDir + "/" + "hermit-testonto-1.owl");
         IRI iri2 = IRI.create("file://" + inputDir + "/" + "pizza.owl");
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+
         try {
             OWLOntology onto = manager.loadOntology(iri2);
-        } catch (OWLOntologyCreationException ex) {}
-
-
+        } catch (OWLOntologyCreationException e) {
+            e.printStackTrace();
+        }
 
         System.out.println(inputDir);
     }
