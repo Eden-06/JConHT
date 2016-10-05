@@ -29,6 +29,6 @@ public class ContextTableau extends Tableau {
                 configuration.useDisjunctionLearning,
                 tableau.getPermanentDLOntology(),
                 tableau.getAdditionalDLOntology(),
-                configuration.parameters);
+                tableau.getParameters());
     }
 }
