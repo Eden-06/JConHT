@@ -21,11 +21,13 @@ public class Main {
         String inputDir = new File("input").getAbsolutePath();
         IRI iri1 = IRI.create("file://" + inputDir + "/" + "hermit-testonto-1.owl");
         IRI iri2 = IRI.create("file://" + inputDir + "/" + "pizza.owl");
+        IRI iri3 = IRI.create("file://" + inputDir + "/" + "testonto1.owl");
+        IRI iri4 = IRI.create("file://" + inputDir + "/" + "hermit-testonto-2.owl");
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 
         try {
 
-            OWLOntology onto = manager.loadOntology(iri1);
+            OWLOntology onto = manager.loadOntology(iri4);
             ContextReasoner reasoner = new ContextReasoner(new Configuration(), onto);
             Tableau tableau = reasoner.getTableau();
             boolean result = tableau.isSatisfiable(true, true, null, null, null, null, null, ReasoningTaskDescription.isABoxSatisfiable());
