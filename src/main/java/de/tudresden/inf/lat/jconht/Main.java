@@ -19,15 +19,34 @@ public class Main {
         System.out.println("Welcome to JConHT!");
 
         String inputDir = new File("input").getAbsolutePath();
-        IRI iri1 = IRI.create("file://" + inputDir + "/" + "hermit-testonto-1.owl");
-        IRI iri2 = IRI.create("file://" + inputDir + "/" + "pizza.owl");
-        IRI iri3 = IRI.create("file://" + inputDir + "/" + "testonto1.owl");
-        IRI iri4 = IRI.create("file://" + inputDir + "/" + "hermit-testonto-2.owl");
+
+
+        IRI iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-2.owl");
+        if (args.length == 0) {
+            // default ontology is loaded.
+        } else {
+            switch (args[0]) {
+                case "1":
+                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-2.owl");
+                    break;
+                case "2":
+                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-1.owl");
+                    break;
+                case "3":
+                    iri = IRI.create("file://" + inputDir + "/" + "pizza.owl");
+                    break;
+                case "4":
+                    iri = IRI.create("file://" + inputDir + "/" + "testonto1.owl");
+                    break;
+            }
+        }
+
+
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 
         try {
 
-            OWLOntology onto = manager.loadOntology(iri4);
+            OWLOntology onto = manager.loadOntology(iri);
             ContextReasoner reasoner = new ContextReasoner(new Configuration(), onto);
             Tableau tableau = reasoner.getTableau();
             boolean result = tableau.isSatisfiable(true, true, null, null, null, null, null, ReasoningTaskDescription.isABoxSatisfiable());
