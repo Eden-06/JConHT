@@ -38,6 +38,9 @@ public class Main {
                 case "4":
                     iri = IRI.create("file://" + inputDir + "/" + "testonto1.owl");
                     break;
+                case "5":
+                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-2-backtrack.owl");
+                    break;
             }
         }
 
@@ -47,7 +50,10 @@ public class Main {
         try {
 
             OWLOntology onto = manager.loadOntology(iri);
-            ContextReasoner reasoner = new ContextReasoner(new Configuration(), onto);
+            Configuration confWithouTableauMonitor = new Configuration();
+//            Debugger debugger = new Debugger(Prefixes.STANDARD_PREFIXES,true);
+//            confWithouTableauMonitor.monitor = debugger;
+            ContextReasoner reasoner = new ContextReasoner(confWithouTableauMonitor, onto);
             Tableau tableau = reasoner.getTableau();
             boolean result = tableau.isSatisfiable(true, true, null, null, null, null, null, ReasoningTaskDescription.isABoxSatisfiable());
 
