@@ -50,10 +50,10 @@ public class Main {
         try {
 
             OWLOntology onto = manager.loadOntology(iri);
-            Configuration confWithouTableauMonitor = new Configuration();
+            Configuration confWithoutTableauMonitor = new Configuration();
 //            Debugger debugger = new Debugger(Prefixes.STANDARD_PREFIXES,true);
-//            confWithouTableauMonitor.monitor = debugger;
-            ContextReasoner reasoner = new ContextReasoner(confWithouTableauMonitor, onto);
+//            confWithoutTableauMonitor.monitor = debugger;
+            ContextReasoner reasoner = new ContextReasoner(confWithoutTableauMonitor, onto);
             Tableau tableau = reasoner.getTableau();
             boolean result = tableau.isSatisfiable(true, true, null, null, null, null, null, ReasoningTaskDescription.isABoxSatisfiable());
 
