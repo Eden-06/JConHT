@@ -22,23 +22,33 @@ public class Main {
 
 
         IRI iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-2.owl");
-        if (args.length == 0) {
-            // default ontology is loaded.
-        } else {
+        if (args.length != 0) {
             switch (args[0]) {
                 case "1":
-                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-2.owl");
-                    break;
-                case "2":
                     iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-1.owl");
                     break;
+                case "2":
+                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-2.owl");
+                    break;
                 case "3":
-                    iri = IRI.create("file://" + inputDir + "/" + "pizza.owl");
+                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-3.owl");
                     break;
                 case "4":
-                    iri = IRI.create("file://" + inputDir + "/" + "testonto1.owl");
+                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-4.owl");
                     break;
                 case "5":
+                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-5.owl");
+                    break;
+                case "6":
+                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-6.owl");
+                    break;
+                case "pizza":
+                    iri = IRI.create("file://" + inputDir + "/" + "pizza.owl");
+                    break;
+                case "rosi1":
+                    iri = IRI.create("file://" + inputDir + "/" + "testonto1.owl");
+                    break;
+                case "2backtrack":
                     iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-2-backtrack.owl");
                     break;
             }
