@@ -1,0 +1,82 @@
+Prefix: dc: <http://purl.org/dc/elements/1.1/>
+Prefix: owl: <http://www.w3.org/2002/07/owl#>
+Prefix: rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+Prefix: xml: <http://www.w3.org/XML/1998/namespace>
+Prefix: xsd: <http://www.w3.org/2001/XMLSchema#>
+Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+
+
+Ontology: <http://www.rosi-project.org/ontologies/2016/9/hermit-testonto-3>
+
+
+ObjectProperty: <rosi:R>
+
+    
+Class: <rosi:B>
+
+    SubClassOf: 
+        <rosi:B1> or <rosi:B2>
+    
+    
+Class: <rosi:B12>
+
+    
+Class: <rosi:A12>
+
+    
+Class: <rosi:B11>
+
+    
+Class: <rosi:B22>
+
+    
+Class: <rosi:A11>
+
+    
+Class: <rosi:A22>
+
+    
+Class: <rosi:B21>
+
+    
+Class: <rosi:A>
+
+    SubClassOf: 
+        <rosi:A1> or <rosi:A2>
+    
+    
+Class: <rosi:A21>
+
+    
+Class: <rosi:A1>
+
+    SubClassOf: 
+        <rosi:A11> or <rosi:A12>
+    
+    
+Class: <rosi:B2>
+
+    SubClassOf: 
+        <rosi:B21> or <rosi:B22>
+    
+    
+Class: <rosi:A2>
+
+    SubClassOf: 
+        <rosi:A21> or <rosi:A22>
+    
+    
+Class: <rosi:B1>
+
+    SubClassOf: 
+        <rosi:B11> or <rosi:B12>
+    
+    
+Individual: <rosi:a>
+
+    Types: 
+        <rosi:A>,
+        <rosi:B>
+    
+    
