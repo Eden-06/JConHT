@@ -1,6 +1,7 @@
 package de.tudresden.inf.lat.jconht.tableau;
 
 import org.semanticweb.HermiT.Configuration;
+import org.semanticweb.HermiT.tableau.DependencySet;
 import org.semanticweb.HermiT.tableau.ExtensionTable;
 import org.semanticweb.HermiT.tableau.Node;
 import org.semanticweb.HermiT.tableau.Tableau;
@@ -40,16 +41,25 @@ public class ContextTableau extends Tableau {
         if (super.runCalculus()) {
 
             // Possibly a model is found.
+            int i = 0;
+            ExtensionTable extensionTable = getExtensionManager().getBinaryExtensionTable();
             for (Node node = getFirstTableauNode(); node != null; node = node.getNextTableauNode()) {
 
-                ExtensionTable extensionTable = getExtensionManager().getBinaryExtensionTable();
                 Object o;
-                for (int i = 0; (o = extensionTable.getTupleObject(i, 0)) != null; ++i) {
-                    System.out.println(node.getNodeID() + " " + o);
+                for (i = 0; (o = extensionTable.getTupleObject(i, 0)) != null; ++i) {
+                    if (extensionTable.getTupleObject(i, 1).equals(node)) {
+                        System.out.println(node.getNodeID() + " " + o);
+                    }
                 }
+                System.out.println();
             }
+            System.out.println();
 
-            return true;
+            DependencySet dependencySet = (DependencySet) extensionTable.getTupleObject(i - 1, 2);
+            System.out.println(dependencySet);
+            getExtensionManager().setClash(dependencySet);
+
+            return runCalculus();
 
         } else {
 
