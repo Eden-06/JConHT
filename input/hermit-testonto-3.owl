@@ -21,18 +21,30 @@ Class: <rosi:B>
     
 Class: <rosi:B12>
 
+    DisjointWith: 
+        <rosi:A11>
+    
     
 Class: <rosi:A12>
 
+    DisjointWith: 
+        <rosi:B11>
+    
     
 Class: <rosi:B11>
 
+    DisjointWith: 
+        <rosi:A11>, <rosi:A12>
+    
     
 Class: <rosi:B22>
 
     
 Class: <rosi:A11>
 
+    DisjointWith: 
+        <rosi:B11>, <rosi:B12>
+    
     
 Class: <rosi:A22>
 
