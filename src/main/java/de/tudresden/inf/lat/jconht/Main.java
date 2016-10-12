@@ -25,22 +25,12 @@ public class Main {
         if (args.length != 0) {
             switch (args[0]) {
                 case "1":
-                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-1.owl");
-                    break;
                 case "2":
-                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-2.owl");
-                    break;
                 case "3":
-                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-3.owl");
-                    break;
                 case "4":
-                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-4.owl");
-                    break;
                 case "5":
-                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-5.owl");
-                    break;
                 case "6":
-                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-6.owl");
+                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-" + args[0] +".owl");
                     break;
                 case "pizza":
                     iri = IRI.create("file://" + inputDir + "/" + "pizza.owl");
