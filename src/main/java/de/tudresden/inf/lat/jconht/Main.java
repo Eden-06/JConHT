@@ -1,5 +1,6 @@
 package de.tudresden.inf.lat.jconht;
 
+import de.tudresden.inf.lat.jconht.model.ContextOntology;
 import de.tudresden.inf.lat.jconht.tableau.ContextReasoner;
 import org.semanticweb.HermiT.Configuration;
 import org.semanticweb.HermiT.tableau.ReasoningTaskDescription;
@@ -50,6 +51,12 @@ public class Main {
         try {
 
             OWLOntology onto = manager.loadOntology(iri);
+
+
+            ContextOntology contextOntology = new ContextOntology(onto);
+            System.out.println(contextOntology);
+
+
             Configuration confWithoutTableauMonitor = new Configuration();
 //            Debugger debugger = new Debugger(Prefixes.STANDARD_PREFIXES,true);
 //            confWithoutTableauMonitor.monitor = debugger;
