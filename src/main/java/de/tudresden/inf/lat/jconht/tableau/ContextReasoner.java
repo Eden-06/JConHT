@@ -1,8 +1,8 @@
 package de.tudresden.inf.lat.jconht.tableau;
 
+import de.tudresden.inf.lat.jconht.model.ContextOntology;
 import org.semanticweb.HermiT.Configuration;
 import org.semanticweb.HermiT.Reasoner;
-import org.semanticweb.owlapi.model.OWLOntology;
 
 /**
  * This class describes a reasoner that can deal with contexts.
@@ -24,8 +24,10 @@ public class ContextReasoner extends Reasoner {
      * @param configuration The configuration used to create the reasoner.
      * @param rootOntology  The root ontology for the reasoner.
      */
-    public ContextReasoner(Configuration configuration, OWLOntology rootOntology) {
-        super(configuration, rootOntology);
+    public ContextReasoner(Configuration configuration, ContextOntology rootOntology) {
+        super(configuration, rootOntology.getMetaOntology());
+
+
 
         this.m_tableau = new ContextTableau(this.getTableau(), configuration);
     }

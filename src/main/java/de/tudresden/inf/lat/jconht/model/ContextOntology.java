@@ -62,6 +62,10 @@ public class ContextOntology {
                 );
     }
 
+    public OWLOntology getMetaOntology() {
+        return metaOntology;
+    }
+
     @Override
     public String toString() {
 
