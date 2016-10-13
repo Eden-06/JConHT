@@ -1,0 +1,36 @@
+Prefix: owl: <http://www.w3.org/2002/07/owl#>
+Prefix: rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+Prefix: xml: <http://www.w3.org/XML/1998/namespace>
+Prefix: xsd: <http://www.w3.org/2001/XMLSchema#>
+Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+
+
+Ontology: <http://www.rosi-project.org/ontologies/2016/9/hermit-testonto-4>
+
+
+Class: <rosi:A3>
+
+    
+Class: <rosi:A4>
+
+    
+Class: <rosi:A1>
+
+    
+Class: <rosi:A>
+
+    SubClassOf: 
+        <rosi:A1> or <rosi:A2> or <rosi:A3> or <rosi:A4>
+    
+    
+Class: <rosi:A2>
+
+    
+DisjointClasses: 
+    <rosi:A>, <rosi:A1>, <rosi:A2>, <rosi:A3>
+
+Individual: <rosi:a>
+
+    Types:
+        <rosi:A>
