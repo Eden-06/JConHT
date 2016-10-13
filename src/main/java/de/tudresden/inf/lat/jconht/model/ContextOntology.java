@@ -7,6 +7,7 @@ import uk.ac.manchester.cs.owl.owlapi.OWLClassImpl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -43,6 +44,13 @@ public class ContextOntology {
                             .collect(Collectors.toSet())
             );
 
+            IRI metaIRI = IRI.create(rootOntology.getOntologyID().getOntologyIRI().get() + "_meta");
+            OWLOntologyID metaOntologyID = new OWLOntologyID(Optional.of(metaIRI),Optional.empty());
+            // Create the change that will set our version IRI
+            SetOntologyID setOntologyID = new SetOntologyID(metaOntology, metaOntologyID);
+            // Apply the change
+            ontologyManager.applyChange(setOntologyID);
+
         } catch (OWLOntologyCreationException e) {
 
             e.printStackTrace();
@@ -72,6 +80,9 @@ public class ContextOntology {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("Meta Ontology:\n");
+        stringBuilder.append("Meta Ontology IRI: ");
+        metaOntology.getOntologyID().getOntologyIRI()
+                .ifPresent(iri -> stringBuilder.append(iri + "\n"));
         metaOntology.axioms()
                 .forEach(axiom -> stringBuilder.append(axiom + "\n"));
         stringBuilder.append("\n");
