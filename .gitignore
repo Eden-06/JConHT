@@ -3,3 +3,4 @@ JConHT.iml
 target/*
 input/catalog-v001.xml
 src/main/java/de/tudresden/inf/lat/jconht/playground/
+.idea/codeStyleSettings.xml
