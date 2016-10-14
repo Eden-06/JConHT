@@ -5,10 +5,7 @@ import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import uk.ac.manchester.cs.owl.owlapi.OWLAnnotationPropertyImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLClassImpl;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -22,6 +19,7 @@ public class ContextOntology {
     private final OWLOntologyManager ontologyManager;
     private OWLOntology metaOntology;
     private Map<OWLClassExpression, OWLAxiom> objectAxiomsMap;
+    private Set<OWLClass> outerAbstractedMetaConcepts;
 
     /**
      * This is the standard constructor.
@@ -71,6 +69,11 @@ public class ContextOntology {
                         )
                 );
 
+        // Retrieve all meta concepts that identify object axioms
+        outerAbstractedMetaConcepts = new HashSet<>();
+        objectAxiomsMap.keySet().forEach(
+                owlClass -> outerAbstractedMetaConcepts.add(owlClass.asOWLClass())
+        );
 
         // Create negated axioms for negated keys and add them to object axioms map
         Map<OWLClassExpression, OWLAxiom> negatedObjectAxiomsMap = new HashMap<>();
@@ -134,10 +137,13 @@ public class ContextOntology {
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append("Meta Ontology:\n");
         stringBuilder.append("Meta Ontology IRI: ");
         metaOntology.getOntologyID().getOntologyIRI()
                 .ifPresent(iri -> stringBuilder.append(iri).append("\n"));
+        stringBuilder.append("Meta concpts that identify object axioms:\n");
+        outerAbstractedMetaConcepts.forEach(owlClass -> stringBuilder.append(owlClass).append(", "));
+        stringBuilder.append("\n");
+        stringBuilder.append("Meta Ontology:\n");
         metaOntology.axioms()
                 .forEach(axiom -> stringBuilder.append(axiom).append("\n"));
         stringBuilder.append("\n");
