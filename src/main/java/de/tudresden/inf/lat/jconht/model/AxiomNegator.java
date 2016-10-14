@@ -35,21 +35,12 @@ public class AxiomNegator {
         // TODO actually return the negated axiom for all AxiomTypes
         // TODO lieber AxiomNegator als Interface mit einzelnen Subklassen für alle AxiomTzpes oder hier mit switch??
         switch (owlAxiom.getAxiomType().getIndex()) {
-//          case 0: // Declaration
-//              System.out.println("AxiomNegator: Declaration found");
-//              break;
-//          case 1: // Declaration
-//              System.out.println("AxiomNegator: Declaration found");
-//              break;
-//          case 2: // Declaration
-//              System.out.println("AxiomNegator: Declaration found");
-//              break;
-//          case 3: // Declaration
-//              System.out.println("AxiomNegator: Declaration found");
-//              break;
-//          case 4: // Declaration
-//              System.out.println("AxiomNegator: Declaration found");
-//              break
+//        case 0: // Declaration
+//        case 1: // Equivalent Classes
+            // TODO bei einer negiert GCI muss ein fresh individual eingeführt werden. Wo bekommen wir das her?
+//        case 2: // Subclass Of
+//        case 3: // Disjoint Classes
+//        case 4: // Disjoint Union
             // TODO Warum geht das hier nicht, wenn man oben .getIndex() weglässt
             // case AxiomType.CLASS_ASSERTION: // Class Assertion
             case 5: // Class Assertion
@@ -57,6 +48,10 @@ public class AxiomNegator {
                 return new OWLClassAssertionAxiomImpl(axiomAsClassAssertion.getIndividual(),
                         axiomAsClassAssertion.getClassExpression().getObjectComplementOf(),
                         Collections.emptySet());
+//          case 6: // Same Individual
+//          case 7: // Different Individuals
+//          case 8: // Object Property Assertion
+//          case 9: // Negative Object Property Assertion
             default:
                 // TODO das muss hier noch mal ordentlich gemacht werden
                 try {
