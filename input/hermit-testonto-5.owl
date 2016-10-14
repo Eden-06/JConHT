@@ -48,7 +48,7 @@ Individual: <rosi:meta_c>
 
     Types: 
         <rosi:meta_C>,
-        owl:Thing
+        <rosi:meta_A2>
     
     
 Individual: <rosi:obj_a>
