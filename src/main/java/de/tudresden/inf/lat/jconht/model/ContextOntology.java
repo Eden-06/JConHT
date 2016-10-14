@@ -21,7 +21,7 @@ public class ContextOntology {
 
     private final OWLOntologyManager ontologyManager;
     private OWLOntology metaOntology;
-    private Map<OWLClass, OWLAxiom> objectAxiomsMap;
+    private Map<OWLClassExpression, OWLAxiom> objectAxiomsMap;
 
     /**
      * This is the standard constructor.
@@ -69,7 +69,18 @@ public class ContextOntology {
                                         owlAxiom.getAxiomWithoutAnnotations())
                         )
                 );
+
+
+        // Create negated axioms for negated keys and add them to object axioms map
+        Map<OWLClassExpression, OWLAxiom> negatedObjectAxiomsMap = new HashMap<>();
+        objectAxiomsMap.forEach((metaClass,axiom) -> {
+            AxiomNegator axiomNegator = new AxiomNegator(axiom);
+            negatedObjectAxiomsMap.put(metaClass.getObjectComplementOf(), axiomNegator.getNegation());
+        });
+
+        objectAxiomsMap.putAll(negatedObjectAxiomsMap);
     }
+    
 
     /**
      * This method returns the meta ontology.
