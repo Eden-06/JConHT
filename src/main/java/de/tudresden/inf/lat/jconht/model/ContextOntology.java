@@ -109,7 +109,6 @@ public class ContextOntology {
             e.printStackTrace();
         }
 
-        // The object ontology should not be null.
         return objectOntology;
     }
 

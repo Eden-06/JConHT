@@ -25,11 +25,10 @@ public class ContextReasoner extends Reasoner {
      * @param rootOntology  The root ontology for the reasoner.
      */
     public ContextReasoner(Configuration configuration, ContextOntology rootOntology) {
+
         super(configuration, rootOntology.getMetaOntology());
 
-
-
-        this.m_tableau = new ContextTableau(this.getTableau(), configuration);
+        m_tableau = new ContextTableau(this.getTableau(), configuration);
     }
 
 }

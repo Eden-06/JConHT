@@ -31,7 +31,7 @@ public class Main {
                 case "4":
                 case "5":
                 case "6":
-                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-" + args[0] +".owl");
+                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-" + args[0] + ".owl");
                     break;
                 case "pizza":
                     iri = IRI.create("file://" + inputDir + "/" + "pizza.owl");
@@ -55,7 +55,6 @@ public class Main {
 
             ContextOntology contextOntology = new ContextOntology(onto);
             System.out.println(contextOntology);
-
 
             Configuration confWithoutTableauMonitor = new Configuration();
 //            Debugger debugger = new Debugger(Prefixes.STANDARD_PREFIXES,true);
