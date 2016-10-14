@@ -45,7 +45,7 @@ public class ContextOntology {
                             .collect(Collectors.toSet())
             );
 
-            IRI metaIRI = IRI.create(rootOntology.getOntologyID().getOntologyIRI().get() + "_meta");
+            IRI metaIRI = IRI.create(rootOntology.getOntologyID().getOntologyIRI().orElse(IRI.create("")) + "_meta");
             OWLOntologyID metaOntologyID = new OWLOntologyID(Optional.of(metaIRI), Optional.empty());
             // Create the change that will set our version IRI
             SetOntologyID setOntologyID = new SetOntologyID(metaOntology, metaOntologyID);
@@ -121,13 +121,14 @@ public class ContextOntology {
         stringBuilder.append("Meta Ontology:\n");
         stringBuilder.append("Meta Ontology IRI: ");
         metaOntology.getOntologyID().getOntologyIRI()
-                .ifPresent(iri -> stringBuilder.append(iri + "\n"));
+                .ifPresent(iri -> stringBuilder.append(iri).append("\n"));
         metaOntology.axioms()
-                .forEach(axiom -> stringBuilder.append(axiom + "\n"));
+                .forEach(axiom -> stringBuilder.append(axiom).append("\n"));
         stringBuilder.append("\n");
 
         stringBuilder.append("Hash map:\n");
-        objectAxiomsMap.forEach((key, value) -> stringBuilder.append(key + " -> " + value + "\n"));
+        objectAxiomsMap.forEach(
+                (key, value) -> stringBuilder.append(key).append(" -> ").append(value).append("\n"));
         stringBuilder.append("\n");
 
         return stringBuilder.toString();
