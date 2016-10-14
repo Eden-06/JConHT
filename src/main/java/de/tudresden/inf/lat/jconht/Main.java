@@ -3,6 +3,7 @@ package de.tudresden.inf.lat.jconht;
 import de.tudresden.inf.lat.jconht.model.ContextOntology;
 import de.tudresden.inf.lat.jconht.tableau.ContextReasoner;
 import org.semanticweb.HermiT.Configuration;
+import org.semanticweb.HermiT.tableau.ReasoningTaskDescription;
 import org.semanticweb.HermiT.tableau.Tableau;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
@@ -69,3 +70,4 @@ public class Main {
         }
     }
 }
+
