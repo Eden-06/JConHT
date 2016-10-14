@@ -45,6 +45,7 @@ public class ContextOntology {
                             .collect(Collectors.toSet())
             );
 
+            // Create IRI for meta ontology
             IRI metaIRI = IRI.create(rootOntology.getOntologyID().getOntologyIRI().orElse(IRI.create("")) + "_meta");
             OWLOntologyID metaOntologyID = new OWLOntologyID(Optional.of(metaIRI), Optional.empty());
             // Create the change that will set our version IRI
@@ -108,10 +109,15 @@ public class ContextOntology {
 
         try {
 
+            //create the object ontology
             objectOntology = ontologyManager.createOntology(
+                    //convert objectAxiomsMap to a stream
                     objectAxiomsMap.entrySet().stream()
+                            // filter only these entries where the key is in metaClasses
                             .filter(entry -> metaClasses.contains(entry.getKey()))
+                            // retrieve the OWLAxiom from the entry
                             .map(Map.Entry::getValue)
+                            // collect all axioms in a set
                             .collect(Collectors.toSet())
             );
 
