@@ -55,7 +55,7 @@ public class AxiomNegator {
             default:
                 // TODO das muss hier noch mal ordentlich gemacht werden
                 try {
-                    throw new Exception("Unknown axiom type! The input axiom is returned.");
+                    throw new Exception("Unknown axiom type! No negated  axiom is returned.");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
