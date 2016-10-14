@@ -26,7 +26,7 @@ public class ContextOntology {
      * This is the standard constructor.
      *
      * @param rootOntology The correctly annotated root ontology.
-     *                     TODO: Specify what this actually means.
+     *                     @TODO: Specify what this actually means.
      */
     public ContextOntology(OWLOntology rootOntology) {
 
@@ -45,7 +45,7 @@ public class ContextOntology {
             );
 
             IRI metaIRI = IRI.create(rootOntology.getOntologyID().getOntologyIRI().get() + "_meta");
-            OWLOntologyID metaOntologyID = new OWLOntologyID(Optional.of(metaIRI),Optional.empty());
+            OWLOntologyID metaOntologyID = new OWLOntologyID(Optional.of(metaIRI), Optional.empty());
             // Create the change that will set our version IRI
             SetOntologyID setOntologyID = new SetOntologyID(metaOntology, metaOntologyID);
             // Apply the change
@@ -70,6 +70,15 @@ public class ContextOntology {
                 );
     }
 
+    /**
+     * This method returns the meta ontology.
+     * <p>
+     * @TODO: Probably this class could implement <code>OWLOntology</code> and
+     * could delegate all functionality to the meta ontology field.  This
+     * would make this method obsolete.
+     *
+     * @return The meta ontology.
+     */
     public OWLOntology getMetaOntology() {
         return metaOntology;
     }
