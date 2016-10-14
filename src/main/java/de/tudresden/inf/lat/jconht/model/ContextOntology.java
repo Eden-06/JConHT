@@ -8,6 +8,7 @@ import uk.ac.manchester.cs.owl.owlapi.OWLClassImpl;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -18,19 +19,19 @@ import java.util.stream.Collectors;
  */
 public class ContextOntology {
 
+    private final OWLOntologyManager ontologyManager;
     private OWLOntology metaOntology;
-
     private Map<OWLClass, OWLAxiom> objectAxiomsMap;
 
     /**
      * This is the standard constructor.
      *
      * @param rootOntology The correctly annotated root ontology.
-     *                     @TODO: Specify what this actually means.
+     * @TODO: Specify what this actually means.
      */
     public ContextOntology(OWLOntology rootOntology) {
 
-        OWLOntologyManager ontologyManager = rootOntology.getOWLOntologyManager();
+        ontologyManager = rootOntology.getOWLOntologyManager();
         IRI isDefinedBy = OWLRDFVocabulary.RDFS_IS_DEFINED_BY.getIRI();
 
         // Obtain meta ontology
@@ -73,14 +74,43 @@ public class ContextOntology {
     /**
      * This method returns the meta ontology.
      * <p>
+     *
+     * @return The meta ontology.
      * @TODO: Probably this class could implement <code>OWLOntology</code> and
      * could delegate all functionality to the meta ontology field.  This
      * would make this method obsolete.
-     *
-     * @return The meta ontology.
      */
     public OWLOntology getMetaOntology() {
+
         return metaOntology;
+    }
+
+    /**
+     * This method returns an object ontology associated to the given set of meta classes.
+     *
+     * @param metaClasses A set of meta classes.
+     * @return The associated object ontology.
+     */
+    public OWLOntology getObjectOntology(Set<OWLClass> metaClasses) {
+
+        OWLOntology objectOntology = null;
+
+        try {
+
+            objectOntology = ontologyManager.createOntology(
+                    objectAxiomsMap.entrySet().stream()
+                            .filter(entry -> metaClasses.contains(entry.getKey()))
+                            .map(Map.Entry::getValue)
+                            .collect(Collectors.toSet())
+            );
+
+        } catch (OWLOntologyCreationException e) {
+
+            e.printStackTrace();
+        }
+
+        // The object ontology should not be null.
+        return objectOntology;
     }
 
     @Override
