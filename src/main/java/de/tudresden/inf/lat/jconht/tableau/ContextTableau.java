@@ -5,6 +5,10 @@ import org.semanticweb.HermiT.tableau.DependencySet;
 import org.semanticweb.HermiT.tableau.ExtensionTable;
 import org.semanticweb.HermiT.tableau.Node;
 import org.semanticweb.HermiT.tableau.Tableau;
+import org.semanticweb.owlapi.model.IRI;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -66,5 +70,31 @@ public class ContextTableau extends Tableau {
             // The meta-ontology is inconsistent, giving up.
             return false;
         }
+    }
+
+    /**
+     * This method returns the set of IRIs associated to a given node.
+     *
+     * @param node A node.
+     * @return The set of associated IRIs.
+     */
+    private Set<IRI> getClassesOfNode(Node node) {
+
+        Set<IRI> associatedIRIs = new HashSet<>();
+
+        ExtensionTable extensionTable = getExtensionManager().getBinaryExtensionTable();
+
+//        Object o;
+//        for (int i = 0; (o = extensionTable.getTupleObject(i, 0)) != null; ++i) {
+//            if (extensionTable.getTupleObject(i, 1).equals(node)) {
+//                Object concept = extensionTable.getTupleObject(i, 0);
+//                if (concept instanceof AtomicConcept) {
+//                    associatedIRIs.add()
+//
+//                }
+//            }
+//        }
+
+        return associatedIRIs;
     }
 }
