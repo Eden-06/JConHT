@@ -3,6 +3,7 @@ package de.tudresden.inf.lat.jconht.model;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import uk.ac.manchester.cs.owl.owlapi.OWLAnnotationPropertyImpl;
+import uk.ac.manchester.cs.owl.owlapi.OWLClassExpressionImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLClassImpl;
 
 import java.util.*;
@@ -70,10 +71,9 @@ public class ContextOntology {
                 );
 
         // Retrieve all meta concepts that identify object axioms
-        outerAbstractedMetaConcepts = new HashSet<>();
-        objectAxiomsMap.keySet().forEach(
-                owlClass -> outerAbstractedMetaConcepts.add(owlClass.asOWLClass())
-        );
+        outerAbstractedMetaConcepts = objectAxiomsMap.keySet().stream()
+                .map(OWLClassExpression::asOWLClass)
+                .collect(Collectors.toSet());
 
         // Create negated axioms for negated keys and add them to object axioms map
         OWLDataFactory dataFactory = rootOntology.getOWLOntologyManager().getOWLDataFactory();
