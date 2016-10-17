@@ -76,9 +76,10 @@ public class ContextOntology {
         );
 
         // Create negated axioms for negated keys and add them to object axioms map
+        OWLDataFactory dataFactory = rootOntology.getOWLOntologyManager().getOWLDataFactory();
         Map<OWLClassExpression, OWLAxiom> negatedObjectAxiomsMap = new HashMap<>();
         objectAxiomsMap.forEach((metaClass,axiom) -> {
-            AxiomNegator axiomNegator = new AxiomNegator(axiom);
+            AxiomNegator axiomNegator = new AxiomNegator(axiom, dataFactory);
             negatedObjectAxiomsMap.put(metaClass.getObjectComplementOf(), axiomNegator.getNegation());
         });
 
