@@ -2,8 +2,6 @@ package de.tudresden.inf.lat.jconht.model;
 
 import org.semanticweb.owlapi.model.*;
 
-import java.util.stream.Collectors;
-
 /**
  * This class is used to generate the negation of a given OWLAxiom.
  *
@@ -52,17 +50,13 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
     @Override
     public OWLAxiom visit(OWLSameIndividualAxiom axiom) {
 
-        // ¬(s ≈ t) ⟹ (s ≉ t)
-        // TODO ist nur korrekt, wenn es nur zwei Individuals sind
-        return dataFactory.getOWLDifferentIndividualsAxiom(axiom.individuals().collect(Collectors.toSet()));
+        throw new UnhandledAxiomTypeException("Unknown axiom type in AxiomNegator: " + axiom.getAxiomType());
     }
 
     @Override
     public OWLAxiom visit(OWLDifferentIndividualsAxiom axiom) {
 
-        // ¬(s ≉ t) ⟹ (s ≈ t)
-        // TODO ist nur korrekt, wenn es nur zwei Individuals sind
-        return dataFactory.getOWLSameIndividualAxiom(axiom.individuals().collect(Collectors.toSet()));
+        throw new UnhandledAxiomTypeException("Unknown axiom type in AxiomNegator: " + axiom.getAxiomType());
     }
 
     @Override
@@ -78,4 +72,24 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
         return dataFactory.getOWLNegativeObjectPropertyAssertionAxiom(
                 axiom.getProperty(), axiom.getSubject(), axiom.getObject());
     }
+
+    @Override
+    public OWLAxiom visit(OWLObjectPropertyDomainAxiom axiom) {
+
+        throw new UnhandledAxiomTypeException("Unknown axiom type in AxiomNegator: " + axiom.getAxiomType());
+    }
+
+    @Override
+    public OWLAxiom visit(OWLObjectPropertyRangeAxiom axiom) {
+
+        throw new UnhandledAxiomTypeException("Unknown axiom type in AxiomNegator: " + axiom.getAxiomType());
+    }
+
+    @Override
+    public OWLAxiom visit(OWLDisjointUnionAxiom axiom) {
+
+        throw new UnhandledAxiomTypeException("Unknown axiom type in AxiomNegator: " + axiom.getAxiomType());
+    }
+
+
 }
