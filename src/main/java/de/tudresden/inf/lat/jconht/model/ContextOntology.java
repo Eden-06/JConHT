@@ -3,10 +3,12 @@ package de.tudresden.inf.lat.jconht.model;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import uk.ac.manchester.cs.owl.owlapi.OWLAnnotationPropertyImpl;
-import uk.ac.manchester.cs.owl.owlapi.OWLClassExpressionImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLClassImpl;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -77,11 +79,12 @@ public class ContextOntology {
 
         // Create negated axioms for negated keys and add them to object axioms map
         OWLDataFactory dataFactory = rootOntology.getOWLOntologyManager().getOWLDataFactory();
-        Map<OWLClassExpression, OWLAxiom> negatedObjectAxiomsMap = new HashMap<>();
-        objectAxiomsMap.forEach((metaClass, axiom) -> negatedObjectAxiomsMap.put(metaClass.getObjectComplementOf(),
-                axiom.accept(new AxiomNegator(dataFactory))));
-
-        objectAxiomsMap.putAll(negatedObjectAxiomsMap);
+        objectAxiomsMap.putAll(objectAxiomsMap.entrySet().stream()
+                .collect(Collectors.toMap(
+                        entry -> entry.getKey().getObjectComplementOf(),
+                        entry -> entry.getValue().accept(new AxiomNegator(dataFactory)))
+                )
+        );
     }
 
 
