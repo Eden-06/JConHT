@@ -3,7 +3,7 @@ package de.tudresden.inf.lat.jconht.model;
 import org.semanticweb.owlapi.model.*;
 
 /**
- * This class describes is used to generate the negation of a given OWLAxiom.
+ * This class is used to generate the negation of a given OWLAxiom.
  *
  * @author Stephan Böhme
  * @author Marcel Lippmann
@@ -26,7 +26,7 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
     public <T> OWLAxiom doDefault(T object) {
 
         // This should never happen!
-        throw new RuntimeException("Unknown axiom type in AxiomNegator: " + object.getClass());
+        throw new UnhandledAxiomTypeException("Unknown axiom type in AxiomNegator: " + object.getClass());
     }
 
     @Override
