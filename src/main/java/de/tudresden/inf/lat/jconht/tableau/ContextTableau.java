@@ -1,5 +1,6 @@
 package de.tudresden.inf.lat.jconht.tableau;
 
+import de.tudresden.inf.lat.jconht.model.ContextOntology;
 import org.semanticweb.HermiT.Configuration;
 import org.semanticweb.HermiT.model.AtomicConcept;
 import org.semanticweb.HermiT.model.AtomicNegationConcept;
@@ -10,7 +11,6 @@ import org.semanticweb.HermiT.tableau.Tableau;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
-import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +24,7 @@ import java.util.Set;
  */
 public class ContextTableau extends Tableau {
 
+    private ContextOntology contextOntology;
 
     /**
      * This is the standard constructor.
@@ -33,7 +34,7 @@ public class ContextTableau extends Tableau {
      * @param tableau       A given tableau instance.
      * @param configuration The configuration used for creating the given tableau instance.
      */
-    public ContextTableau(Tableau tableau, Configuration configuration) {
+    public ContextTableau(Tableau tableau, ContextOntology contextOntology, Configuration configuration) {
 
         super(tableau.getInterruptFlag(),
                 tableau.getTableauMonitor(),
@@ -42,6 +43,7 @@ public class ContextTableau extends Tableau {
                 tableau.getPermanentDLOntology(),
                 tableau.getAdditionalDLOntology(),
                 tableau.getParameters());
+        this.contextOntology = contextOntology;
     }
 
     @Override
@@ -57,6 +59,7 @@ public class ContextTableau extends Tableau {
 
                 classesOfNode = getClassesOfNode(node);
                 System.out.println("Classes of node " + node + ": " + classesOfNode);
+
 
                 Object o;
 
@@ -91,10 +94,7 @@ public class ContextTableau extends Tableau {
     private Set<OWLClassExpression> getClassesOfNode(Node node) {
 
         Set<OWLClassExpression> setOfClassExpressions = new HashSet<>();
-
-        // TODO get the already existing data factory
-        OWLDataFactory dataFactory = new OWLDataFactoryImpl();
-
+        OWLDataFactory dataFactory = contextOntology.getDataFactory();
         ExtensionTable extensionTable = getExtensionManager().getBinaryExtensionTable();
 
         Object o;

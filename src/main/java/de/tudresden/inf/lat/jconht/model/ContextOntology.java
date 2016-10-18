@@ -134,6 +134,14 @@ public class ContextOntology {
         return objectOntology;
     }
 
+
+    /**
+     * @return The OWL data factory of the ontology manager that was used to create the context
+     */
+    public OWLDataFactory getDataFactory() {
+        return ontologyManager.getOWLDataFactory();
+    }
+
     @Override
     public String toString() {
 
