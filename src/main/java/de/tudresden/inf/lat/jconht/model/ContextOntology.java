@@ -108,7 +108,7 @@ public class ContextOntology {
      * @param metaClasses A set of meta classes.
      * @return The associated object ontology.
      */
-    public OWLOntology getObjectOntology(Set<OWLClass> metaClasses) {
+    public OWLOntology getObjectOntology(Set<OWLClassExpression> metaClasses) {
 
         OWLOntology objectOntology = null;
 

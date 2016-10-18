@@ -2,6 +2,7 @@ package de.tudresden.inf.lat.jconht.tableau;
 
 import de.tudresden.inf.lat.jconht.model.ContextOntology;
 import org.semanticweb.HermiT.Configuration;
+import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.HermiT.model.AtomicConcept;
 import org.semanticweb.HermiT.model.AtomicNegationConcept;
 import org.semanticweb.HermiT.tableau.DependencySet;
@@ -11,6 +12,7 @@ import org.semanticweb.HermiT.tableau.Tableau;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLOntology;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -54,12 +56,9 @@ public class ContextTableau extends Tableau {
             // Possibly a model is found.
             int i = 0;
             Set<OWLClassExpression> classesOfNode;
+            OWLOntology objectOntology;
             ExtensionTable extensionTable = getExtensionManager().getBinaryExtensionTable();
             for (Node node = getFirstTableauNode(); node != null; node = node.getNextTableauNode()) {
-
-                classesOfNode = getClassesOfNode(node);
-                System.out.println("Classes of node " + node + ": " + classesOfNode);
-
 
                 Object o;
 
@@ -68,6 +67,16 @@ public class ContextTableau extends Tableau {
                         System.out.println(node.getNodeID() + " " + o + " " + extensionTable.getTupleObject(i, 2));
                     }
                 }
+
+                classesOfNode = getClassesOfNode(node);
+                System.out.println("Classes of node " + node + ": " + classesOfNode);
+                objectOntology = contextOntology.getObjectOntology(classesOfNode);
+                Reasoner objectReasoner = new Reasoner(new Configuration(),objectOntology);
+                System.out.println(objectReasoner.getDLOntology().getDLClauses());
+                System.out.println(objectReasoner.getDLOntology().getPositiveFacts());
+                System.out.println(objectReasoner.getDLOntology().getNegativeFacts());
+                System.out.println("object ontology is consistent: " + objectReasoner.isConsistent());
+
                 System.out.println();
             }
             System.out.println();
