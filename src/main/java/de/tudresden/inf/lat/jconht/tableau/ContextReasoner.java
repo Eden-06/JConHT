@@ -29,9 +29,9 @@ public class ContextReasoner extends Reasoner {
     public ContextReasoner(Configuration configuration, ContextOntology rootOntology) {
 
         super(configuration, rootOntology.getMetaOntology());
-        this.rootOntology = rootOntology;
 
-        m_tableau = new ContextTableau(this.getTableau(), rootOntology, configuration);
+        this.rootOntology = rootOntology;
+        this.m_tableau = new ContextTableau(getTableau(), rootOntology, configuration);
     }
 
 }

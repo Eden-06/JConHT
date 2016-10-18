@@ -28,7 +28,7 @@ public class ContextOntology {
      * This is the standard constructor.
      *
      * @param rootOntology The correctly annotated root ontology.
-     * @TODO: Specify what this actually means.
+     * TODO: Specify what this actually means.
      */
     public ContextOntology(OWLOntology rootOntology) {
 
@@ -90,12 +90,8 @@ public class ContextOntology {
 
     /**
      * This method returns the meta ontology.
-     * <p>
      *
      * @return The meta ontology.
-     * @TODO: Probably this class could implement <code>OWLOntology</code> and
-     * could delegate all functionality to the meta ontology field.  This
-     * would make this method obsolete.
      */
     public OWLOntology getMetaOntology() {
 
@@ -136,9 +132,10 @@ public class ContextOntology {
 
 
     /**
-     * @return The OWL data factory of the ontology manager that was used to create the context
+     * @return The OWL data factory of the ontology manager that was used to create the context.
      */
     public OWLDataFactory getDataFactory() {
+
         return ontologyManager.getOWLDataFactory();
     }
 

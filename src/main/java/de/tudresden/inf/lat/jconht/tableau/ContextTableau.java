@@ -71,7 +71,7 @@ public class ContextTableau extends Tableau {
                 classesOfNode = getClassesOfNode(node);
                 System.out.println("Classes of node " + node + ": " + classesOfNode);
                 objectOntology = contextOntology.getObjectOntology(classesOfNode);
-                Reasoner objectReasoner = new Reasoner(new Configuration(),objectOntology);
+                Reasoner objectReasoner = new Reasoner(new Configuration(), objectOntology);
                 System.out.println(objectReasoner.getDLOntology().getDLClauses());
                 System.out.println(objectReasoner.getDLOntology().getPositiveFacts());
                 System.out.println(objectReasoner.getDLOntology().getNegativeFacts());
@@ -98,7 +98,7 @@ public class ContextTableau extends Tableau {
      * This method returns the set of OWLClassExpressions associated to a given node.
      *
      * @param node A node.
-     * @return The set of associated OWLClassExpressionss.
+     * @return The set of associated OWLClassExpressions.
      */
     private Set<OWLClassExpression> getClassesOfNode(Node node) {
 
