@@ -78,7 +78,7 @@ public class ContextOntology {
                 .collect(Collectors.toSet());
 
         // Create negated axioms for negated keys and add them to object axioms map
-        OWLDataFactory dataFactory = rootOntology.getOWLOntologyManager().getOWLDataFactory();
+        OWLDataFactory dataFactory = ontologyManager.getOWLDataFactory();
         objectAxiomsMap.putAll(objectAxiomsMap.entrySet().stream()
                 .collect(Collectors.toMap(
                         entry -> entry.getKey().getObjectComplementOf(),
