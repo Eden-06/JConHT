@@ -180,7 +180,7 @@ public class ContextTableau extends Tableau {
             // The following code is necessary because of legacy HermiT code.
             this.concept = (Concept) extensionTable.getTupleObject(tupleIndex, 0);
             this.node = (Node) extensionTable.getTupleObject(tupleIndex, 1);
-            this.dependencySet = (DependencySet) extensionTable.getTupleObject(tupleIndex, 2);
+            this.dependencySet = extensionTable.getDependencySet(tupleIndex);
         }
 
         /**
