@@ -245,16 +245,16 @@ public class ContextTableau extends Tableau {
         }
 
         @Override
-        public BinaryTupleTableEntry next() {
-
-            update(tupleIndex + 1);
-            return this;
-        }
-
-        @Override
         public String toString() {
 
             return getNode() + "\t" + getClassExpression() + "\t" + getDependencySet();
+        }
+
+        @Override
+        public BinaryTupleTableEntry next() {
+
+            update(tupleIndex + 1);
+            return new BinaryTupleTableEntry(tupleIndex);
         }
     }
 
