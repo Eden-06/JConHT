@@ -9,28 +9,21 @@ Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 Ontology: <http://www.rosi-project.org/ontologies/2016/7/hermit-testonto-1>
 
 
-Class: <rosi:C>
+Class: <rosi:A>
 
     SubClassOf: 
-        <rosi:D>
+        owl:Nothing
     
     
-Class: <rosi:D>
+Class: <rosi:B>
 
-    DisjointWith: 
-        <rosi:E>
-    
-    
-Class: <rosi:E>
+    SubClassOf:
+        owl:Nothing
 
-    DisjointWith: 
-        <rosi:D>
-    
     
 Individual: <rosi:a>
 
     Types: 
-        <rosi:E>,
-        <rosi:C>
+        <rosi:A> or  <rosi:B>
     
     
