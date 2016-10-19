@@ -56,10 +56,9 @@ public class Main {
             ContextOntology contextOntology = new ContextOntology(onto);
             System.out.println(contextOntology);
 
-            Configuration confWithoutTableauMonitor = new Configuration();
 //            Debugger debugger = new Debugger(Prefixes.STANDARD_PREFIXES,true);
 //            confWithoutTableauMonitor.monitor = debugger;
-            ContextReasoner reasoner = new ContextReasoner(confWithoutTableauMonitor, contextOntology);
+            ContextReasoner reasoner = new ContextReasoner(contextOntology);
             Tableau tableau = reasoner.getTableau();
             boolean result = tableau.isSatisfiable(true, true, null, null, null, null, null, ReasoningTaskDescription.isABoxSatisfiable());
 

@@ -34,4 +34,14 @@ public class ContextReasoner extends Reasoner {
         this.m_tableau = new ContextTableau(getTableau(), rootOntology, configuration);
     }
 
+    /**
+     * This constructor calls the standard constructor with a default configuration.
+     *
+     * @param rootOntology  The root ontology for the reasoner.
+     */
+    public ContextReasoner(ContextOntology rootOntology) {
+
+        this(new Configuration(), rootOntology);
+    }
+
 }
