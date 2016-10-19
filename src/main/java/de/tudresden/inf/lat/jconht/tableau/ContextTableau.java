@@ -88,7 +88,8 @@ public class ContextTableau extends Tableau {
                 getExtensionManager().setClash(lastEntryOfClashNode.getDependencySet());
 
                 // Perform actual backtracking.
-                System.out.println("Doing backtracking because of node " + clashNode.get() + "with" + lastEntryOfClashNode.getDependencySet());
+                System.out.println("Doing backtracking because of node " + clashNode.get() + " with " +
+                        lastEntryOfClashNode.getDependencySet());
                 return runCalculus();
 
             } else {
@@ -235,7 +236,7 @@ public class ContextTableau extends Tableau {
         @Override
         public boolean hasNext() {
 
-            return getExtensionManager().getBinaryExtensionTable().getTupleObject(tupleIndex + 1, 0) != null;
+            return concept != null;
         }
 
         @Override
@@ -254,7 +255,7 @@ public class ContextTableau extends Tableau {
         public BinaryTupleTableEntry next() {
 
             update(tupleIndex + 1);
-            return new BinaryTupleTableEntry(tupleIndex);
+            return new BinaryTupleTableEntry(tupleIndex - 1);
         }
     }
 
