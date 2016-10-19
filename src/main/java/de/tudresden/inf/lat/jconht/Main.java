@@ -2,9 +2,6 @@ package de.tudresden.inf.lat.jconht;
 
 import de.tudresden.inf.lat.jconht.model.ContextOntology;
 import de.tudresden.inf.lat.jconht.tableau.ContextReasoner;
-import org.semanticweb.HermiT.Configuration;
-import org.semanticweb.HermiT.tableau.ReasoningTaskDescription;
-import org.semanticweb.HermiT.tableau.Tableau;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -24,25 +21,7 @@ public class Main {
 
         IRI iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-2.owl");
         if (args.length != 0) {
-            switch (args[0]) {
-                case "1":
-                case "2":
-                case "3":
-                case "4":
-                case "5":
-                case "6":
-                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-" + args[0] + ".owl");
-                    break;
-                case "pizza":
-                    iri = IRI.create("file://" + inputDir + "/" + "pizza.owl");
-                    break;
-                case "rosi1":
-                    iri = IRI.create("file://" + inputDir + "/" + "testonto1.owl");
-                    break;
-                case "2backtrack":
-                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-2-backtrack.owl");
-                    break;
-            }
+            iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-" + args[0] + ".owl");
         }
 
 
@@ -55,12 +34,12 @@ public class Main {
 
             ContextOntology contextOntology = new ContextOntology(onto);
             System.out.println(contextOntology);
+            System.out.println("---------------------------------------------");
 
 //            Debugger debugger = new Debugger(Prefixes.STANDARD_PREFIXES,true);
 //            confWithoutTableauMonitor.monitor = debugger;
             ContextReasoner reasoner = new ContextReasoner(contextOntology);
-            Tableau tableau = reasoner.getTableau();
-            boolean result = tableau.isSatisfiable(true, true, null, null, null, null, null, ReasoningTaskDescription.isABoxSatisfiable());
+            boolean result = reasoner.isConsistent();
 
             System.out.println(result);
 

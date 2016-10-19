@@ -158,7 +158,6 @@ public class ContextOntology {
         stringBuilder.append("Hash map:\n");
         objectAxiomsMap.forEach(
                 (key, value) -> stringBuilder.append(key).append(" -> ").append(value).append("\n"));
-        stringBuilder.append("\n");
 
         return stringBuilder.toString();
     }
