@@ -64,6 +64,10 @@ public class ContextTableau extends Tableau {
 
             // Possibly a model is found.
 
+            // Debug output
+            System.out.println("meta ontology is consistent, following model is found:");
+            binaryTupleTableEntries().forEach(System.out::println);
+
             // Iterate over all tableau nodes and check whether one of them is not inner consistent.
             Optional<Node> clashNode = StreamSupport.stream(new NodeIterator().spliterator(), false)
                     .filter(this::isNodeInnerInconsistent)
@@ -84,6 +88,7 @@ public class ContextTableau extends Tableau {
                 getExtensionManager().setClash(lastEntryOfClashNode.getDependencySet());
 
                 // Perform actual backtracking.
+                System.out.println("Doing backtracking because of node " + clashNode.get() + "with" + lastEntryOfClashNode.getDependencySet());
                 return runCalculus();
 
             } else {
@@ -246,7 +251,11 @@ public class ContextTableau extends Tableau {
             return this;
         }
 
+        @Override
+        public String toString() {
 
+            return getNode() + "\t" + getClassExpression() + "\t" + getDependencySet();
+        }
     }
 
     /**
