@@ -40,7 +40,7 @@ public class ContextOntology {
 
             metaOntology = ontologyManager.createOntology(
                     rootOntology.axioms()
-                            .filter(owlAxiom -> !owlAxiom.isOfType(AxiomType.DECLARATION))
+                            .filter(owlAxiom -> owlAxiom.isOfType(AxiomType.LOGICAL_AXIOM_TYPES))
                             .filter(owlAxiom -> owlAxiom.annotations(new OWLAnnotationPropertyImpl(isDefinedBy))
                                     .count() == 0)
                             .collect(Collectors.toSet())
