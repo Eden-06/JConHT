@@ -25,21 +25,27 @@ public class ConceptNegator implements OWLClassExpressionVisitorEx<OWLClassExpre
     @Override
     public <T> OWLClassExpression doDefault(T object) {
 
-        // This should never happen!
-        throw new UnhandledClassExpressionException("Unhandled class expression in ConceptNegator: " + object.getClass());
+        try {
+
+            return ((OWLClassExpression) object).getObjectComplementOf();
+
+        } catch (ClassCastException e) {
+
+            // This should never happen!
+            throw new UnhandledClassExpressionException("Unhandled class expression in ConceptNegator: " + object.getClass());
+        }
     }
 
-
     @Override
-    public OWLClassExpression visit(OWLObjectComplementOf owlClassExpression) {
+    public OWLClassExpression visit(OWLObjectComplementOf owlObjectComplementOf) {
 
-        return owlClassExpression.getOperand();
+        return owlObjectComplementOf.getOperand();
     }
 
     @Override
     public OWLClassExpression visit(OWLClass owlClass) {
 
-        if (owlClass.isOWLThing()){
+        if (owlClass.isOWLThing()) {
             return dataFactory.getOWLNothing();
         }
 
@@ -49,4 +55,5 @@ public class ConceptNegator implements OWLClassExpressionVisitorEx<OWLClassExpre
 
         return owlClass.getObjectComplementOf();
     }
+
 }
