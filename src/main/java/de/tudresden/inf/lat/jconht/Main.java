@@ -45,6 +45,11 @@ public class Main {
 //            Debugger debugger = new Debugger(Prefixes.STANDARD_PREFIXES,true);
 //            confWithoutTableauMonitor.monitor = debugger;
             ContextReasoner reasoner = new ContextReasoner(contextOntology);
+            System.out.println("reasoner.getDLOntology().getDLClauses() = ");
+            reasoner.getDLOntology().getDLClauses().stream().forEach(System.out::println);
+            System.out.println("reasoner.getDLOntology().getPositiveFacts() = " + reasoner.getDLOntology().getPositiveFacts());
+            System.out.println("reasoner.getDLOntology().getNegativeFacts() = " + reasoner.getDLOntology().getNegativeFacts());
+            System.out.println("---------------------------------------------");
             boolean result = reasoner.isConsistent();
 
             System.out.println(result);
