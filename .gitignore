@@ -4,3 +4,5 @@ target/*
 input/catalog-v001.xml
 src/main/java/de/tudresden/inf/lat/jconht/playground/
 .idea/codeStyleSettings.xml
+.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml
+.idea/libraries/Maven__junit_junit_4_12.xml
