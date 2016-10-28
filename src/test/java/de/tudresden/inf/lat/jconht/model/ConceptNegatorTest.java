@@ -1,5 +1,8 @@
 package de.tudresden.inf.lat.jconht.model;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 
@@ -25,7 +28,7 @@ public class ConceptNegatorTest {
 
     private OWLObjectIntersectionOf intersectionOf;
 
-    @org.junit.Before
+    @Before
     public void setUp() throws Exception {
 
         manager = OWLManager.createOWLOntologyManager();
@@ -42,12 +45,12 @@ public class ConceptNegatorTest {
 
     }
 
-    @org.junit.After
+    @After
     public void tearDown() throws Exception {
         dataFactory.purge();
     }
 
-    @org.junit.Test
+    @Test
     public void testOWLThing() throws Exception {
 
         assertEquals("Negation of OWLThing is OWLNothing",
@@ -55,7 +58,7 @@ public class ConceptNegatorTest {
                 owlThing.accept(conceptNegator));
     }
 
-    @org.junit.Test
+    @Test
     public void testOWLNothing() throws Exception {
 
         assertEquals("Negation of OWLNothing is OWLThing",
@@ -63,7 +66,7 @@ public class ConceptNegatorTest {
                 owlNothing.accept(conceptNegator));
     }
 
-    @org.junit.Test
+    @Test
     public void testOWLClass() throws Exception {
 
         assertEquals("Negation of OWLClass",
@@ -71,7 +74,7 @@ public class ConceptNegatorTest {
                 owlClass.accept(conceptNegator));
     }
 
-    @org.junit.Test
+    @Test
     public void testOWLObjectComplementOf() throws Exception {
 
         assertEquals("Negation of OWLObjectComplementOf",
@@ -79,7 +82,7 @@ public class ConceptNegatorTest {
                 complementOf.accept(conceptNegator));
     }
 
-    @org.junit.Test
+    @Test
     public void testOWLObjectIntersectionOf() throws Exception {
 
         assertEquals("Negation of OWLObjectIntersectionOf",
