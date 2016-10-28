@@ -44,7 +44,7 @@ public class ConceptNegatorTest {
 
     @org.junit.After
     public void tearDown() throws Exception {
-
+        dataFactory.purge();
     }
 
     @org.junit.Test
