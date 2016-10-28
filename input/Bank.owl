@@ -1,0 +1,185 @@
+#
+# This ontology is automatically written by the FRaMED OWL Ontology generator
+#
+# The following features are not supported:
+#		Compartment inheritance
+#		Compartments that play a role in another compartment
+#
+Prefix: owl: <http://www.w3.org/2002/07/owl#>
+Prefix: rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+Prefix: xml: <http://www.w3.org/XML/1998/namespace>
+Prefix: xsd: <http://www.w3.org/2001/XMLSchema#>
+Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+Prefix: rosi: <http://www.rosi-project.org/ontologies#>
+
+Ontology: <http://www.rosi-project.org/ontologies/2016-10-26/Bank>
+
+#
+# Used OWL datatypes
+#
+
+Datatype: xsd:boolean
+
+
+#
+# Used OWL annotations
+#
+
+AnnotationProperty: rosi:rigidity
+    Range: <http://www.w3.org/2001/XMLSchema#boolean>
+    
+AnnotationProperty: rosi:isMeta
+    Range: <http://www.w3.org/2001/XMLSchema#boolean>
+
+AnnotationProperty: rdfs:isDefinedBy
+
+
+
+#
+# General axioms and declarations, independent of the CROModel
+#
+
+Class: rosi:Meta
+    Annotations: rosi:isMeta true
+    EquivalentTo: owl:Thing
+    
+
+Class: rosi:Object
+    Annotations: rosi:isMeta false
+    EquivalentTo:
+        owl:Nothing,
+    	Annotations: rdfs:isDefinedBy owl:Thing owl:Thing
+
+Class: owl:Thing
+    DisjointUnionOf: rosi:Meta, rosi:Object
+
+
+#
+# The declaration of all compartment types that occur in the model
+#
+Class: rosi:CompartmentTypes
+    SubClassOf: rosi:Meta
+    DisjointUnionOf: rosi:Transaction, rosi:Bank
+
+Class: rosi:Transaction
+    Annotations: rosi:isMeta true
+    SubClassOf: rosi:CompartmentTypes
+
+Class: rosi:Bank
+    Annotations: rosi:isMeta true
+    SubClassOf: rosi:CompartmentTypes
+
+
+#
+# The declaration of all natural types that occur in the model
+#
+Class: rosi:NaturalTypes
+    Annotations: rosi:isMeta false
+    SubClassOf: rosi:Object
+    DisjointWith: rosi:RoleTypes
+    DisjointUnionOf: rosi:Person, rosi:Account
+
+
+Class: rosi:Person
+    Annotations: rosi:rigidity true,
+                 rosi:isMeta false
+    SubClassOf: rosi:NaturalTypes
+
+Class: rosi:Company
+    Annotations: rosi:rigidity true,
+                 rosi:isMeta false
+    SubClassOf: rosi:NaturalTypes, rosi:Person
+
+Class: rosi:Account
+    Annotations: rosi:rigidity true,
+                 rosi:isMeta false
+    SubClassOf: rosi:NaturalTypes
+
+Class: rosi:TestNaturalType
+    Annotations: rosi:rigidity true,
+                 rosi:isMeta false
+    SubClassOf: rosi:NaturalTypes, rosi:Person
+
+
+#
+# The declaration of all role types that occur in the model
+#
+Class: rosi:RoleTypes
+    Annotations: rosi:isMeta false
+    SubClassOf: rosi:Object
+    DisjointWith: rosi:NaturalTypes
+    DisjointUnionOf: rosi:Source, rosi:Target, rosi:Consultant, rosi:Customer, rosi:MoneyTransfer, rosi:CheckingsAccount, rosi:SavingsAccount
+
+Class: rosi:Source
+    Annotations: rosi:rigidity false,
+                 rosi:isMeta false
+    SubClassOf: rosi:RoleTypes
+
+Class: rosi:Target
+    Annotations: rosi:rigidity false,
+                 rosi:isMeta false
+    SubClassOf: rosi:RoleTypes
+
+Class: rosi:Consultant
+    Annotations: rosi:rigidity false,
+                 rosi:isMeta false
+    SubClassOf: rosi:RoleTypes
+
+Class: rosi:Customer
+    Annotations: rosi:rigidity false,
+                 rosi:isMeta false
+    SubClassOf: rosi:RoleTypes
+
+Class: rosi:MoneyTransfer
+    Annotations: rosi:rigidity false,
+                 rosi:isMeta false
+    SubClassOf: rosi:RoleTypes
+
+Class: rosi:CheckingsAccount
+    Annotations: rosi:rigidity false,
+                 rosi:isMeta false
+    SubClassOf: rosi:RoleTypes
+
+Class: rosi:SavingsAccount
+    Annotations: rosi:rigidity false,
+                 rosi:isMeta false
+    SubClassOf: rosi:RoleTypes
+
+
+# builder.fills
+# [Person->Bank->Consultant, Person->Bank->Customer, Company->Bank->Customer, Account->Bank->CheckingsAccount, Account->Bank->SavingsAccount, Account->Bank->CheckingsAccount, Account->Bank->SavingsAccount, Transaction->Bank->MoneyTransfer]
+#
+# builder.ntinh
+# [TestNaturalType->Person, Company->Person]
+#
+# builder.ctinh
+# []
+#
+# builder.card
+# {trans->Transaction=(1,1)->(1,1), own_sa->Bank=(1,inf)->(0,inf), own_ca->Bank=(0,inf)->(1,1), advices->Bank=(0,inf)->(1,inf)}
+#
+# builder.rel
+# {trans->Transaction=Source->Target, own_sa->Bank=Customer->SavingsAccount, own_ca->Bank=CheckingsAccount->Customer, advices->Bank=Consultant->Customer}
+#
+# builder.rst
+# [trans, own_ca, advices, own_sa]
+#
+# builder.toString
+# builder.CROModel@76b35d4b
+#
+#
+#
+# TODO: still unhandled
+# compartment types
+# annotations to get object axioms to object level
+# fills relation and domain, range of plays
+# parts relation
+# rel
+#
+# Contraint model:
+# rolec
+# card
+# intra
+# inter
+#
+#

@@ -21,7 +21,13 @@ public class Main {
 
         IRI iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-2.owl");
         if (args.length != 0) {
-            iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-" + args[0] + ".owl");
+            switch (args[0]) {
+                case "framed":
+                    iri = IRI.create("file://" + inputDir + "/" + "Bank.owl");
+                    break;
+                default:
+                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-" + args[0] + ".owl");
+            }
         }
 
 
