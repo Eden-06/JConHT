@@ -23,6 +23,7 @@ public class ContextOntology {
     private OWLOntology metaOntology;
     private Map<OWLClassExpression, OWLAxiom> objectAxiomsMap;
     private Set<OWLClass> outerAbstractedMetaConcepts;
+    private OWLDataFactory dataFactory;
 
     /**
      * This is the standard constructor.
@@ -33,6 +34,8 @@ public class ContextOntology {
     public ContextOntology(OWLOntology rootOntology) {
 
         ontologyManager = rootOntology.getOWLOntologyManager();
+        dataFactory = ontologyManager.getOWLDataFactory();
+
         IRI isDefinedBy = OWLRDFVocabulary.RDFS_IS_DEFINED_BY.getIRI();
 
         // Obtain meta ontology
@@ -78,10 +81,9 @@ public class ContextOntology {
                 .collect(Collectors.toSet());
 
         // Create negated axioms for negated keys and add them to object axioms map
-        OWLDataFactory dataFactory = ontologyManager.getOWLDataFactory();
         objectAxiomsMap.putAll(objectAxiomsMap.entrySet().stream()
                 .collect(Collectors.toMap(
-                        entry -> entry.getKey().getObjectComplementOf(),
+                        entry -> entry.getKey().accept(new ConceptNegator(dataFactory)),
                         entry -> entry.getValue().accept(new AxiomNegator(dataFactory)))
                 )
         );

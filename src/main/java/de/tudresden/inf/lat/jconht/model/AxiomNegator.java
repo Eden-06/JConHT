@@ -2,6 +2,9 @@ package de.tudresden.inf.lat.jconht.model;
 
 import org.semanticweb.owlapi.model.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * This class is used to generate the negation of a given OWLAxiom.
  *
@@ -33,7 +36,8 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
     public OWLAxiom visit(OWLClassAssertionAxiom axiom) {
 
         // ¬(C(a)) ⟹ (¬C(a))
-        return dataFactory.getOWLClassAssertionAxiom(axiom.getClassExpression().getObjectComplementOf(),
+
+        return dataFactory.getOWLClassAssertionAxiom(axiom.getClassExpression().accept(new ConceptNegator(dataFactory)),
                 axiom.getIndividual());
     }
 
@@ -41,9 +45,10 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
     public OWLAxiom visit(OWLSubClassOfAxiom axiom) {
 
         // ¬(C ⊑ D) ⟹ (C ∧ ¬D)(x_new)
+
         return dataFactory.getOWLClassAssertionAxiom(
                 dataFactory.getOWLObjectIntersectionOf(axiom.getSubClass(),
-                        axiom.getSuperClass().getObjectComplementOf()),
+                        axiom.getSuperClass().accept(new ConceptNegator(dataFactory))),
                 dataFactory.getOWLAnonymousIndividual());
     }
 
@@ -64,6 +69,26 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
 
         return dataFactory.getOWLObjectPropertyAssertionAxiom(
                 axiom.getProperty(), axiom.getSubject(), axiom.getObject());
+    }
+
+    @Override
+    public OWLAxiom visit(OWLEquivalentClassesAxiom axiom) {
+        // ¬(C ≡ D) ⟹ ((C ∧ ¬D)∨(¬C ∧ D))(x_new)
+
+        if (axiom.operands().count() != 2)
+            throw new UnhandledAxiomTypeException("Equivalent class axioms are only allowed with two operands.");
+
+        List<OWLClassExpression> classExpressions = axiom.operands().collect(Collectors.toList());
+
+        return dataFactory.getOWLClassAssertionAxiom(
+                dataFactory.getOWLObjectUnionOf(
+                        dataFactory.getOWLObjectIntersectionOf(
+                                classExpressions.get(0),
+                                classExpressions.get(1).accept(new ConceptNegator(dataFactory))),
+                        dataFactory.getOWLObjectIntersectionOf(
+                                classExpressions.get(0).accept(new ConceptNegator(dataFactory)),
+                                classExpressions.get(1))),
+                dataFactory.getOWLAnonymousIndividual());
     }
 
     @Override
