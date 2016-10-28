@@ -32,18 +32,21 @@ public class ConceptNegator implements OWLClassExpressionVisitorEx<OWLClassExpre
 
     @Override
     public OWLClassExpression visit(OWLObjectComplementOf owlClassExpression) {
+
         return owlClassExpression.getOperand();
     }
 
     @Override
     public OWLClassExpression visit(OWLClass owlClass) {
+
         if (owlClass.isOWLThing()){
             return dataFactory.getOWLNothing();
-        } else if (owlClass.isOWLNothing()) {
-            return dataFactory.getOWLThing();
-        } else {
-            return owlClass.getObjectComplementOf();
         }
 
+        if (owlClass.isOWLNothing()) {
+            return dataFactory.getOWLThing();
+        }
+
+        return owlClass.getObjectComplementOf();
     }
 }
