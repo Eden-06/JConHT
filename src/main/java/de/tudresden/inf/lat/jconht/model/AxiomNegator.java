@@ -2,9 +2,6 @@ package de.tudresden.inf.lat.jconht.model;
 
 import org.semanticweb.owlapi.model.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * This class is used to generate the negation of a given OWLAxiom.
  *
@@ -33,15 +30,6 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
     }
 
     @Override
-    public OWLAxiom visit(OWLClassAssertionAxiom axiom) {
-
-        // ¬(C(a)) ⟹ (¬C(a))
-
-        return dataFactory.getOWLClassAssertionAxiom(axiom.getClassExpression().accept(new ConceptNegator(dataFactory)),
-                axiom.getIndividual());
-    }
-
-    @Override
     public OWLAxiom visit(OWLSubClassOfAxiom axiom) {
 
         // ¬(C ⊑ D) ⟹ (C ∧ ¬D)(x_new)
@@ -53,7 +41,14 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
     }
 
     @Override
-    public OWLAxiom visit(OWLSameIndividualAxiom axiom) {
+    public OWLAxiom visit(OWLNegativeObjectPropertyAssertionAxiom axiom) {
+
+        return dataFactory.getOWLObjectPropertyAssertionAxiom(
+                axiom.getProperty(), axiom.getSubject(), axiom.getObject());
+    }
+
+    @Override
+    public OWLAxiom visit(OWLObjectPropertyDomainAxiom axiom) {
 
         throw new UnhandledAxiomTypeException("Unknown axiom type in AxiomNegator: " + axiom.getAxiomType());
     }
@@ -65,30 +60,9 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
     }
 
     @Override
-    public OWLAxiom visit(OWLNegativeObjectPropertyAssertionAxiom axiom) {
+    public OWLAxiom visit(OWLObjectPropertyRangeAxiom axiom) {
 
-        return dataFactory.getOWLObjectPropertyAssertionAxiom(
-                axiom.getProperty(), axiom.getSubject(), axiom.getObject());
-    }
-
-    @Override
-    public OWLAxiom visit(OWLEquivalentClassesAxiom axiom) {
-        // ¬(C ≡ D) ⟹ ((C ∧ ¬D)∨(¬C ∧ D))(x_new)
-
-        if (axiom.operands().count() != 2)
-            throw new UnhandledAxiomTypeException("Equivalent class axioms are only allowed with two operands.");
-
-        List<OWLClassExpression> classExpressions = axiom.operands().collect(Collectors.toList());
-
-        return dataFactory.getOWLClassAssertionAxiom(
-                dataFactory.getOWLObjectUnionOf(
-                        dataFactory.getOWLObjectIntersectionOf(
-                                classExpressions.get(0),
-                                classExpressions.get(1).accept(new ConceptNegator(dataFactory))),
-                        dataFactory.getOWLObjectIntersectionOf(
-                                classExpressions.get(0).accept(new ConceptNegator(dataFactory)),
-                                classExpressions.get(1))),
-                dataFactory.getOWLAnonymousIndividual());
+        throw new UnhandledAxiomTypeException("Unknown axiom type in AxiomNegator: " + axiom.getAxiomType());
     }
 
     @Override
@@ -99,22 +73,45 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
     }
 
     @Override
-    public OWLAxiom visit(OWLObjectPropertyDomainAxiom axiom) {
-
-        throw new UnhandledAxiomTypeException("Unknown axiom type in AxiomNegator: " + axiom.getAxiomType());
-    }
-
-    @Override
-    public OWLAxiom visit(OWLObjectPropertyRangeAxiom axiom) {
-
-        throw new UnhandledAxiomTypeException("Unknown axiom type in AxiomNegator: " + axiom.getAxiomType());
-    }
-
-    @Override
     public OWLAxiom visit(OWLDisjointUnionAxiom axiom) {
 
         throw new UnhandledAxiomTypeException("Unknown axiom type in AxiomNegator: " + axiom.getAxiomType());
     }
 
+    @Override
+    public OWLAxiom visit(OWLClassAssertionAxiom axiom) {
 
+        // ¬(C(a)) ⟹ (¬C(a))
+
+        return dataFactory.getOWLClassAssertionAxiom(axiom.getClassExpression().accept(new ConceptNegator(dataFactory)),
+                axiom.getIndividual());
+    }
+
+    @Override
+    public OWLAxiom visit(OWLEquivalentClassesAxiom axiom) {
+        // ¬(C ≡ D) ⟹ ((C ∧ ¬D)∨(¬C ∧ D))(x_new)
+
+        if (axiom.operands().count() != 2) {
+            throw new UnhandledAxiomTypeException("Equivalent class axioms are only allowed with two operands.");
+        }
+
+        return dataFactory.getOWLClassAssertionAxiom(
+                axiom.operands()
+                        .reduce((c, d) -> dataFactory.getOWLObjectUnionOf(
+                                dataFactory.getOWLObjectIntersectionOf(
+                                        c,
+                                        d.accept(new ConceptNegator(dataFactory))),
+                                dataFactory.getOWLObjectIntersectionOf(
+                                        c.accept(new ConceptNegator(dataFactory)),
+                                        d)))
+                        // This get() does not fail!  See if-statement above.
+                        .get(),
+                dataFactory.getOWLAnonymousIndividual());
+    }
+
+    @Override
+    public OWLAxiom visit(OWLSameIndividualAxiom axiom) {
+
+        throw new UnhandledAxiomTypeException("Unknown axiom type in AxiomNegator: " + axiom.getAxiomType());
+    }
 }
