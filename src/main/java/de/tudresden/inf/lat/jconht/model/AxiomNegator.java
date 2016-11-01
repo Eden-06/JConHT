@@ -2,6 +2,9 @@ package de.tudresden.inf.lat.jconht.model;
 
 import org.semanticweb.owlapi.model.*;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * This class is used to generate the negation of a given OWLAxiom.
  *
@@ -32,7 +35,7 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
     @Override
     public OWLAxiom visit(OWLSubClassOfAxiom axiom) {
 
-        // ¬(C ⊑ D) ⟹ (C ∧ ¬D)(x_new)
+        // ¬(C ⊑ D) ⟹ (C ⊓ ¬D)(x_new)
 
         return dataFactory.getOWLClassAssertionAxiom(
                 dataFactory.getOWLObjectIntersectionOf(axiom.getSubClass(),
@@ -50,7 +53,11 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
     @Override
     public OWLAxiom visit(OWLObjectPropertyDomainAxiom axiom) {
 
-        throw new UnhandledAxiomTypeException("Unknown axiom type in AxiomNegator: " + axiom.getAxiomType());
+        return dataFactory.getOWLClassAssertionAxiom(
+                dataFactory.getOWLObjectIntersectionOf(
+                        dataFactory.getOWLObjectMinCardinality(1, axiom.getProperty()),
+                        axiom.getDomain().accept(new ConceptNegator(dataFactory))),
+                dataFactory.getOWLAnonymousIndividual());
     }
 
     @Override
@@ -62,7 +69,11 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
     @Override
     public OWLAxiom visit(OWLObjectPropertyRangeAxiom axiom) {
 
-        throw new UnhandledAxiomTypeException("Unknown axiom type in AxiomNegator: " + axiom.getAxiomType());
+        return dataFactory.getOWLClassAssertionAxiom(
+                dataFactory.getOWLObjectMinCardinality(1,
+                        axiom.getProperty(),
+                        axiom.getRange().accept(new ConceptNegator(dataFactory))),
+                dataFactory.getOWLAnonymousIndividual());
     }
 
     @Override
@@ -75,7 +86,23 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
     @Override
     public OWLAxiom visit(OWLDisjointUnionAxiom axiom) {
 
-        throw new UnhandledAxiomTypeException("Unknown axiom type in AxiomNegator: " + axiom.getAxiomType());
+        // ¬(A DisjointUnionOf B,C,D) ⟹ ((A ⊓ ¬B ⊓ ¬C ⊓ ¬D) ⊔ (B ⊓ C) ⊔ (B ⊓ D) ⊔ (C ⊓ D))(x_new)
+
+        Set conjuncts = axiom.classExpressions()
+                .map(ce -> ce.accept(new ConceptNegator(dataFactory)))
+                .collect(Collectors.toSet());
+        conjuncts.add(axiom.getOWLClass());
+
+        return dataFactory.getOWLClassAssertionAxiom(
+                dataFactory.getOWLObjectUnionOf(
+                        dataFactory.getOWLObjectIntersectionOf(conjuncts),
+                        dataFactory.getOWLObjectUnionOf(
+                        axiom.getOWLDisjointClassesAxiom().asPairwiseAxioms().stream()
+                            .map(a -> a.operands()
+                                    .reduce((c, d) -> dataFactory.getOWLObjectIntersectionOf(c, d))
+                                    .get()))),
+                dataFactory.getOWLAnonymousIndividual()
+        );
     }
 
     @Override
@@ -102,6 +129,21 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
                                                 dataFactory.getOWLObjectIntersectionOf(
                                                         c.accept(new ConceptNegator(dataFactory)),
                                                         d)))
+                                        // This get() does not fail.
+                                        .get())),
+                dataFactory.getOWLAnonymousIndividual());
+    }
+
+    @Override
+    public OWLAxiom visit(OWLDisjointClassesAxiom axiom) {
+
+        // ¬(DisjointUnion(C,D,E) ⟹ ((C ⊓ D) ⊔ (C ⊓ E) ⊔ (D ⊓ E))(x_new)
+
+        return dataFactory.getOWLClassAssertionAxiom(
+                dataFactory.getOWLObjectUnionOf(
+                        axiom.asPairwiseAxioms().stream()
+                                .map(a -> a.operands()
+                                        .reduce((c, d) -> dataFactory.getOWLObjectIntersectionOf(c, d))
                                         // This get() does not fail.
                                         .get())),
                 dataFactory.getOWLAnonymousIndividual());
