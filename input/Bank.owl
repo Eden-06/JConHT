@@ -33,10 +33,10 @@ Datatype: xsd:boolean
 # Used OWL annotations
 #
 
-AnnotationProperty: rosi:rigidity
+AnnotationProperty: <rosi:rigidity>
     Range: <http://www.w3.org/2001/XMLSchema#boolean>
 
-AnnotationProperty: rosi:isMeta
+AnnotationProperty: <rosi:isMeta>
     Range: <http://www.w3.org/2001/XMLSchema#boolean>
 
 AnnotationProperty: rdfs:isDefinedBy
@@ -52,45 +52,45 @@ AnnotationProperty: rdfs:isDefinedBy
 #
 Class: owl:Thing
     SubClassOf:
-        rosi:MetaIsBottom,
-        rosi:ObjectIsTop,
-        rosi:DomainOfPlaysIsNaturalTypes,
-        rosi:RangeOfPlaysIsRoleTypes,
-        rosi:ObjectTopIsRoleOrNatural,
-        rosi:NaturalTypesDisjointAxiom,
-        rosi:RoleTypesDisjointAxiom,
-        rosi:NaturalTypesAreObjectLevel,
-        rosi:RoleTypesAreObjectLevel,
-        rosi:EveryRoleIsPlayedOnce,
-        rosi:NaturalTypeInheritance,
-        rosi:RolePlayerDeclarations
+        <rosi:MetaIsBottom>,
+        <rosi:ObjectIsTop>,
+        <rosi:DomainOfPlaysIsNaturalTypes>,
+        <rosi:RangeOfPlaysIsRoleTypes>,
+        <rosi:ObjectTopIsRoleOrNatural>,
+        <rosi:NaturalTypesDisjointAxiom>,
+        <rosi:RoleTypesDisjointAxiom>,
+        <rosi:NaturalTypesAreObjectLevel>,
+        <rosi:RoleTypesAreObjectLevel>,
+        <rosi:EveryRoleIsPlayedOnce>,
+        <rosi:NaturalTypeInheritance>,
+        <rosi:RolePlayerDeclarations>
     DisjointUnionOf:
-         Annotations: rdfs:isDefinedBy rosi:ObjectTopIsRoleOrNatural
-         rosi:NaturalTypes, rosi:RoleTypes
+         Annotations: rdfs:isDefinedBy <rosi:ObjectTopIsRoleOrNatural>
+         <rosi:NaturalTypes>, <rosi:RoleTypes>
 
 Class: owl:Nothing
-Class: rosi:ObjectTopIsRoleOrNatural
-Class: rosi:MetaIsBottom
-Class: rosi:ObjectIsTop
-Class: rosi:Meta
+Class: <rosi:ObjectTopIsRoleOrNatural>
+Class: <rosi:MetaIsBottom>
+Class: <rosi:ObjectIsTop>
+Class: <rosi:Meta>
     EquivalentTo:
         owl:Thing,
-        Annotations: rdfs:isDefinedBy rosi:MetaIsBottom
+        Annotations: rdfs:isDefinedBy <rosi:MetaIsBottom>
    	    owl:Nothing
 
-Class: rosi:Object
+Class: <rosi:Object>
     EquivalentTo:
         owl:Nothing,
-        Annotations: rdfs:isDefinedBy rosi:ObjectIsTop
+        Annotations: rdfs:isDefinedBy <rosi:ObjectIsTop>
         owl:Thing
 
-Class: rosi:DomainOfPlaysIsNaturalTypes
-Class: rosi:RangeOfPlaysIsRoleTypes
-Class: rosi:NaturalTypesDisjointAxiom
-Class: rosi:NaturalTypesAreObjectLevel
-Class: rosi:RoleTypesDisjointAxiom
-Class: rosi:RoleTypesAreObjectLevel
-Class: rosi:EveryRoleIsPlayedOnce
+Class: <rosi:DomainOfPlaysIsNaturalTypes>
+Class: <rosi:RangeOfPlaysIsRoleTypes>
+Class: <rosi:NaturalTypesDisjointAxiom>
+Class: <rosi:NaturalTypesAreObjectLevel>
+Class: <rosi:RoleTypesDisjointAxiom>
+Class: <rosi:RoleTypesAreObjectLevel>
+Class: <rosi:EveryRoleIsPlayedOnce>
 
 
 
@@ -100,11 +100,11 @@ Class: rosi:EveryRoleIsPlayedOnce
 #
 # The declaration of all compartment types that occur in the model
 #
-Class: rosi:CompartmentTypes
-    DisjointUnionOf: rosi:Transaction, rosi:Bank
+Class: <rosi:CompartmentTypes>
+    DisjointUnionOf: <rosi:Transaction>, <rosi:Bank>
 
-Class: rosi:Transaction
-Class: rosi:Bank
+Class: <rosi:Transaction>
+Class: <rosi:Bank>
 
 
 
@@ -114,42 +114,42 @@ Class: rosi:Bank
 #
 # The declaration of all natural types that occur in the model
 #
-Class: rosi:NaturalTypeInheritanceCompanyPerson
-Class: rosi:NaturalTypeInheritanceCompanyTestNaturalType
-Class: rosi:NaturalTypeInheritanceTestNaturalTypePerson
-Class: rosi:NaturalTypeInheritance
-    SubClassOf: rosi:NaturalTypeInheritanceCompanyPerson
-    SubClassOf: rosi:NaturalTypeInheritanceCompanyTestNaturalType
-    SubClassOf: rosi:NaturalTypeInheritanceTestNaturalTypePerson
+Class: <rosi:NaturalTypeInheritanceCompanyPerson>
+Class: <rosi:NaturalTypeInheritanceCompanyTestNaturalType>
+Class: <rosi:NaturalTypeInheritanceTestNaturalTypePerson>
+Class: <rosi:NaturalTypeInheritance>
+    SubClassOf: <rosi:NaturalTypeInheritanceCompanyPerson>
+    SubClassOf: <rosi:NaturalTypeInheritanceCompanyTestNaturalType>
+    SubClassOf: <rosi:NaturalTypeInheritanceTestNaturalTypePerson>
 
-Class: rosi:NaturalTypes
+Class: <rosi:NaturalTypes>
     SubClassOf:
-        Annotations: rdfs:isDefinedBy rosi:NaturalTypesAreObjectLevel
-        rosi:Object
+        Annotations: rdfs:isDefinedBy <rosi:NaturalTypesAreObjectLevel>
+        <rosi:Object>
     DisjointUnionOf:
-        Annotations: rdfs:isDefinedBy rosi:NaturalTypesDisjointAxiom
-        rosi:Person, rosi:Account
+        Annotations: rdfs:isDefinedBy <rosi:NaturalTypesDisjointAxiom>
+        <rosi:Person>, <rosi:Account>
 
 
-Class: rosi:Person
-    Annotations: rosi:rigidity true
+Class: <rosi:Person>
+    Annotations: <rosi:rigidity> true
 
-Class: rosi:Company
-    Annotations: rosi:rigidity true
+Class: <rosi:Company>
+    Annotations: <rosi:rigidity> true
     SubClassOf: 
-        Annotations: rdfs:isDefinedBy rosi:NaturalTypeInheritanceCompanyPerson
-        rosi:Person, 
-        Annotations: rdfs:isDefinedBy rosi:NaturalTypeInheritanceCompanyTestNaturalType
-        rosi:TestNaturalType
+        Annotations: rdfs:isDefinedBy <rosi:NaturalTypeInheritanceCompanyPerson>
+        <rosi:Person>, 
+        Annotations: rdfs:isDefinedBy <rosi:NaturalTypeInheritanceCompanyTestNaturalType>
+        <rosi:TestNaturalType>
 
-Class: rosi:Account
-    Annotations: rosi:rigidity true
+Class: <rosi:Account>
+    Annotations: <rosi:rigidity> true
 
-Class: rosi:TestNaturalType
-    Annotations: rosi:rigidity true
+Class: <rosi:TestNaturalType>
+    Annotations: <rosi:rigidity> true
     SubClassOf: 
-        Annotations: rdfs:isDefinedBy rosi:NaturalTypeInheritanceTestNaturalTypePerson
-        rosi:Person
+        Annotations: rdfs:isDefinedBy <rosi:NaturalTypeInheritanceTestNaturalTypePerson>
+        <rosi:Person>
 
 
 
@@ -160,96 +160,96 @@ Class: rosi:TestNaturalType
 #
 # The declaration of all role types that occur in the model
 #
-Class: rosi:PlaysSourceDeclaration
-Class: rosi:PlaysTargetDeclaration
-Class: rosi:PlaysConsultantDeclaration
-Class: rosi:PlaysCustomerDeclaration
-Class: rosi:PlaysMoneyTransferDeclaration
-Class: rosi:PlaysCheckingsAccountDeclaration
-Class: rosi:PlaysSavingsAccountDeclaration
-Class: rosi:RolePlayerDeclarations
-    SubClassOf: rosi:PlaysSourceDeclaration
-    SubClassOf: rosi:PlaysTargetDeclaration
-    SubClassOf: rosi:PlaysConsultantDeclaration
-    SubClassOf: rosi:PlaysCustomerDeclaration
-    SubClassOf: rosi:PlaysMoneyTransferDeclaration
-    SubClassOf: rosi:PlaysCheckingsAccountDeclaration
-    SubClassOf: rosi:PlaysSavingsAccountDeclaration
+Class: <rosi:PlaysSourceDeclaration>
+Class: <rosi:PlaysTargetDeclaration>
+Class: <rosi:PlaysConsultantDeclaration>
+Class: <rosi:PlaysCustomerDeclaration>
+Class: <rosi:PlaysMoneyTransferDeclaration>
+Class: <rosi:PlaysCheckingsAccountDeclaration>
+Class: <rosi:PlaysSavingsAccountDeclaration>
+Class: <rosi:RolePlayerDeclarations>
+    SubClassOf: <rosi:PlaysSourceDeclaration>
+    SubClassOf: <rosi:PlaysTargetDeclaration>
+    SubClassOf: <rosi:PlaysConsultantDeclaration>
+    SubClassOf: <rosi:PlaysCustomerDeclaration>
+    SubClassOf: <rosi:PlaysMoneyTransferDeclaration>
+    SubClassOf: <rosi:PlaysCheckingsAccountDeclaration>
+    SubClassOf: <rosi:PlaysSavingsAccountDeclaration>
 
-Class: rosi:RoleTypes
+Class: <rosi:RoleTypes>
     SubClassOf:
-        Annotations: rdfs:isDefinedBy rosi:RoleTypesAreObjectLevel
-        rosi:Object
+        Annotations: rdfs:isDefinedBy <rosi:RoleTypesAreObjectLevel>
+        <rosi:Object>
     SubClassOf:
-        Annotations: rdfs:isDefinedBy rosi:EveryRoleIsPlayedOnce
-        inverse (rosi:plays) exactly 1 owl:Thing
+        Annotations: rdfs:isDefinedBy <rosi:EveryRoleIsPlayedOnce>
+        inverse (<rosi:plays>) exactly 1 owl:Thing
     DisjointUnionOf:
-        Annotations: rdfs:isDefinedBy rosi:RoleTypesDisjointAxiom
-        rosi:Source, rosi:Target, rosi:Consultant, rosi:Customer, rosi:MoneyTransfer, rosi:CheckingsAccount, rosi:SavingsAccount
+        Annotations: rdfs:isDefinedBy <rosi:RoleTypesDisjointAxiom>
+        <rosi:Source>, <rosi:Target>, <rosi:Consultant>, <rosi:Customer>, <rosi:MoneyTransfer>, <rosi:CheckingsAccount>, <rosi:SavingsAccount>
 
-Class: rosi:Source
-    Annotations: rosi:rigidity false
-Class: rosi:PlaysSource
+Class: <rosi:Source>
+    Annotations: <rosi:rigidity> false
+Class: <rosi:PlaysSource>
     EquivalentTo:
-        Annotations: rdfs:isDefinedBy rosi:PlaysSourceDeclaration
-        rosi:plays some rosi:Source
+        Annotations: rdfs:isDefinedBy <rosi:PlaysSourceDeclaration>
+        <rosi:plays> some <rosi:Source>
 
-Class: rosi:Target
-    Annotations: rosi:rigidity false
-Class: rosi:PlaysTarget
+Class: <rosi:Target>
+    Annotations: <rosi:rigidity> false
+Class: <rosi:PlaysTarget>
     EquivalentTo:
-        Annotations: rdfs:isDefinedBy rosi:PlaysTargetDeclaration
-        rosi:plays some rosi:Target
+        Annotations: rdfs:isDefinedBy <rosi:PlaysTargetDeclaration>
+        <rosi:plays> some <rosi:Target>
 
-Class: rosi:Consultant
-    Annotations: rosi:rigidity false
-Class: rosi:PlaysConsultant
+Class: <rosi:Consultant>
+    Annotations: <rosi:rigidity> false
+Class: <rosi:PlaysConsultant>
     EquivalentTo:
-        Annotations: rdfs:isDefinedBy rosi:PlaysConsultantDeclaration
-        rosi:plays some rosi:Consultant
+        Annotations: rdfs:isDefinedBy <rosi:PlaysConsultantDeclaration>
+        <rosi:plays> some <rosi:Consultant>
     SubClassOf:
-        Annotations: rdfs:isDefinedBy rosi:Bank
-        rosi:Person
+        Annotations: rdfs:isDefinedBy <rosi:Bank>
+        <rosi:Person>
 
-Class: rosi:Customer
-    Annotations: rosi:rigidity false
-Class: rosi:PlaysCustomer
+Class: <rosi:Customer>
+    Annotations: <rosi:rigidity> false
+Class: <rosi:PlaysCustomer>
     EquivalentTo:
-        Annotations: rdfs:isDefinedBy rosi:PlaysCustomerDeclaration
-        rosi:plays some rosi:Customer
+        Annotations: rdfs:isDefinedBy <rosi:PlaysCustomerDeclaration>
+        <rosi:plays> some <rosi:Customer>
     SubClassOf:
-        Annotations: rdfs:isDefinedBy rosi:Bank
-        rosi:Company or rosi:Person
+        Annotations: rdfs:isDefinedBy <rosi:Bank>
+        <rosi:Company> or <rosi:Person>
 
-Class: rosi:MoneyTransfer
-    Annotations: rosi:rigidity false
-Class: rosi:PlaysMoneyTransfer
+Class: <rosi:MoneyTransfer>
+    Annotations: <rosi:rigidity> false
+Class: <rosi:PlaysMoneyTransfer>
     EquivalentTo:
-        Annotations: rdfs:isDefinedBy rosi:PlaysMoneyTransferDeclaration
-        rosi:plays some rosi:MoneyTransfer
+        Annotations: rdfs:isDefinedBy <rosi:PlaysMoneyTransferDeclaration>
+        <rosi:plays> some <rosi:MoneyTransfer>
     SubClassOf:
-        Annotations: rdfs:isDefinedBy rosi:Bank
-        rosi:Transaction
+        Annotations: rdfs:isDefinedBy <rosi:Bank>
+        <rosi:Transaction>
 
-Class: rosi:CheckingsAccount
-    Annotations: rosi:rigidity false
-Class: rosi:PlaysCheckingsAccount
+Class: <rosi:CheckingsAccount>
+    Annotations: <rosi:rigidity> false
+Class: <rosi:PlaysCheckingsAccount>
     EquivalentTo:
-        Annotations: rdfs:isDefinedBy rosi:PlaysCheckingsAccountDeclaration
-        rosi:plays some rosi:CheckingsAccount
+        Annotations: rdfs:isDefinedBy <rosi:PlaysCheckingsAccountDeclaration>
+        <rosi:plays> some <rosi:CheckingsAccount>
     SubClassOf:
-        Annotations: rdfs:isDefinedBy rosi:Bank
-        rosi:Account
+        Annotations: rdfs:isDefinedBy <rosi:Bank>
+        <rosi:Account>
 
-Class: rosi:SavingsAccount
-    Annotations: rosi:rigidity false
-Class: rosi:PlaysSavingsAccount
+Class: <rosi:SavingsAccount>
+    Annotations: <rosi:rigidity> false
+Class: <rosi:PlaysSavingsAccount>
     EquivalentTo:
-        Annotations: rdfs:isDefinedBy rosi:PlaysSavingsAccountDeclaration
-        rosi:plays some rosi:SavingsAccount
+        Annotations: rdfs:isDefinedBy <rosi:PlaysSavingsAccountDeclaration>
+        <rosi:plays> some <rosi:SavingsAccount>
     SubClassOf:
-        Annotations: rdfs:isDefinedBy rosi:Bank
-        rosi:Account
+        Annotations: rdfs:isDefinedBy <rosi:Bank>
+        <rosi:Account>
 
 
 
@@ -262,13 +262,13 @@ Class: rosi:PlaysSavingsAccount
 
 ObjectProperty: owl:bottomObjectProperty
 
-ObjectProperty: rosi:plays
+ObjectProperty: <rosi:plays>
     Domain:
-        Annotations: rdfs:isDefinedBy rosi:DomainOfPlaysIsNaturalTypes
-        rosi:NaturalTypes
+        Annotations: rdfs:isDefinedBy <rosi:DomainOfPlaysIsNaturalTypes>
+        <rosi:NaturalTypes>
     Range:
-        Annotations: rdfs:isDefinedBy rosi:RangeOfPlaysIsRoleTypes
-        rosi:RoleTypes
+        Annotations: rdfs:isDefinedBy <rosi:RangeOfPlaysIsRoleTypes>
+        <rosi:RoleTypes>
     SubPropertyOf:
         owl:bottomObjectProperty
 
@@ -295,7 +295,7 @@ ObjectProperty: rosi:plays
 # [trans, own_ca, advices, own_sa]
 #
 # builder.toString
-# builder.CROModel@42f32c9f
+# builder.CROModel@33aad6f5
 #
 #
 #
