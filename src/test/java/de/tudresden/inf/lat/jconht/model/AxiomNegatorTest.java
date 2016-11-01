@@ -17,14 +17,13 @@ import static org.junit.Assert.assertEquals;
 public class AxiomNegatorTest {
 
     private OWLOntologyManager manager;
-    private OWLDataFactory df;
+    private OWLDataFactory dataFactory;
     private AxiomNegator axiomNegator;
-    private ConceptNegator conceptNegator;
 
-    private OWLClass conceptA;
-    private OWLClass conceptB;
-    private OWLClassExpression notConceptA;
-    private OWLClassExpression notConceptB;
+    private OWLClass clsA;
+    private OWLClass clsB;
+    private OWLClassExpression negClsA;
+    private OWLClassExpression negClsB;
     private OWLIndividual indA;
     private OWLIndividual indB;
     private OWLObjectProperty roleR;
@@ -36,47 +35,46 @@ public class AxiomNegatorTest {
     private OWLSubClassOfAxiom subClassOfAxiom;
     private OWLClassAssertionAxiom classAssertionAxiom;
 
-
     @Before
     public void setUp() throws Exception {
 
         manager = OWLManager.createOWLOntologyManager();
-        df = manager.getOWLDataFactory();
-        axiomNegator = new AxiomNegator(df);
-        conceptNegator = new ConceptNegator(df);
+        dataFactory = manager.getOWLDataFactory();
+        axiomNegator = new AxiomNegator(dataFactory);
 
-        conceptA = df.getOWLClass("cls:A");
-        conceptB = df.getOWLClass("cls:B");
-        notConceptA = conceptA.accept(conceptNegator);
-        notConceptB = conceptB.accept(conceptNegator);
-        indA = df.getOWLNamedIndividual("ind:a");
-        indB = df.getOWLNamedIndividual("ind:b");
-        roleR = df.getOWLObjectProperty("rol:r");
-        roleS = df.getOWLObjectProperty("rol:s");
+        clsA = dataFactory.getOWLClass("cls:A");
+        clsB = dataFactory.getOWLClass("cls:B");
+        negClsA = clsA.getObjectComplementOf();
+        negClsB = clsB.getObjectComplementOf();
+        indA = dataFactory.getOWLNamedIndividual("ind:a");
+        indB = dataFactory.getOWLNamedIndividual("ind:b");
+        roleR = dataFactory.getOWLObjectProperty("rol:r");
+        roleS = dataFactory.getOWLObjectProperty("rol:s");
 
-        objectPropertyAssertionAxiom = df.getOWLObjectPropertyAssertionAxiom(roleR, indA, indB);
-        negativeObjectPropertyAssertionAxiom = df.getOWLNegativeObjectPropertyAssertionAxiom(roleR, indA, indB);
-        equivalentClassesAxiom = df.getOWLEquivalentClassesAxiom(conceptA, conceptB);
-        subClassOfAxiom = df.getOWLSubClassOfAxiom(conceptA, conceptB);
-        classAssertionAxiom = df.getOWLClassAssertionAxiom(conceptA,indA);
+        objectPropertyAssertionAxiom = dataFactory.getOWLObjectPropertyAssertionAxiom(roleR, indA, indB);
+        negativeObjectPropertyAssertionAxiom = dataFactory.getOWLNegativeObjectPropertyAssertionAxiom(roleR, indA, indB);
+        equivalentClassesAxiom = dataFactory.getOWLEquivalentClassesAxiom(clsA, clsB);
+        subClassOfAxiom = dataFactory.getOWLSubClassOfAxiom(clsA, clsB);
+        classAssertionAxiom = dataFactory.getOWLClassAssertionAxiom(clsA, indA);
     }
 
     @After
     public void tearDown() throws Exception {
-        df.purge();
+
+        dataFactory.purge();
     }
 
     @Test
     public void testOWLSubclassOf() throws Exception {
 
-
+        // TODO
     }
 
     @Test
     public void testOWLNegativeObjectPropertyAssertionAxiom() throws Exception {
 
         assertEquals("Negation of OWLNegativeObjectPropertyAssertionAxiom",
-                df.getOWLObjectPropertyAssertionAxiom(roleR, indA, indB),
+                objectPropertyAssertionAxiom,
                 negativeObjectPropertyAssertionAxiom.accept(axiomNegator));
 
     }
@@ -85,7 +83,7 @@ public class AxiomNegatorTest {
     public void testOWLObjectPropertyAssertionAxiom() throws Exception {
 
         assertEquals("Negation of OWLNegativeObjectPropertyAssertionAxiom",
-                df.getOWLNegativeObjectPropertyAssertionAxiom(roleR, indA, indB),
+                negativeObjectPropertyAssertionAxiom,
                 objectPropertyAssertionAxiom.accept(axiomNegator));
 
     }
@@ -93,10 +91,10 @@ public class AxiomNegatorTest {
     @Test
     public void testOWLEquivalentClassesAxiom() throws Exception {
 
-        assertEquals("Negation of OWLNegativeObjectPropertyAssertionAxiom",
-                df.getOWLObjectUnionOf(
-                        df.getOWLObjectIntersectionOf(conceptA, notConceptB),
-                        df.getOWLObjectIntersectionOf(notConceptA, conceptB)),
+        assertEquals("Negation of OWLEquivalentClassesAxiom",
+                dataFactory.getOWLObjectUnionOf(
+                        dataFactory.getOWLObjectIntersectionOf(clsA, negClsB),
+                        dataFactory.getOWLObjectIntersectionOf(negClsA, clsB)),
                 ((OWLClassAssertionAxiom) equivalentClassesAxiom.accept(axiomNegator)).getClassExpression());
 
     }
@@ -105,17 +103,15 @@ public class AxiomNegatorTest {
     public void testOWLSubclassOfAxiom() throws Exception {
 
         assertEquals("Negation of OWLSubclassOfAxiom",
-                df.getOWLObjectIntersectionOf(conceptA, notConceptB),
-                ((OWLClassAssertionAxiom) subClassOfAxiom.accept(axiomNegator)).getClassExpression()
-        );
+                dataFactory.getOWLObjectIntersectionOf(clsA, negClsB),
+                ((OWLClassAssertionAxiom) subClassOfAxiom.accept(axiomNegator)).getClassExpression());
     }
 
     @Test
     public void testOWLClassAssertionAxiom() throws Exception {
 
         assertEquals("Negation of OWLClassAssertionAxiom",
-                df.getOWLClassAssertionAxiom(notConceptA,indA),
-                classAssertionAxiom.accept(axiomNegator)
-        );
+                dataFactory.getOWLClassAssertionAxiom(negClsA, indA),
+                classAssertionAxiom.accept(axiomNegator));
     }
 }

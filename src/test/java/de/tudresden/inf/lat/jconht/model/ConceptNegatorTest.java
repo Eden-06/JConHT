@@ -22,11 +22,11 @@ public class ConceptNegatorTest {
 
     private OWLClass owlThing;
     private OWLClass owlNothing;
-    private OWLClass owlClass;
+    private OWLClass clsA;
 
-    private OWLObjectComplementOf complementOf;
+    private OWLObjectComplementOf complementOfA;
 
-    private OWLObjectIntersectionOf intersectionOf;
+    private OWLObjectIntersectionOf intersectionOfAAndA;
 
     @Before
     public void setUp() throws Exception {
@@ -37,16 +37,16 @@ public class ConceptNegatorTest {
 
         owlThing = dataFactory.getOWLThing();
         owlNothing = dataFactory.getOWLNothing();
-        owlClass = dataFactory.getOWLClass("cls:A");
+        clsA = dataFactory.getOWLClass("cls:A");
 
-        complementOf = dataFactory.getOWLObjectComplementOf(owlClass);
-
-        intersectionOf = dataFactory.getOWLObjectIntersectionOf(owlClass, owlClass);
+        complementOfA = dataFactory.getOWLObjectComplementOf(clsA);
+        intersectionOfAAndA = dataFactory.getOWLObjectIntersectionOf(clsA, clsA);
 
     }
 
     @After
     public void tearDown() throws Exception {
+
         dataFactory.purge();
     }
 
@@ -70,23 +70,23 @@ public class ConceptNegatorTest {
     public void testOWLClass() throws Exception {
 
         assertEquals("Negation of OWLClass",
-                owlClass.getObjectComplementOf(),
-                owlClass.accept(conceptNegator));
+                clsA.getObjectComplementOf(),
+                clsA.accept(conceptNegator));
     }
 
     @Test
     public void testOWLObjectComplementOf() throws Exception {
 
         assertEquals("Negation of OWLObjectComplementOf",
-                owlClass,
-                complementOf.accept(conceptNegator));
+                clsA,
+                complementOfA.accept(conceptNegator));
     }
 
     @Test
     public void testOWLObjectIntersectionOf() throws Exception {
 
         assertEquals("Negation of OWLObjectIntersectionOf",
-                intersectionOf.getObjectComplementOf(),
-                intersectionOf.accept(conceptNegator));
+                intersectionOfAAndA.getObjectComplementOf(),
+                intersectionOfAAndA.accept(conceptNegator));
     }
 }

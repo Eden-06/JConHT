@@ -15,23 +15,29 @@ import static org.junit.Assert.assertEquals;
 
 
 /**
- * Created by boehme on 28/10/16.
+ * This is indA test class for <code>ContextOntology</code>.
+ *
+ * @author Stephan Böhme
+ * @author Marcel Lippmann
  */
 public class ContextOntologyTest {
 
     private OWLOntologyManager manager;
-    private OWLDataFactory df;
+    private OWLDataFactory dataFactory;
+
     private OWLOntology rootOntology;
     private ContextOntology contextOntology;
-    private OWLClass C;
-    private OWLClass A;
-    private OWLClass A1;
-    private OWLClass A2;
-    private OWLClass A3;
-    private OWLClass B;
-    private OWLIndividual a;
-    private OWLIndividual b;
-    private OWLIndividual c;
+
+    private OWLClass clsC;
+    private OWLClass clsA;
+    private OWLClass clsA1;
+    private OWLClass clsA2;
+    private OWLClass clsA3;
+    private OWLClass clsB;
+    private OWLIndividual indA;
+    private OWLIndividual indB;
+    private OWLIndividual indC;
+
     private OWLAnnotation annotationA1;
     private Set<OWLAnnotation> setAnnotationA1;
     private OWLAnnotation annotationA2;
@@ -39,48 +45,47 @@ public class ContextOntologyTest {
     private OWLAnnotation annotationA3;
     private Set<OWLAnnotation> setAnnotationA3;
 
-
     @Before
     public void setUp() throws Exception {
 
         manager = OWLManager.createOWLOntologyManager();
-        df = manager.getOWLDataFactory();
+        dataFactory = manager.getOWLDataFactory();
 
-        C = df.getOWLClass("cls:C");
-        A = df.getOWLClass("cls:A");
-        A1 = df.getOWLClass("cls:A1");
-        A2 = df.getOWLClass("cls:A2");
-        A3 = df.getOWLClass("cls:A3");
-        B = df.getOWLClass("cls:B");
-        a = df.getOWLNamedIndividual("ind:a");
-        b = df.getOWLNamedIndividual("ind:b");
-        c = df.getOWLNamedIndividual("ind:c");
+        clsC = dataFactory.getOWLClass("cls:C");
+        clsA = dataFactory.getOWLClass("cls:A");
+        clsA1 = dataFactory.getOWLClass("cls:A1");
+        clsA2 = dataFactory.getOWLClass("cls:A2");
+        clsA3 = dataFactory.getOWLClass("cls:A3");
+        clsB = dataFactory.getOWLClass("cls:B");
+        indA = dataFactory.getOWLNamedIndividual("ind:a");
+        indB = dataFactory.getOWLNamedIndividual("ind:b");
+        indC = dataFactory.getOWLNamedIndividual("ind:c");
 
-        annotationA1 = df.getOWLAnnotation(df.getRDFSIsDefinedBy(), A1.getIRI());
+        annotationA1 = dataFactory.getOWLAnnotation(dataFactory.getRDFSIsDefinedBy(), clsA1.getIRI());
         setAnnotationA1 = new HashSet<>();
         setAnnotationA1.add(annotationA1);
-        annotationA2 = df.getOWLAnnotation(df.getRDFSIsDefinedBy(), A2.getIRI());
+        annotationA2 = dataFactory.getOWLAnnotation(dataFactory.getRDFSIsDefinedBy(), clsA2.getIRI());
         setAnnotationA2 = new HashSet<>();
         setAnnotationA2.add(annotationA2);
-        annotationA3 = df.getOWLAnnotation(df.getRDFSIsDefinedBy(), A3.getIRI());
+        annotationA3 = dataFactory.getOWLAnnotation(dataFactory.getRDFSIsDefinedBy(), clsA3.getIRI());
         setAnnotationA3 = new HashSet<>();
         setAnnotationA3.add(annotationA3);
 
         rootOntology = manager.createOntology(Arrays.asList(
-                df.getOWLSubClassOfAxiom(C,df.getOWLObjectIntersectionOf(A1, A2)),
-                df.getOWLSubClassOfAxiom(A,df.getOWLNothing(), setAnnotationA1),
-                df.getOWLClassAssertionAxiom(C,c),
-                df.getOWLClassAssertionAxiom(A2,c),
-                df.getOWLClassAssertionAxiom(A,a,setAnnotationA2),
-                df.getOWLClassAssertionAxiom(B,a,setAnnotationA3)
-        ));
+                dataFactory.getOWLSubClassOfAxiom(clsC, dataFactory.getOWLObjectIntersectionOf(clsA1, clsA2)),
+                dataFactory.getOWLSubClassOfAxiom(clsA, dataFactory.getOWLNothing(), setAnnotationA1),
+                dataFactory.getOWLClassAssertionAxiom(clsC, indC),
+                dataFactory.getOWLClassAssertionAxiom(clsA2, indC),
+                dataFactory.getOWLClassAssertionAxiom(clsA, indA, setAnnotationA2),
+                dataFactory.getOWLClassAssertionAxiom(clsB, indA, setAnnotationA3)));
 
         contextOntology = new ContextOntology(rootOntology);
     }
 
     @After
     public void tearDown() throws Exception {
-        df.purge();
+
+        dataFactory.purge();
         manager.clearOntologies();
     }
 
@@ -88,10 +93,9 @@ public class ContextOntologyTest {
     public void testMetaOntology() throws Exception {
 
         OWLOntology ontology = manager.createOntology(Arrays.asList(
-                df.getOWLSubClassOfAxiom(C,df.getOWLObjectIntersectionOf(A1,A2)),
-                df.getOWLClassAssertionAxiom(C,c),
-                df.getOWLClassAssertionAxiom(A2,c)
-                ));
+                dataFactory.getOWLSubClassOfAxiom(clsC, dataFactory.getOWLObjectIntersectionOf(clsA1, clsA2)),
+                dataFactory.getOWLClassAssertionAxiom(clsC, indC),
+                dataFactory.getOWLClassAssertionAxiom(clsA2, indC)));
 
         assertEquals("Test for getting the meta ontology:",
                 ontology.axioms().collect(Collectors.toSet()),
@@ -103,19 +107,18 @@ public class ContextOntologyTest {
 
         assertEquals("Test for getting the object ontology:",
                 manager.createOntology(Arrays.asList(
-                        df.getOWLSubClassOfAxiom(A, df.getOWLNothing()),
-                        df.getOWLClassAssertionAxiom(A, a)))
+                        dataFactory.getOWLSubClassOfAxiom(clsA, dataFactory.getOWLNothing()),
+                        dataFactory.getOWLClassAssertionAxiom(clsA, indA)))
                         .axioms().collect(Collectors.toSet()),
-                contextOntology.getObjectOntology(new HashSet<>(Arrays.asList(A1, A2))).axioms().collect(Collectors.toSet()));
+                contextOntology.getObjectOntology(new HashSet<>(Arrays.asList(clsA1, clsA2))).axioms().collect(Collectors.toSet()));
 
 
         assertEquals("Test for getting the object ontology:",
                 manager.createOntology(Arrays.asList(
-                        df.getOWLSubClassOfAxiom(A, df.getOWLNothing()),
-                        df.getOWLClassAssertionAxiom(B, a)))
+                        dataFactory.getOWLSubClassOfAxiom(clsA, dataFactory.getOWLNothing()),
+                        dataFactory.getOWLClassAssertionAxiom(clsB, indA)))
                         .axioms().collect(Collectors.toSet()),
-                contextOntology.getObjectOntology(new HashSet<>(Arrays.asList(A1, A3))).axioms().collect(Collectors.toSet()));
-
+                contextOntology.getObjectOntology(new HashSet<>(Arrays.asList(clsA1, clsA3))).axioms().collect(Collectors.toSet()));
     }
-    
+
 }
