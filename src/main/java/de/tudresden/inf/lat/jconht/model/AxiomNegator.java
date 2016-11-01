@@ -89,23 +89,21 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
 
     @Override
     public OWLAxiom visit(OWLEquivalentClassesAxiom axiom) {
-        // ¬(C ≡ D) ⟹ ((C ∧ ¬D)∨(¬C ∧ D))(x_new)
 
-        if (axiom.operands().count() != 2) {
-            throw new UnhandledAxiomTypeException("Equivalent class axioms are only allowed with two operands.");
-        }
-
+        // ¬(C ≡ D) ⟹ ((C ⊓ ¬D) ⊔ (¬C ⊓ D))(x_new)
         return dataFactory.getOWLClassAssertionAxiom(
-                axiom.operands()
-                        .reduce((c, d) -> dataFactory.getOWLObjectUnionOf(
-                                dataFactory.getOWLObjectIntersectionOf(
-                                        c,
-                                        d.accept(new ConceptNegator(dataFactory))),
-                                dataFactory.getOWLObjectIntersectionOf(
-                                        c.accept(new ConceptNegator(dataFactory)),
-                                        d)))
-                        // This get() does not fail!  See if-statement above.
-                        .get(),
+                dataFactory.getOWLObjectUnionOf(
+                        axiom.asPairwiseAxioms().stream()
+                                .map(a -> a.operands()
+                                        .reduce((c, d) -> dataFactory.getOWLObjectUnionOf(
+                                                dataFactory.getOWLObjectIntersectionOf(
+                                                        c,
+                                                        d.accept(new ConceptNegator(dataFactory))),
+                                                dataFactory.getOWLObjectIntersectionOf(
+                                                        c.accept(new ConceptNegator(dataFactory)),
+                                                        d)))
+                                        // This get() does not fail.
+                                        .get())),
                 dataFactory.getOWLAnonymousIndividual());
     }
 
