@@ -61,6 +61,7 @@ public class ConceptNegatorTest {
     @Test
     public void testOWLThing() throws Exception {
 
+        // pure syntactical test
         assertEquals("Negation of OWLThing is OWLNothing",
                 owlNothing,
                 owlThing.accept(conceptNegator));
@@ -69,6 +70,7 @@ public class ConceptNegatorTest {
     @Test
     public void testOWLNothing() throws Exception {
 
+        // pure syntactical test
         assertEquals("Negation of OWLNothing is OWLThing",
                 owlThing,
                 owlNothing.accept(conceptNegator));
@@ -77,6 +79,7 @@ public class ConceptNegatorTest {
     @Test
     public void testOWLObjectComplementOf() throws Exception {
 
+        // pure syntactical test
         assertEquals("Negation of OWLObjectComplementOf",
                 clsA,
                 complementOfA.accept(conceptNegator));
@@ -85,17 +88,19 @@ public class ConceptNegatorTest {
     @Test
     public void testOWLClass() throws Exception {
 
-        OWLReasoner reasoner = reasonerFactory.createReasoner(
-                manager.createOntology(Stream.of(
-                        dataFactory.getOWLDisjointUnionAxiom(
-                                dataFactory.getOWLThing(),
-                                Stream.of(
-                                        clsA,
-                                        clsA.accept(conceptNegator))))));
+        // D is negation of C iff ⊭(C ⊓ D)(x) and ⊨(C ⊔ D)(x)
+        //⊨
 
-        assertTrue("Negation of OWLClass", reasoner.isConsistent());
+        assertTrue("Negation of OWLClass: (C ⊓ D)(x) inconsistent",
+                IsInconsistent(Stream.of(dataFactory.getOWLClassAssertionAxiom(
+                        dataFactory.getOWLObjectIntersectionOf(clsA, clsA.accept(conceptNegator)),
+                        dataFactory.getOWLAnonymousIndividual()))));
 
-        reasoner.dispose();
+        assertTrue("Negation of OWLClass: ⊨ (C ⊔ D)(x)",
+                EmptyOntologyEntails(dataFactory.getOWLClassAssertionAxiom(
+                        dataFactory.getOWLObjectUnionOf(clsA, clsA.accept(conceptNegator)),
+                        dataFactory.getOWLAnonymousIndividual())));
+
     }
 
     @Test
@@ -112,5 +117,18 @@ public class ConceptNegatorTest {
         assertTrue("Negation of OWLObjectIntersectionOf", reasoner.isConsistent());
 
         reasoner.dispose();
+    }
+
+    private boolean IsInconsistent(Stream<OWLAxiom> axioms) throws OWLOntologyCreationException {
+
+        OWLReasoner reasoner = reasonerFactory.createReasoner(
+                manager.createOntology(axioms));
+        return !reasoner.isConsistent();
+    }
+
+    private boolean EmptyOntologyEntails(OWLAxiom axiom) throws OWLOntologyCreationException {
+        OWLReasoner reasoner = reasonerFactory.createReasoner(
+                manager.createOntology());
+        return reasoner.isEntailed(axiom);
     }
 }
