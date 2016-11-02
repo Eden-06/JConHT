@@ -32,7 +32,6 @@ public class ConceptNegatorTest {
     private OWLClass clsB;
 
     private OWLObjectComplementOf complementOfA;
-
     private OWLObjectIntersectionOf intersectionOfAAndB;
 
     @Before
@@ -56,6 +55,7 @@ public class ConceptNegatorTest {
     public void tearDown() throws Exception {
 
         dataFactory.purge();
+        manager.clearOntologies();
     }
 
     @Test
@@ -88,15 +88,15 @@ public class ConceptNegatorTest {
     @Test
     public void testOWLClass() throws Exception {
 
-        // D is negation of C iff ⊭(C ⊓ D)(x) and ⊨(C ⊔ D)(x)
+        // A is negation of B iff ⊭(A ⊓ B)(x) and ⊨(A ⊔ B)(x)
 
-        assertTrue("Negation of OWLClass: (C ⊓ D)(x) inconsistent",
-                !isConsistent(Stream.of(
+        assertTrue("Negation of OWLClass: (A ⊓ B)(x) inconsistent",
+                isInconsistent(Stream.of(
                         dataFactory.getOWLClassAssertionAxiom(
                                 dataFactory.getOWLObjectIntersectionOf(clsA, clsA.accept(conceptNegator)),
                                 dataFactory.getOWLAnonymousIndividual()))));
 
-        assertTrue("Negation of OWLClass: ⊨ (C ⊔ D)(x)",
+        assertTrue("Negation of OWLClass: ⊨ (A ⊔ B)(x)",
                 entailedByEmptyOntology(dataFactory.getOWLClassAssertionAxiom(
                         dataFactory.getOWLObjectUnionOf(clsA, clsA.accept(conceptNegator)),
                         dataFactory.getOWLAnonymousIndividual())));
@@ -106,28 +106,35 @@ public class ConceptNegatorTest {
     @Test
     public void testOWLObjectIntersectionOf() throws Exception {
 
-        // TODO: check this test.
-        assertTrue("Negation of OWLObjectIntersectionOf",
-                isConsistent(Stream.of(
-                        dataFactory.getOWLDisjointUnionAxiom(
-                                dataFactory.getOWLThing(),
-                                Stream.of(
-                                        intersectionOfAAndB,
-                                        intersectionOfAAndB.accept(conceptNegator).getNNF())))));
+        // D is negation of C iff ⊭(C ⊓ D)(x) and ⊨(C ⊔ D)(x)
 
+        assertTrue("Negation of OWLClass: (C ⊓ D)(x) inconsistent",
+                isInconsistent(Stream.of(
+                        dataFactory.getOWLClassAssertionAxiom(
+                                dataFactory.getOWLObjectIntersectionOf(
+                                        intersectionOfAAndB,
+                                        intersectionOfAAndB.accept(conceptNegator)),
+                                dataFactory.getOWLAnonymousIndividual()))));
+
+        assertTrue("Negation of OWLClass: ⊨ (C ⊔ D)(x)",
+                entailedByEmptyOntology(dataFactory.getOWLClassAssertionAxiom(
+                        dataFactory.getOWLObjectUnionOf(
+                                intersectionOfAAndB,
+                                intersectionOfAAndB.accept(conceptNegator)),
+                        dataFactory.getOWLAnonymousIndividual())));
     }
 
-    private boolean isConsistent(Stream<OWLAxiom> axioms) throws OWLOntologyCreationException {
+    private boolean isInconsistent(Stream<OWLAxiom> axioms) throws OWLOntologyCreationException {
 
         OWLOntology ontology = manager.createOntology(axioms);
         OWLReasoner reasoner = reasonerFactory.createReasoner(ontology);
 
-        boolean consistent = reasoner.isConsistent();
+        boolean inconsistent = !reasoner.isConsistent();
 
         reasoner.dispose();
         manager.removeOntology(ontology);
 
-        return consistent;
+        return inconsistent;
     }
 
     private boolean entailedByEmptyOntology(OWLAxiom axiom) throws OWLOntologyCreationException {
