@@ -15,7 +15,10 @@ import static org.junit.Assert.assertEquals;
 
 
 /**
- * This is indA test class for <code>ContextOntology</code>.
+ * TODO: REWRITE COMPLETELY!
+ *
+ *
+ * This is a test class for <code>ContextOntology</code>.
  *
  * @author Stephan Böhme
  * @author Marcel Lippmann

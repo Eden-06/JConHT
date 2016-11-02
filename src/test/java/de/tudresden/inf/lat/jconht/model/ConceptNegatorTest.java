@@ -108,7 +108,7 @@ public class ConceptNegatorTest {
 
         // D is negation of C iff ⊭(C ⊓ D)(x) and ⊨(C ⊔ D)(x)
 
-        assertTrue("Negation of OWLClass: (C ⊓ D)(x) inconsistent",
+        assertTrue("Negation of OWLClassExpression: (C ⊓ D)(x) inconsistent",
                 isInconsistent(Stream.of(
                         dataFactory.getOWLClassAssertionAxiom(
                                 dataFactory.getOWLObjectIntersectionOf(
@@ -116,7 +116,7 @@ public class ConceptNegatorTest {
                                         intersectionOfAAndB.accept(conceptNegator)),
                                 dataFactory.getOWLAnonymousIndividual()))));
 
-        assertTrue("Negation of OWLClass: ⊨ (C ⊔ D)(x)",
+        assertTrue("Negation of OWLClassExpression: ⊨ (C ⊔ D)(x)",
                 entailedByEmptyOntology(dataFactory.getOWLClassAssertionAxiom(
                         dataFactory.getOWLObjectUnionOf(
                                 intersectionOfAAndB,
