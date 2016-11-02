@@ -5,11 +5,13 @@ import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import uk.ac.manchester.cs.owl.owlapi.OWLAnnotationPropertyImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLClassImpl;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This class describes a context ontology.
@@ -142,6 +144,37 @@ public class ContextOntology {
 
     @Override
     public String toString() {
+
+        String metaOntologyIRI = metaOntology.getOntologyID().getOntologyIRI().isPresent()
+                ? metaOntology.getOntologyID().getOntologyIRI().get().toString()
+                : "no IRI specified";
+
+        String outerAbstractedMetaConcepts.stream()
+                .map(OWLClass::toString)
+                .collect(Collectors.joining(", ")),
+
+        Stream.of(
+                Stream.of(
+                        "Meta Ontology IRI: " + metaOntologyIRI,
+                        "Meta concepts that identify object axioms:",
+                        outerAbstractedMetaConcepts.stream()
+                                .map(OWLClass::toString)
+                                .collect(Collectors.joining(", ")),
+                        "",
+                        "Meta Ontology:"),
+                metaOntology.axioms()
+                        .map(OWLAxiom::toString),
+                Stream.of("Hash map:")
+        );
+
+
+        objectAxiomsMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(entry -> stringBuilder.append(entry.getKey())
+                        .append(" -> ")
+                        .append(entry.getValue())
+                        .append("\n"));
+
 
         StringBuilder stringBuilder = new StringBuilder();
 
