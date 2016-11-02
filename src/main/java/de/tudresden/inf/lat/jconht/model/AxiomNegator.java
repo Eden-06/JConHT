@@ -2,8 +2,9 @@ package de.tudresden.inf.lat.jconht.model;
 
 import org.semanticweb.owlapi.model.*;
 
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * This class is used to generate the negation of a given OWLAxiom.
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
 
     private OWLDataFactory dataFactory;
+    private ConceptNegator conceptNegator;
 
     /**
      * This is the standard constructor.
@@ -23,6 +25,7 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
     public AxiomNegator(OWLDataFactory dataFactory) {
 
         this.dataFactory = dataFactory;
+        this.conceptNegator = new ConceptNegator(dataFactory);
     }
 
     @Override
@@ -38,46 +41,66 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
         // ¬(C ⊑ D) ⟹ (C ⊓ ¬D)(x_new)
 
         return dataFactory.getOWLClassAssertionAxiom(
-                dataFactory.getOWLObjectIntersectionOf(axiom.getSubClass(),
-                        axiom.getSuperClass().accept(new ConceptNegator(dataFactory))),
+                dataFactory.getOWLObjectIntersectionOf(
+                        axiom.getSubClass(),
+                        axiom.getSuperClass().accept(conceptNegator)),
                 dataFactory.getOWLAnonymousIndividual());
     }
 
     @Override
     public OWLAxiom visit(OWLNegativeObjectPropertyAssertionAxiom axiom) {
 
+        // ¬(¬r(a, b)) ⟹ r(a, b)
+
         return dataFactory.getOWLObjectPropertyAssertionAxiom(
                 axiom.getProperty(), axiom.getSubject(), axiom.getObject());
     }
 
     @Override
-    public OWLAxiom visit(OWLObjectPropertyDomainAxiom axiom) {
+    public OWLAxiom visit(OWLDisjointClassesAxiom axiom) {
+
+        // ¬(DisjointUnion(C, D, E)) ⟹ ((C ⊓ D) ⊔ (C ⊓ E) ⊔ (D ⊓ E))(x_new)
 
         return dataFactory.getOWLClassAssertionAxiom(
-                dataFactory.getOWLObjectIntersectionOf(
-                        dataFactory.getOWLObjectMinCardinality(1, axiom.getProperty()),
-                        axiom.getDomain().accept(new ConceptNegator(dataFactory))),
+                dataFactory.getOWLObjectUnionOf(
+                        axiom.asPairwiseAxioms().stream()
+                                .map(a -> a.operands()
+                                        .reduce((c, d) -> dataFactory.getOWLObjectIntersectionOf(c, d))
+                                        // This get() does not fail, because of asPairwiseAxioms().
+                                        .get())),
                 dataFactory.getOWLAnonymousIndividual());
     }
 
     @Override
-    public OWLAxiom visit(OWLDifferentIndividualsAxiom axiom) {
+    public OWLAxiom visit(OWLObjectPropertyDomainAxiom axiom) {
 
-        throw new UnhandledAxiomTypeException("Unknown axiom type in AxiomNegator: " + axiom.getAxiomType());
+        // ¬(Dom(r) = C) ⟹ (∃r.⊤ ⊓ ¬C)(x_new)
+
+        return dataFactory.getOWLClassAssertionAxiom(
+                dataFactory.getOWLObjectIntersectionOf(
+                        dataFactory.getOWLObjectSomeValuesFrom(
+                                axiom.getProperty(),
+                                dataFactory.getOWLThing()),
+                        axiom.getDomain().accept(conceptNegator)),
+                dataFactory.getOWLAnonymousIndividual());
     }
 
     @Override
     public OWLAxiom visit(OWLObjectPropertyRangeAxiom axiom) {
 
+        // ¬(Ran(r) = C) ⟹ (∃r.¬C)(x_new)
+
         return dataFactory.getOWLClassAssertionAxiom(
-                dataFactory.getOWLObjectMinCardinality(1,
+                dataFactory.getOWLObjectSomeValuesFrom(
                         axiom.getProperty(),
-                        axiom.getRange().accept(new ConceptNegator(dataFactory))),
+                        axiom.getRange().accept(conceptNegator)),
                 dataFactory.getOWLAnonymousIndividual());
     }
 
     @Override
     public OWLAxiom visit(OWLObjectPropertyAssertionAxiom axiom) {
+
+        // ¬(r(a, b)) ⟹ ¬r(a, b)
 
         return dataFactory.getOWLNegativeObjectPropertyAssertionAxiom(
                 axiom.getProperty(), axiom.getSubject(), axiom.getObject());
@@ -86,72 +109,55 @@ public class AxiomNegator implements OWLAxiomVisitorEx<OWLAxiom> {
     @Override
     public OWLAxiom visit(OWLDisjointUnionAxiom axiom) {
 
-        // ¬(A DisjointUnionOf B,C,D) ⟹ ((A ⊓ ¬B ⊓ ¬C ⊓ ¬D) ⊔ (B ⊓ C) ⊔ (B ⊓ D) ⊔ (C ⊓ D))(x_new)
+        // ¬(DisjointUnionOf(A, B, C, D)) ⟹ ((A ⊓ ¬B ⊓ ¬C ⊓ ¬D) ⊔ (B ⊓ C) ⊔ (B ⊓ D) ⊔ (C ⊓ D))(x_new)
 
-        Set conjuncts = axiom.classExpressions()
-                .map(ce -> ce.accept(new ConceptNegator(dataFactory)))
-                .collect(Collectors.toSet());
-        conjuncts.add(axiom.getOWLClass());
+        OWLClassExpression firstDisjunct = dataFactory.getOWLObjectIntersectionOf(
+                Stream.concat(Stream.of(axiom.getOWLClass()),
+                        axiom.classExpressions()
+                                .map(c -> c.accept(conceptNegator))));
+
+        Stream<OWLClassExpression> remainingDisjuncts =
+                axiom.getOWLDisjointClassesAxiom().asPairwiseAxioms().stream()
+                        .map(a -> a.operands()
+                                .reduce((c, d) -> dataFactory.getOWLObjectIntersectionOf(c, d))
+                                // This get() does not fail, because of asPairwiseAxioms().
+                                .get());
 
         return dataFactory.getOWLClassAssertionAxiom(
                 dataFactory.getOWLObjectUnionOf(
-                        dataFactory.getOWLObjectIntersectionOf(conjuncts),
-                        dataFactory.getOWLObjectUnionOf(
-                        axiom.getOWLDisjointClassesAxiom().asPairwiseAxioms().stream()
-                            .map(a -> a.operands()
-                                    .reduce((c, d) -> dataFactory.getOWLObjectIntersectionOf(c, d))
-                                    .get()))),
-                dataFactory.getOWLAnonymousIndividual()
-        );
+                        Stream.concat(Stream.of(firstDisjunct), remainingDisjuncts)),
+                dataFactory.getOWLAnonymousIndividual());
     }
 
     @Override
     public OWLAxiom visit(OWLClassAssertionAxiom axiom) {
 
-        // ¬(C(a)) ⟹ (¬C(a))
+        // ¬(C(a)) ⟹ ¬C(a)
 
-        return dataFactory.getOWLClassAssertionAxiom(axiom.getClassExpression().accept(new ConceptNegator(dataFactory)),
+        return dataFactory.getOWLClassAssertionAxiom(
+                axiom.getClassExpression().accept(conceptNegator),
                 axiom.getIndividual());
     }
 
     @Override
     public OWLAxiom visit(OWLEquivalentClassesAxiom axiom) {
 
-        // ¬(C ≡ D) ⟹ ((C ⊓ ¬D) ⊔ (¬C ⊓ D))(x_new)
-        return dataFactory.getOWLClassAssertionAxiom(
-                dataFactory.getOWLObjectUnionOf(
-                        axiom.asPairwiseAxioms().stream()
-                                .map(a -> a.operands()
-                                        .reduce((c, d) -> dataFactory.getOWLObjectUnionOf(
-                                                dataFactory.getOWLObjectIntersectionOf(
-                                                        c,
-                                                        d.accept(new ConceptNegator(dataFactory))),
-                                                dataFactory.getOWLObjectIntersectionOf(
-                                                        c.accept(new ConceptNegator(dataFactory)),
-                                                        d)))
-                                        // This get() does not fail.
-                                        .get())),
-                dataFactory.getOWLAnonymousIndividual());
-    }
+        // ¬(C ≡ D ≡ E) ⟹ ((C ⊓ ¬D) ⊔ (¬C ⊓ D) ⊔ (D ⊓ ¬E) ⊔ (¬D ⊓ E) ⊔ (C ⊓ ¬E) ⊔ (¬C ⊓ E))(x_new)
 
-    @Override
-    public OWLAxiom visit(OWLDisjointClassesAxiom axiom) {
-
-        // ¬(DisjointUnion(C,D,E) ⟹ ((C ⊓ D) ⊔ (C ⊓ E) ⊔ (D ⊓ E))(x_new)
+        // This function maps C ≡ D to [(C ⊓ ¬D), (¬C ⊓ D)].
+        Function<OWLEquivalentClassesAxiom, Stream<Optional<OWLClassExpression>>> mapper =
+                a -> Stream.of(
+                        a.operands().reduce((c, d) ->
+                                dataFactory.getOWLObjectIntersectionOf(c, d.accept(conceptNegator))),
+                        a.operands().reduce((c, d) ->
+                                dataFactory.getOWLObjectIntersectionOf(c.accept(conceptNegator), d)));
 
         return dataFactory.getOWLClassAssertionAxiom(
                 dataFactory.getOWLObjectUnionOf(
                         axiom.asPairwiseAxioms().stream()
-                                .map(a -> a.operands()
-                                        .reduce((c, d) -> dataFactory.getOWLObjectIntersectionOf(c, d))
-                                        // This get() does not fail.
-                                        .get())),
+                                .flatMap(mapper)
+                                // This get() does not fail, because of asPairwiseAxioms().
+                                .map(Optional::get)),
                 dataFactory.getOWLAnonymousIndividual());
-    }
-
-    @Override
-    public OWLAxiom visit(OWLSameIndividualAxiom axiom) {
-
-        throw new UnhandledAxiomTypeException("Unknown axiom type in AxiomNegator: " + axiom.getAxiomType());
     }
 }
