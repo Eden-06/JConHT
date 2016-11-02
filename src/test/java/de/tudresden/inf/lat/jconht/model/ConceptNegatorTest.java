@@ -89,15 +89,15 @@ public class ConceptNegatorTest {
     public void testOWLClass() throws Exception {
 
         // D is negation of C iff ⊭(C ⊓ D)(x) and ⊨(C ⊔ D)(x)
-        //⊨
 
         assertTrue("Negation of OWLClass: (C ⊓ D)(x) inconsistent",
-                IsInconsistent(Stream.of(dataFactory.getOWLClassAssertionAxiom(
-                        dataFactory.getOWLObjectIntersectionOf(clsA, clsA.accept(conceptNegator)),
-                        dataFactory.getOWLAnonymousIndividual()))));
+                !isConsistent(Stream.of(
+                        dataFactory.getOWLClassAssertionAxiom(
+                                dataFactory.getOWLObjectIntersectionOf(clsA, clsA.accept(conceptNegator)),
+                                dataFactory.getOWLAnonymousIndividual()))));
 
         assertTrue("Negation of OWLClass: ⊨ (C ⊔ D)(x)",
-                EmptyOntologyEntails(dataFactory.getOWLClassAssertionAxiom(
+                entailedByEmptyOntology(dataFactory.getOWLClassAssertionAxiom(
                         dataFactory.getOWLObjectUnionOf(clsA, clsA.accept(conceptNegator)),
                         dataFactory.getOWLAnonymousIndividual())));
 
@@ -106,29 +106,40 @@ public class ConceptNegatorTest {
     @Test
     public void testOWLObjectIntersectionOf() throws Exception {
 
-        OWLReasoner reasoner = reasonerFactory.createReasoner(
-                manager.createOntology(Stream.of(
+        // TODO: check this test.
+        assertTrue("Negation of OWLObjectIntersectionOf",
+                isConsistent(Stream.of(
                         dataFactory.getOWLDisjointUnionAxiom(
                                 dataFactory.getOWLThing(),
                                 Stream.of(
                                         intersectionOfAAndB,
                                         intersectionOfAAndB.accept(conceptNegator).getNNF())))));
 
-        assertTrue("Negation of OWLObjectIntersectionOf", reasoner.isConsistent());
+    }
+
+    private boolean isConsistent(Stream<OWLAxiom> axioms) throws OWLOntologyCreationException {
+
+        OWLOntology ontology = manager.createOntology(axioms);
+        OWLReasoner reasoner = reasonerFactory.createReasoner(ontology);
+
+        boolean consistent = reasoner.isConsistent();
 
         reasoner.dispose();
+        manager.removeOntology(ontology);
+
+        return consistent;
     }
 
-    private boolean IsInconsistent(Stream<OWLAxiom> axioms) throws OWLOntologyCreationException {
+    private boolean entailedByEmptyOntology(OWLAxiom axiom) throws OWLOntologyCreationException {
 
-        OWLReasoner reasoner = reasonerFactory.createReasoner(
-                manager.createOntology(axioms));
-        return !reasoner.isConsistent();
-    }
+        OWLOntology ontology = manager.createOntology();
+        OWLReasoner reasoner = reasonerFactory.createReasoner(ontology);
 
-    private boolean EmptyOntologyEntails(OWLAxiom axiom) throws OWLOntologyCreationException {
-        OWLReasoner reasoner = reasonerFactory.createReasoner(
-                manager.createOntology());
-        return reasoner.isEntailed(axiom);
+        boolean entailed = reasoner.isEntailed(axiom);
+
+        reasoner.dispose();
+        manager.removeOntology(ontology);
+
+        return entailed;
     }
 }
