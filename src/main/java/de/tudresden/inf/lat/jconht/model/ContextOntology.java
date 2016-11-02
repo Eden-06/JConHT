@@ -28,8 +28,7 @@ public class ContextOntology {
     /**
      * This is the standard constructor.
      *
-     * @param rootOntology The correctly annotated root ontology.
-     * TODO: Specify what this actually means.
+     * @param rootOntology The correctly annotated root ontology. TODO: Specify what this actually means.
      */
     public ContextOntology(OWLOntology rootOntology) {
 
@@ -149,7 +148,7 @@ public class ContextOntology {
         stringBuilder.append("Meta Ontology IRI: ");
         metaOntology.getOntologyID().getOntologyIRI()
                 .ifPresent(iri -> stringBuilder.append(iri).append("\n"));
-        stringBuilder.append("Meta concpts that identify object axioms:\n");
+        stringBuilder.append("Meta concepts that identify object axioms:\n");
         outerAbstractedMetaConcepts.forEach(owlClass -> stringBuilder.append(owlClass).append(", "));
         stringBuilder.append("\n");
         stringBuilder.append("Meta Ontology:\n");
@@ -158,8 +157,12 @@ public class ContextOntology {
         stringBuilder.append("\n");
 
         stringBuilder.append("Hash map:\n");
-        objectAxiomsMap.forEach(
-                (key, value) -> stringBuilder.append(key).append(" -> ").append(value).append("\n"));
+        objectAxiomsMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(entry -> stringBuilder.append(entry.getKey())
+                        .append(" -> ")
+                        .append(entry.getValue())
+                        .append("\n"));
 
         return stringBuilder.toString();
     }
