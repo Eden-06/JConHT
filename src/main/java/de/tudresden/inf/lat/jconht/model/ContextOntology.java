@@ -5,7 +5,6 @@ import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import uk.ac.manchester.cs.owl.owlapi.OWLAnnotationPropertyImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLClassImpl;
 
-import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -149,54 +148,26 @@ public class ContextOntology {
                 ? metaOntology.getOntologyID().getOntologyIRI().get().toString()
                 : "no IRI specified";
 
-        String outerAbstractedMetaConcepts.stream()
+        String metaConcepts = outerAbstractedMetaConcepts.stream()
                 .map(OWLClass::toString)
-                .collect(Collectors.joining(", ")),
+                .collect(Collectors.joining(", "));
 
-        Stream.of(
-                Stream.of(
-                        "Meta Ontology IRI: " + metaOntologyIRI,
-                        "Meta concepts that identify object axioms:",
-                        outerAbstractedMetaConcepts.stream()
-                                .map(OWLClass::toString)
-                                .collect(Collectors.joining(", ")),
-                        "",
-                        "Meta Ontology:"),
-                metaOntology.axioms()
-                        .map(OWLAxiom::toString),
-                Stream.of("Hash map:")
-        );
+        String metaOntologyAsString = metaOntology.axioms().map(OWLAxiom::toString).collect(Collectors.joining("\n"));
 
-
-        objectAxiomsMap.entrySet().stream()
+        String objectAxiomsMapAsString = objectAxiomsMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
-                .forEach(entry -> stringBuilder.append(entry.getKey())
-                        .append(" -> ")
-                        .append(entry.getValue())
-                        .append("\n"));
+                .map(entry -> entry.getKey() + " -> " + entry.getValue())
+                .collect(Collectors.joining("\n"));
 
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("Meta Ontology IRI: ");
-        metaOntology.getOntologyID().getOntologyIRI()
-                .ifPresent(iri -> stringBuilder.append(iri).append("\n"));
-        stringBuilder.append("Meta concepts that identify object axioms:\n");
-        outerAbstractedMetaConcepts.forEach(owlClass -> stringBuilder.append(owlClass).append(", "));
-        stringBuilder.append("\n");
-        stringBuilder.append("Meta Ontology:\n");
-        metaOntology.axioms()
-                .forEach(axiom -> stringBuilder.append(axiom).append("\n"));
-        stringBuilder.append("\n");
-
-        stringBuilder.append("Hash map:\n");
-        objectAxiomsMap.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey())
-                .forEach(entry -> stringBuilder.append(entry.getKey())
-                        .append(" -> ")
-                        .append(entry.getValue())
-                        .append("\n"));
-
-        return stringBuilder.toString();
+        return Stream.of(
+                "Meta Ontology IRI: " + metaOntologyIRI,
+                "Meta concepts that identify object axioms:",
+                metaConcepts,
+                "Meta Ontology:",
+                metaOntologyAsString,
+                "",
+                "Hash map:",
+                objectAxiomsMapAsString
+                ).collect(Collectors.joining("\n"));
     }
 }
