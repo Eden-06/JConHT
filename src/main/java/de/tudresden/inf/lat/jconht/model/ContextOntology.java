@@ -172,6 +172,7 @@ public class ContextOntology {
         // Obtain meta ontology.
         builder.append("Meta Ontology:\n");
         builder.append(metaOntology.axioms()
+                .sorted((axiom1, axiom2) -> axiom1.compareTo(axiom2))
                 .map(OWLAxiom::toString)
                 .collect(Collectors.joining("\n")));
         builder.append("\n\n");
