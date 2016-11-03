@@ -14,6 +14,9 @@ Ontology: <http://www.rosi-project.org/ontologies/2016/7/hermit-testonto-1>
 AnnotationProperty: <rosi:isMeta>
 
     
+AnnotationProperty: rdfs:label
+
+
 AnnotationProperty: rdfs:comment
 
     
@@ -113,13 +116,16 @@ Class: <rosi:NT1>
         <rosi:NaturalTypes>
     
     
+Class: <rosi:NominalA>
+
+
 Class: rosi:A
 
     Annotations: 
         <rosi:rigidity> true,
         <rosi:isMeta> false
     
-    SubClassOf: 
+    SubClassOf:
         rosi:C1 or rosi:C2,
         rosi:B1 or rosi:B2 or rosi:C1,
         rosi:D1 or rosi:D2

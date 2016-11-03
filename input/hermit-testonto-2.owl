@@ -30,7 +30,8 @@ Class: <rosi:F>
     
 Class: <rosi:D>
 
-    SubClassOf: 
+    SubClassOf:
+        Annotations: rdfs:label "objectGlobal"
         <rosi:F>
     
     

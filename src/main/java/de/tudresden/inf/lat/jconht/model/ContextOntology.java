@@ -4,6 +4,7 @@ import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import uk.ac.manchester.cs.owl.owlapi.OWLAnnotationPropertyImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLClassImpl;
+import uk.ac.manchester.cs.owl.owlapi.OWLLiteralImplString;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +24,7 @@ public class ContextOntology {
     private final OWLOntologyManager ontologyManager;
     private OWLOntology metaOntology;
     private Map<OWLClassExpression, OWLAxiom> objectAxiomsMap;
+    private Stream<OWLAxiom> globalObjectOntology;
     private Set<OWLClass> outerAbstractedMetaConcepts;
     private OWLDataFactory dataFactory;
 
@@ -33,10 +35,14 @@ public class ContextOntology {
      */
     public ContextOntology(OWLOntology rootOntology) {
 
+        rootOntology.axioms().forEach(System.out::println);
+
         ontologyManager = rootOntology.getOWLOntologyManager();
         dataFactory = ontologyManager.getOWLDataFactory();
 
-        IRI isDefinedBy = OWLRDFVocabulary.RDFS_IS_DEFINED_BY.getIRI();
+        OWLAnnotationProperty isDefinedBy = new OWLAnnotationPropertyImpl(OWLRDFVocabulary.RDFS_IS_DEFINED_BY.getIRI());
+        OWLAnnotationProperty label = new OWLAnnotationPropertyImpl(OWLRDFVocabulary.RDFS_LABEL.getIRI());
+        OWLLiteral objectGlobal = new OWLLiteralImplString("objectGlobal");
 
         // Obtain meta ontology
         try {
@@ -44,10 +50,27 @@ public class ContextOntology {
             metaOntology = ontologyManager.createOntology(
                     rootOntology.axioms()
                             .filter(owlAxiom -> owlAxiom.isOfType(AxiomType.LOGICAL_AXIOM_TYPES))
-                            .filter(owlAxiom -> owlAxiom.annotations(new OWLAnnotationPropertyImpl(isDefinedBy))
+                            .filter(owlAxiom -> owlAxiom.annotations(isDefinedBy).count() == 0)
+                            .filter(owlAxiom -> owlAxiom.annotations(label)
+                           //         .filter(owlAnnotation -> owlAnnotation.getValue() == objectGlobal)
                                     .count() == 0)
                             .collect(Collectors.toSet())
             );
+
+            System.out.println("-------");
+            metaOntology.axioms().forEach(System.out::println);
+            System.out.println("-------");
+            rootOntology.axioms()
+                    .filter(owlAxiom -> owlAxiom.annotations(label).count() != 0)
+                    .map(owlAxiom -> owlAxiom.annotations(label).map(owlAnnotation -> owlAnnotation.getValue()))
+                    .forEach(x -> x.forEach(System.out::println));
+            System.out.println(objectGlobal);
+
+            rootOntology.axioms()
+                    .filter(owlAxiom -> owlAxiom.annotations(label).count() != 0)
+                    .map(owlAxiom -> owlAxiom.annotations(label).map(owlAnnotation -> owlAnnotation.getValue()))
+                    .forEach(x -> x.forEach( owlAnnotationValue -> System.out.println(owlAnnotationValue == objectGlobal)));
+
 
             // Create IRI for meta ontology
             IRI metaIRI = IRI.create(rootOntology.getOntologyID().getOntologyIRI().orElse(IRI.create("")) + "_meta");
@@ -67,7 +90,7 @@ public class ContextOntology {
         objectAxiomsMap = new HashMap<>();
 
         rootOntology.axioms()
-                .forEach(owlAxiom -> owlAxiom.annotations(new OWLAnnotationPropertyImpl(isDefinedBy))
+                .forEach(owlAxiom -> owlAxiom.annotations(isDefinedBy)
                         .findFirst()
                         .ifPresent(
                                 owlAnnotation -> objectAxiomsMap.put(new OWLClassImpl((IRI) owlAnnotation.getValue()),
@@ -87,6 +110,20 @@ public class ContextOntology {
                         entry -> entry.getValue().accept(new AxiomNegator(dataFactory)))
                 )
         );
+
+        // Obtain global object axioms
+        globalObjectOntology = rootOntology.axioms()
+                // consider only logical axioms
+                .filter(owlAxiom -> owlAxiom.isOfType(AxiomType.LOGICAL_AXIOM_TYPES))
+                // consider only axioms that are labelled with 'global'
+                .filter(owlAxiom -> owlAxiom.annotations(label)
+                        .filter(owlAnnotation -> owlAnnotation.getValue() == objectGlobal)
+                        .count() != 0);
+
+
+        System.out.println("globalObjectOntology = ");
+        globalObjectOntology.forEach(System.out::println);
+
     }
 
 
@@ -114,12 +151,14 @@ public class ContextOntology {
 
             //create the object ontology
             objectOntology = ontologyManager.createOntology(
-                    //convert objectAxiomsMap to a stream
-                    objectAxiomsMap.entrySet().stream()
-                            // filter only these entries where the key is in metaClasses
-                            .filter(entry -> metaClasses.contains(entry.getKey()))
-                            // retrieve the OWLAxiom from the entry
-                            .map(Map.Entry::getValue)
+                    Stream.concat(
+                            globalObjectOntology,
+                            //convert objectAxiomsMap to a stream
+                            objectAxiomsMap.entrySet().stream()
+                                    // filter only these entries where the key is in metaClasses
+                                    .filter(entry -> metaClasses.contains(entry.getKey()))
+                                    // retrieve the OWLAxiom from the entry
+                                    .map(Map.Entry::getValue))
                             // collect all axioms in a set
                             .collect(Collectors.toSet())
             );

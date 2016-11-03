@@ -13,7 +13,7 @@ Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 Prefix: rosi: <http://www.rosi-project.org/ontologies#>
 
-Ontology: <http://www.rosi-project.org/ontologies/2016-11-01/Bank>
+Ontology: <http://www.rosi-project.org/ontologies/2016-11-02/Bank>
 
 
 
@@ -104,7 +104,15 @@ Class: <rosi:CompartmentTypes>
     DisjointUnionOf: <rosi:Transaction>, <rosi:Bank>
 
 Class: <rosi:Transaction>
+    SubClassOf: <rosi:transDomainInTransaction>
+    SubClassOf: <rosi:transRangeInTransaction>
 Class: <rosi:Bank>
+    SubClassOf: <rosi:own_caDomainInBank>
+    SubClassOf: <rosi:own_caRangeInBank>
+    SubClassOf: <rosi:advicesDomainInBank>
+    SubClassOf: <rosi:advicesRangeInBank>
+    SubClassOf: <rosi:own_saDomainInBank>
+    SubClassOf: <rosi:own_saRangeInBank>
 
 
 
@@ -274,29 +282,93 @@ ObjectProperty: <rosi:plays>
 
 
 
-# builder.fills
-# [Person->Bank->Consultant, Person->Bank->Customer, Account->Bank->CheckingsAccount, Account->Bank->SavingsAccount, Account->Bank->CheckingsAccount, Account->Bank->SavingsAccount, Transaction->Bank->MoneyTransfer, Company->Bank->Customer]
+
+
+
+
 #
-# [Person->Consultant, Person->Customer, Account->CheckingsAccount, Account->SavingsAccount, Account->CheckingsAccount, Account->SavingsAccount, Transaction->MoneyTransfer, Company->Customer]
+# The declaration of all relationship types that occur in the model
 #
-# builder.ntinh
-# [TestNaturalType->Person, Company->Person, Company->TestNaturalType]
+Class: <rosi:transIsBottom>
+Class: <rosi:transDomainInTransaction>
+Class: <rosi:transRangeInTransaction>
+ObjectProperty: <rosi:trans>
+    SubPropertyOf:
+        owl:bottomObjectProperty,
+        Annotations: rdfs:isDefinedBy <rosi:transIsBottom>
+        owl:bottomObjectProperty
+    Domain:
+        Annotations: rdfs:isDefinedBy <rosi:transDomainInTransaction>
+        <rosi:Source>
+    Range:
+        Annotations: rdfs:isDefinedBy <rosi:transRangeInTransaction>
+        <rosi:Target>
+
+Class: <rosi:own_caIsBottom>
+Class: <rosi:own_caDomainInBank>
+Class: <rosi:own_caRangeInBank>
+ObjectProperty: <rosi:own_ca>
+    SubPropertyOf:
+        owl:bottomObjectProperty,
+        Annotations: rdfs:isDefinedBy <rosi:own_caIsBottom>
+        owl:bottomObjectProperty
+    Domain:
+        Annotations: rdfs:isDefinedBy <rosi:own_caDomainInBank>
+        <rosi:CheckingsAccount>
+    Range:
+        Annotations: rdfs:isDefinedBy <rosi:own_caRangeInBank>
+        <rosi:Customer>
+
+Class: <rosi:advicesIsBottom>
+Class: <rosi:advicesDomainInBank>
+Class: <rosi:advicesRangeInBank>
+ObjectProperty: <rosi:advices>
+    SubPropertyOf:
+        owl:bottomObjectProperty,
+        Annotations: rdfs:isDefinedBy <rosi:advicesIsBottom>
+        owl:bottomObjectProperty
+    Domain:
+        Annotations: rdfs:isDefinedBy <rosi:advicesDomainInBank>
+        <rosi:Consultant>
+    Range:
+        Annotations: rdfs:isDefinedBy <rosi:advicesRangeInBank>
+        <rosi:Customer>
+
+Class: <rosi:own_saIsBottom>
+Class: <rosi:own_saDomainInBank>
+Class: <rosi:own_saRangeInBank>
+ObjectProperty: <rosi:own_sa>
+    SubPropertyOf:
+        owl:bottomObjectProperty,
+        Annotations: rdfs:isDefinedBy <rosi:own_saIsBottom>
+        owl:bottomObjectProperty
+    Domain:
+        Annotations: rdfs:isDefinedBy <rosi:own_saDomainInBank>
+        <rosi:Customer>
+    Range:
+        Annotations: rdfs:isDefinedBy <rosi:own_saRangeInBank>
+        <rosi:SavingsAccount>
+
+# TODO:
+# CompInheritance
+# gibt es bei rel jedes rst immer nur einmal?
+# wie ist das mit aussagen über negierten kontexten, z.B. domain(advices) in nicht-Bank-Welten?
 #
-# builder.ctinh
-# []
+# builder.nt: [Person, Company, Account, TestNaturalType]
+# builder.ct: [Transaction, Bank]
+# builder.rt: [Source, Target, Consultant, Customer, MoneyTransfer, CheckingsAccount, SavingsAccount]
+# builder.rst: [trans, own_ca, advices, own_sa]
 #
-# builder.card
-# {trans->Transaction=(1,1)->(1,1), own_sa->Bank=(1,inf)->(0,inf), own_ca->Bank=(0,inf)->(1,1), advices->Bank=(0,inf)->(1,inf)}
+# builder.ntinh: [TestNaturalType->Person, Company->Person, Company->TestNaturalType]
+# builder.ctinh: []
+# builder.fills: [Person->Bank->Consultant, Person->Bank->Customer, Account->Bank->CheckingsAccount, Account->Bank->SavingsAccount, Account->Bank->CheckingsAccount, Account->Bank->SavingsAccount, Transaction->Bank->MoneyTransfer, Company->Bank->Customer]
+# builder.newFills: [Person->Consultant, Person->Customer, Account->CheckingsAccount, Account->SavingsAccount, Account->CheckingsAccount, Account->SavingsAccount, Transaction->MoneyTransfer, Company->Customer]
+# builder.rel: {trans->Transaction=Source->Target, own_sa->Bank=Customer->SavingsAccount, own_ca->Bank=CheckingsAccount->Customer, advices->Bank=Consultant->Customer}
 #
-# builder.rel
-# {trans->Transaction=Source->Target, own_sa->Bank=Customer->SavingsAccount, own_ca->Bank=CheckingsAccount->Customer, advices->Bank=Consultant->Customer}
-#
-# builder.rst
-# [trans, own_ca, advices, own_sa]
-#
-# builder.toString
-# builder.CROModel@33aad6f5
-#
+# builder.card: {trans->Transaction=(1,1)->(1,1), own_sa->Bank=(1,inf)->(0,inf), own_ca->Bank=(0,inf)->(1,1), advices->Bank=(0,inf)->(1,inf)}
+# builder.rolec: {Transaction=[(2,2)->RoleGroup([Source,Target],1,1)], Bank=[(1,inf)->Consultant, (0,inf)->Customer, (0,inf)->MoneyTransfer, (0,inf)->RoleGroup([CheckingsAccount,SavingsAccount],1,1)]}
+# builder.intra: [trans->Transaction->irreflexive, advices->Bank->irreflexive]
+# builder.inter: {}
 #
 #
 # TODO: still unhandled
