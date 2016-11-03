@@ -144,30 +144,36 @@ public class ContextOntology {
     @Override
     public String toString() {
 
-        String metaOntologyIRI = metaOntology.getOntologyID().getOntologyIRI().isPresent()
-                ? metaOntology.getOntologyID().getOntologyIRI().get().toString()
-                : "no IRI specified";
+        StringBuilder builder = new StringBuilder();
 
-        String metaConcepts = outerAbstractedMetaConcepts.stream()
+        // Obtain meta ontology’s IRI.
+        builder.append("Meta Ontology IRI: ");
+        builder.append(metaOntology.getOntologyID().getOntologyIRI()
+                .map(IRI::toString)
+                .orElse("no IRI specified"));
+        builder.append("\n\n");
+
+        // Obtain meta concepts that abbreviate object axioms.
+        builder.append("Meta concepts that identify object axioms:\n");
+        builder.append(outerAbstractedMetaConcepts.stream()
                 .map(OWLClass::toString)
-                .collect(Collectors.joining(", "));
+                .collect(Collectors.joining(", ")));
+        builder.append("\n\n");
 
-        String metaOntologyAsString = metaOntology.axioms().map(OWLAxiom::toString).collect(Collectors.joining("\n"));
+        // Obtain meta ontology.
+        builder.append("Meta Ontology:\n");
+        builder.append(metaOntology.axioms()
+                .map(OWLAxiom::toString)
+                .collect(Collectors.joining("\n")));
+        builder.append("\n\n");
 
-        String objectAxiomsMapAsString = objectAxiomsMap.entrySet().stream()
+        // Obtain object-axioms map.
+        builder.append("Object-axioms map:\n");
+        builder.append(objectAxiomsMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
-                .map(entry -> entry.getKey() + " -> " + entry.getValue())
-                .collect(Collectors.joining("\n"));
+                .flatMap(entry -> Stream.of(entry.getKey().toString(), " -> ", entry.getValue().toString(), "\n"))
+                .collect(Collectors.joining()));
 
-        return Stream.of(
-                "Meta Ontology IRI: " + metaOntologyIRI,
-                "Meta concepts that identify object axioms:",
-                metaConcepts,
-                "Meta Ontology:",
-                metaOntologyAsString,
-                "",
-                "Hash map:",
-                objectAxiomsMapAsString
-                ).collect(Collectors.joining("\n"));
+        return builder.toString();
     }
 }
