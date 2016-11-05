@@ -189,6 +189,7 @@ public class ContextOntology {
         // Obtain global object-axioms.
         builder.append("Global object-axioms:\n");
         builder.append(globalObjectOntology.stream()
+                .sorted()
                 .map(OWLAxiom::toString)
                 .collect(Collectors.joining("\n")));
         builder.append("\n\n");
