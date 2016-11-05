@@ -167,7 +167,7 @@ public class ContextOntology {
         builder.append("Meta concepts that identify object axioms:\n");
         builder.append(outerAbstractedMetaConcepts.stream()
                 .map(OWLClass::toString)
-                .collect(Collectors.joining(", ")));
+                .collect(Collectors.joining("\n")));
         builder.append("\n\n");
 
         // Obtain meta ontology.
@@ -184,6 +184,7 @@ public class ContextOntology {
                 .sorted(Map.Entry.comparingByKey())
                 .flatMap(entry -> Stream.of(entry.getKey().toString(), " -> ", entry.getValue().toString(), "\n"))
                 .collect(Collectors.joining()));
+        builder.append("\n");
 
         // Obtain global object-axioms.
         builder.append("Global object-axioms:\n");
