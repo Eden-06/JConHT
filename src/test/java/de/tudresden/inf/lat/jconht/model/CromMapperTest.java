@@ -16,6 +16,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -172,7 +173,48 @@ public class CromMapperTest {
     }
 
 
+    @Test
+    public void testFillsRelationCheckAllowed() throws Exception {
 
+        OWLIndividual natural1 = dataFactory.getOWLAnonymousIndividual();
+        OWLIndividual natural2 = dataFactory.getOWLAnonymousIndividual();
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass roleType1 = dataFactory.getOWLClass("RoleType1", rosiPrefix);
+        OWLClass naturalType1 = dataFactory.getOWLClass("NaturalType1", rosiPrefix);
+        OWLClass naturalType2 = dataFactory.getOWLClass("NaturalType2", rosiPrefix);
+        OWLClass compartmentType1 = dataFactory.getOWLClass("CompartmentType1", rosiPrefix);
+
+        assertFalse(isInconsistent(
+                addMetaTypeAssertion(compartmentType1,compartment),
+                addObjectTypeAssertion(naturalType1,natural1),
+                addObjectTypeAssertion(naturalType2,natural2),
+                addNaturalPlaysRoleInCompartmentAssertion(natural1,roleType1,compartment),
+                addNaturalPlaysRoleInCompartmentAssertion(natural2,roleType1,compartment)
+        ));
+    }
+
+    @Test
+    public void testFillsRelationCheckForbidden() throws Exception {
+
+        OWLIndividual natural2 = dataFactory.getOWLAnonymousIndividual();
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass roleType2 = dataFactory.getOWLClass("RoleType2", rosiPrefix);
+        OWLClass naturalType2 = dataFactory.getOWLClass("NaturalType2", rosiPrefix);
+        OWLClass compartmentType1 = dataFactory.getOWLClass("CompartmentType1", rosiPrefix);
+        
+        assertTrue(isInconsistent(
+                addMetaTypeAssertion(compartmentType1,compartment),
+                addObjectTypeAssertion(naturalType2,natural2),
+                addNaturalPlaysRoleInCompartmentAssertion(natural2,roleType2,compartment)
+        ));
+    }
+
+    @Test
+    public void testRoleTypesAreDisjoint() throws Exception {
+
+        // TODO still todo
+
+    }
 
     private boolean isInconsistent(Stream<OWLAxiom>... axioms) throws OWLOntologyCreationException {
 
