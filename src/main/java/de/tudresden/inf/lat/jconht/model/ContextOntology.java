@@ -98,6 +98,7 @@ public class ContextOntology {
                 .filter(owlAxiom -> owlAxiom.annotations(label)
                         .filter(owlAnnotation -> owlAnnotation.getValue().equals(objectGlobal))
                         .count() > 0)
+                .map(owlAxiom -> (OWLAxiom) owlAxiom.getAxiomWithoutAnnotations())
                 .collect(Collectors.toSet());
     }
 
