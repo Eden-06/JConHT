@@ -65,11 +65,11 @@ public class ContextTableau extends Tableau {
             // Possibly a model is found.
 
             // Debug output
-            System.out.println("meta ontology is consistent, following model is found:");
+            System.out.println("meta ontology is consistent, following context model is found:");
             binaryTupleTableEntries().forEach(System.out::println);
 
             // Iterate over all tableau nodes and check whether one of them is not inner consistent.
-            Optional<Node> clashNode = StreamSupport.stream(new NodeIterator().spliterator(), false)
+            Optional<Node> clashNode = getTableauNodes()
                     .filter(this::isNodeInnerInconsistent)
                     .findFirst();
 
@@ -293,5 +293,12 @@ public class ContextTableau extends Tableau {
 
             return this;
         }
+    }
+
+    /**
+     * @return A stream of HermiT's tableau nodes.
+     */
+    private Stream<Node> getTableauNodes() {
+        return StreamSupport.stream(new NodeIterator().spliterator(), false);
     }
 }
