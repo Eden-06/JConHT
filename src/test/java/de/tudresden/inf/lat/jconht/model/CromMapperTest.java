@@ -4,7 +4,6 @@ import de.tudresden.inf.lat.jconht.tableau.ContextReasoner;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.semanticweb.HermiT.ReasonerFactory;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
@@ -13,7 +12,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertFalse;
@@ -29,12 +27,12 @@ public class CromMapperTest {
 
     private OWLOntologyManager manager;
     private OWLDataFactory dataFactory;
-    private ReasonerFactory reasonerFactory;
     private PrefixManager rosiPrefix;
+
     private OWLOntology rawOntology;
 
-    private int unusedMetaConceptIndex;
-    private int unusedIndividualIndex;
+    private int numberOfAnonymousMetaConcepts;
+    private int numberOfAnonymousIndividuals;
 
     private OWLClass naturalTypes;
     private OWLClass roleTypes;
@@ -46,29 +44,28 @@ public class CromMapperTest {
     @Before
     public void setUp() throws Exception {
 
+        manager = OWLManager.createOWLOntologyManager();
+        dataFactory = manager.getOWLDataFactory();
+        rosiPrefix = new DefaultPrefixManager("http://www.rosi-project.org/ontologies#");
 
         String inputDir = new File("input").getAbsolutePath();
-        IRI CromMapperTestOntologyIRI = IRI.create("file://" + inputDir + "/" + "CROMMapperTest.owl");
-        manager = OWLManager.createOWLOntologyManager();
-        rawOntology = manager.loadOntology(CromMapperTestOntologyIRI);
-        dataFactory = manager.getOWLDataFactory();
-        reasonerFactory = new ReasonerFactory();
-        rosiPrefix = new DefaultPrefixManager("http://www.rosi-project.org/ontologies#");
-        unusedMetaConceptIndex = 1;
-        unusedIndividualIndex = 1;
+        IRI cromMapperTestOntologyIRI = IRI.create("file://" + inputDir + "/" + "CROMMapperTest.owl");
+        rawOntology = manager.loadOntology(cromMapperTestOntologyIRI);
+
+        numberOfAnonymousMetaConcepts = 0;
+        numberOfAnonymousIndividuals = 0;
 
         naturalTypes = dataFactory.getOWLClass("NaturalTypes", rosiPrefix);
         roleTypes = dataFactory.getOWLClass("RoleTypes", rosiPrefix);
         compartmentTypes = dataFactory.getOWLClass("CompartmentTypes", rosiPrefix);
-        plays = dataFactory.getOWLObjectProperty("plays", rosiPrefix);
 
+        plays = dataFactory.getOWLObjectProperty("plays", rosiPrefix);
     }
 
     @After
     public void tearDown() throws Exception {
 
         dataFactory.purge();
-        manager.removeOntology(rawOntology);
         manager.clearOntologies();
     }
 
@@ -77,20 +74,18 @@ public class CromMapperTest {
 
         OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
         OWLIndividual context = dataFactory.getOWLAnonymousIndividual();
-        OWLIndividual role1 = getAnonymousIndividual();
-        OWLIndividual role2 = getAnonymousIndividual();
+        OWLIndividual role1 = createNewAnonymousIndividual();
+        OWLIndividual role2 = createNewAnonymousIndividual();
         OWLClass roleType1 = dataFactory.getOWLClass("RoleType1", rosiPrefix);
 
-
         assertTrue(isInconsistent(
-                addObjectTypeAssertion(naturalTypes, natural),
-                addObjectTypeAssertion(roleType1, role1),
-                addObjectTypeAssertion(roleType1, role2),
-                addMetaTypeAssertion(compartmentTypes, context),
-                addNaturalPlaysRoleInCompartmentAssertion(natural, role1, context),
-                addNaturalPlaysRoleInCompartmentAssertion(natural, role2, context),
-                addObjectDifferentIndividualAssertion(role1, role2)
-        ));
+                getObjectTypeAssertion(naturalTypes, natural),
+                getObjectTypeAssertion(roleType1, role1),
+                getObjectTypeAssertion(roleType1, role2),
+                getMetaTypeAssertion(compartmentTypes, context),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role1, context),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role2, context),
+                getObjectDifferentIndividualAssertion(role1, role2)));
     }
 
     @Test
@@ -99,22 +94,20 @@ public class CromMapperTest {
         OWLIndividual individual = dataFactory.getOWLAnonymousIndividual();
 
         assertTrue(isInconsistent(
-                addObjectTypeAssertion(naturalTypes, individual),
-                addObjectTypeAssertion(roleTypes, individual)
-        ));
-
+                getObjectTypeAssertion(naturalTypes, individual),
+                getObjectTypeAssertion(roleTypes, individual)));
     }
 
     @Test
     public void testNaturalIsObject() throws Exception {
 
-        assertTrue(isInconsistent(addMetaTypeAssertion(naturalTypes, dataFactory.getOWLAnonymousIndividual())));
+        assertTrue(isInconsistent(getMetaTypeAssertion(naturalTypes, dataFactory.getOWLAnonymousIndividual())));
     }
 
     @Test
     public void testCompartmentIsMeta() throws Exception {
 
-        assertTrue(isInconsistent(addObjectTypeAssertion(compartmentTypes, dataFactory.getOWLAnonymousIndividual())));
+        assertTrue(isInconsistent(getObjectTypeAssertion(compartmentTypes, dataFactory.getOWLAnonymousIndividual())));
     }
 
     @Test
@@ -133,11 +126,10 @@ public class CromMapperTest {
         OWLIndividual individual = dataFactory.getOWLAnonymousIndividual();
 
         assertTrue(isInconsistent(
-                addObjectTypeAssertion(
+                getObjectTypeAssertion(roleTypes, individual),
+                getObjectTypeAssertion(
                         dataFactory.getOWLObjectMaxCardinality(0, dataFactory.getOWLObjectInverseOf(plays)),
-                        individual),
-                addObjectTypeAssertion(roleTypes, individual)
-        ));
+                        individual)));
     }
 
     @Test
@@ -146,16 +138,17 @@ public class CromMapperTest {
         OWLIndividual individual = dataFactory.getOWLAnonymousIndividual();
 
         assertTrue(isInconsistent(
-                addObjectTypeAssertion(roleTypes, individual),
-                addObjectTypeAssertion(dataFactory.getOWLObjectSomeValuesFrom(plays, dataFactory.getOWLThing()), individual)
-        ));
+                getObjectTypeAssertion(roleTypes, individual),
+                getObjectTypeAssertion(
+                        dataFactory.getOWLObjectMinCardinality(1, dataFactory.getOWLObjectInverseOf(plays)),
+                        individual)));
     }
 
     @Test
     public void testOnlyRolesCanBePlayed() throws Exception {
 
         assertTrue(isInconsistent(
-                addObjectTypeAssertion(
+                getObjectTypeAssertion(
                         dataFactory.getOWLObjectSomeValuesFrom(plays, dataFactory.getOWLObjectComplementOf(roleTypes)),
                         dataFactory.getOWLAnonymousIndividual())));
     }
@@ -169,34 +162,31 @@ public class CromMapperTest {
         OWLClass nt4 = dataFactory.getOWLClass("NaturalType4", rosiPrefix);
         OWLClass nt5 = dataFactory.getOWLClass("NaturalType5", rosiPrefix);
 
-        assertFalse("NaturalTypes 1-4 can be instantiated.",isInconsistent(
-                addObjectTypeAssertion(nt1,dataFactory.getOWLAnonymousIndividual()),
-                addObjectTypeAssertion(nt2,dataFactory.getOWLAnonymousIndividual()),
-                addObjectTypeAssertion(nt3,dataFactory.getOWLAnonymousIndividual()),
-                addObjectTypeAssertion(nt4,dataFactory.getOWLAnonymousIndividual())));
+        assertFalse("NaturalTypes 1–4 can be instantiated.",
+                isInconsistent(
+                        getObjectTypeAssertion(nt1, dataFactory.getOWLAnonymousIndividual()),
+                        getObjectTypeAssertion(nt2, dataFactory.getOWLAnonymousIndividual()),
+                        getObjectTypeAssertion(nt3, dataFactory.getOWLAnonymousIndividual()),
+                        getObjectTypeAssertion(nt4, dataFactory.getOWLAnonymousIndividual())));
 
-        assertFalse("A natural can be in NT1 without being in its subtype.", isInconsistent(
-                addObjectTypeAssertion(
+        assertFalse("A natural can be in NT1 without being in its subtype.",
+                isInconsistent(getObjectTypeAssertion(
                         dataFactory.getOWLObjectIntersectionOf(
                                 nt1,
                                 dataFactory.getOWLObjectComplementOf(nt3),
                                 dataFactory.getOWLObjectComplementOf(nt4)),
                         dataFactory.getOWLAnonymousIndividual())));
 
-        assertTrue("NaturalType5 has no instances due to multiple inheritance.",isInconsistent(
-                addObjectTypeAssertion(nt5,dataFactory.getOWLAnonymousIndividual())));
+        assertTrue("NaturalType5 has no instances due to multiple inheritance.",
+                isInconsistent(getObjectTypeAssertion(nt5, dataFactory.getOWLAnonymousIndividual())));
 
-        assertTrue("A natural must have a type",isInconsistent(
-                addObjectTypeAssertion(
+        assertTrue("A natural must have a type",
+                isInconsistent(getObjectTypeAssertion(
                         dataFactory.getOWLObjectIntersectionOf(
                                 naturalTypes,
                                 dataFactory.getOWLObjectComplementOf(nt1),
                                 dataFactory.getOWLObjectComplementOf(nt2)),
                         dataFactory.getOWLAnonymousIndividual())));
-
-
-
-
     }
 
     @Test
@@ -211,12 +201,11 @@ public class CromMapperTest {
         OWLClass compartmentType1 = dataFactory.getOWLClass("CompartmentType1", rosiPrefix);
 
         assertFalse(isInconsistent(
-                addMetaTypeAssertion(compartmentType1, compartment),
-                addObjectTypeAssertion(naturalType1, natural1),
-                addObjectTypeAssertion(naturalType2, natural2),
-                addNaturalPlaysRoleInCompartmentAssertion(natural1, roleType1, compartment),
-                addNaturalPlaysRoleInCompartmentAssertion(natural2, roleType1, compartment)
-        ));
+                getMetaTypeAssertion(compartmentType1, compartment),
+                getObjectTypeAssertion(naturalType1, natural1),
+                getObjectTypeAssertion(naturalType2, natural2),
+                getNaturalPlaysRoleInCompartmentAssertion(natural1, roleType1, compartment),
+                getNaturalPlaysRoleInCompartmentAssertion(natural2, roleType1, compartment)));
     }
 
     @Test
@@ -232,29 +221,24 @@ public class CromMapperTest {
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
         OWLClass roleType2 = dataFactory.getOWLClass("RoleType2", rosiPrefix);
         OWLClass naturalType2 = dataFactory.getOWLClass("NaturalType2", rosiPrefix);
-        OWLClass compartmentType1 = dataFactory.getOWLClass("CompartmentType1", rosiPrefix);
+        OWLClass compartmentType = dataFactory.getOWLClass("CompartmentType1", rosiPrefix);
 
         assertTrue(isInconsistent(
-                addMetaTypeAssertion(compartmentType1, compartment),
-                addObjectTypeAssertion(naturalType2, natural2),
-                addNaturalPlaysRoleInCompartmentAssertion(natural2, roleType2, compartment)
-        ));
+                getMetaTypeAssertion(compartmentType, compartment),
+                getObjectTypeAssertion(naturalType2, natural2),
+                getNaturalPlaysRoleInCompartmentAssertion(natural2, roleType2, compartment)));
     }
 
     @Test
     public void testRoleTypesAreDisjoint() throws Exception {
 
-        // TODO still todo
         OWLClass roleType1 = dataFactory.getOWLClass("RoleType1", rosiPrefix);
         OWLClass roleType2 = dataFactory.getOWLClass("RoleType2", rosiPrefix);
         OWLIndividual individual = dataFactory.getOWLAnonymousIndividual();
 
         assertTrue(isInconsistent(
-                addObjectTypeAssertion(roleType1, individual),
-                addObjectTypeAssertion(roleType2, individual))
-        );
-
-
+                getObjectTypeAssertion(roleType1, individual),
+                getObjectTypeAssertion(roleType2, individual)));
     }
 
     @Test
@@ -263,10 +247,7 @@ public class CromMapperTest {
         OWLIndividual cardinalityCounter = dataFactory.getOWLNamedIndividual("cardinalityCounter", rosiPrefix);
         OWLClassExpression naturalOrRole = dataFactory.getOWLObjectUnionOf(naturalTypes, roleTypes);
 
-
-        assertTrue(isInconsistent(
-                addObjectTypeAssertion(naturalOrRole, cardinalityCounter)
-        ));
+        assertTrue(isInconsistent(getObjectTypeAssertion(naturalOrRole, cardinalityCounter)));
     }
 
     @Test
@@ -280,13 +261,11 @@ public class CromMapperTest {
         OWLClass roleType1 = dataFactory.getOWLClass("RoleType1", rosiPrefix);
         OWLClass roleType2 = dataFactory.getOWLClass("RoleType2", rosiPrefix);
 
-
         assertFalse(isInconsistent(
-                addMetaTypeAssertion(compartmentType1, compartment),
-                addObjectTypeAssertion(roleType1, role1),
-                addObjectTypeAssertion(roleType2, role2),
-                addRelationshipAssertion(relationshipType1, role1, role2, compartment)
-        ));
+                getMetaTypeAssertion(compartmentType1, compartment),
+                getObjectTypeAssertion(roleType1, role1),
+                getObjectTypeAssertion(roleType2, role2),
+                getRelationshipAssertion(relationshipType1, role1, role2, compartment)));
     }
 
     @Test
@@ -297,16 +276,13 @@ public class CromMapperTest {
         OWLIndividual role1 = dataFactory.getOWLAnonymousIndividual();
         OWLIndividual role2 = dataFactory.getOWLAnonymousIndividual();
         OWLClass compartmentType1 = dataFactory.getOWLClass("CompartmentType1", rosiPrefix);
-        OWLClass roleType1 = dataFactory.getOWLClass("RoleType1", rosiPrefix);
         OWLClass roleType2 = dataFactory.getOWLClass("RoleType2", rosiPrefix);
 
-
         assertTrue(isInconsistent(
-                addMetaTypeAssertion(compartmentType1, compartment),
-                addObjectTypeAssertion(roleType2, role1),
-                addObjectTypeAssertion(roleType2, role2),
-                addRelationshipAssertion(relationshipType1, role1, role2, compartment)
-        ));
+                getMetaTypeAssertion(compartmentType1, compartment),
+                getObjectTypeAssertion(roleType2, role1),
+                getObjectTypeAssertion(roleType2, role2),
+                getRelationshipAssertion(relationshipType1, role1, role2, compartment)));
     }
 
     @Test
@@ -316,47 +292,42 @@ public class CromMapperTest {
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
         OWLClass compartmentType2 = dataFactory.getOWLClass("CompartmentType2", rosiPrefix);
 
-
         assertTrue(isInconsistent(
-                addMetaTypeAssertion(compartmentType2, compartment),
-                addRelationshipAssertion(
+                getMetaTypeAssertion(compartmentType2, compartment),
+                getRelationshipAssertion(
                         relationshipType1,
                         dataFactory.getOWLAnonymousIndividual(),
                         dataFactory.getOWLAnonymousIndividual(),
-                        compartment)
-        ));
+                        compartment)));
     }
 
     @Test
     public void testRelationshipTypeCardinalConstraints() throws Exception {
 
-        OWLIndividual role1 = getAnonymousIndividual();
-        OWLIndividual role2 = getAnonymousIndividual();
-        OWLIndividual role3 = getAnonymousIndividual();
-        OWLIndividual role4 = getAnonymousIndividual();
+        // TODO: complete this test.
+        OWLIndividual role1 = createNewAnonymousIndividual();
+        OWLIndividual role2 = createNewAnonymousIndividual();
+        OWLIndividual role3 = createNewAnonymousIndividual();
+        OWLIndividual role4 = createNewAnonymousIndividual();
         OWLClass roleType1 = dataFactory.getOWLClass("RoleType1", rosiPrefix);
         OWLClass roleType2 = dataFactory.getOWLClass("RoleType2", rosiPrefix);
 
-
-
         assertFalse(isInconsistent(
-                addObjectTypeAssertion(roleType1,role1),
-                addObjectTypeAssertion(roleType2,role2),
-                addObjectTypeAssertion(roleType2,role3),
-                addObjectTypeAssertion(roleType2,role4)
-                ));
-
+                getObjectTypeAssertion(roleType1, role1),
+                getObjectTypeAssertion(roleType2, role2),
+                getObjectTypeAssertion(roleType2, role3),
+                getObjectTypeAssertion(roleType2, role4)));
     }
 
     private boolean isInconsistent(Stream<OWLAxiom>... axioms) throws OWLOntologyCreationException {
 
-        manager.addAxioms(rawOntology, Arrays.stream(axioms).flatMap(Function.identity()));
+        Stream<OWLAxiom> axiomsStream = Arrays.stream(axioms)
+                .flatMap(Function.identity());
+
+        manager.addAxioms(rawOntology, axiomsStream);
 
         ContextOntology contextOntology = new ContextOntology(rawOntology);
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
-
-        //System.out.println(contextOntology);
-        //System.out.println("---------------------------------------------");
 
         boolean inconsistent = !reasoner.isConsistent();
 
@@ -365,43 +336,54 @@ public class CromMapperTest {
         return inconsistent;
     }
 
-    private Stream<OWLAxiom> addMetaTypeAssertion(OWLClassExpression metaType, OWLIndividual individual) {
+    private Stream<OWLAxiom> getMetaTypeAssertion(OWLClassExpression metaType, OWLIndividual individual) {
+
         return Stream.of(dataFactory.getOWLClassAssertionAxiom(metaType, individual));
     }
 
-    private Stream<OWLAxiom> addObjectTypeAssertion(OWLClassExpression objectType, OWLIndividual individual) {
+    private Stream<OWLAxiom> getObjectTypeAssertion(OWLClassExpression objectType, OWLIndividual individual) {
+
         return Stream.of(dataFactory.getOWLClassAssertionAxiom(objectType, individual, getObjectGlobal()));
     }
 
-    private Stream<OWLAxiom> addObjectDifferentIndividualAssertion(OWLIndividual individual1, OWLIndividual individual2) {
+    private Stream<OWLAxiom> getObjectDifferentIndividualAssertion(OWLIndividual individual1,
+                                                                   OWLIndividual individual2) {
+
         return Stream.of(dataFactory.getOWLDifferentIndividualsAxiom(individual1, individual2, getObjectGlobal()));
     }
 
-    private Stream<OWLAxiom> addNaturalPlaysRoleInCompartmentAssertion(OWLIndividual natural, OWLClass roleType, OWLIndividual compartment) {
+    private Stream<OWLAxiom> getNaturalPlaysRoleInCompartmentAssertion(OWLIndividual natural,
+                                                                       OWLClass roleType,
+                                                                       OWLIndividual compartment) {
 
-        OWLClass metaConceptA = getAnonymousMetaConcept();
-        OWLClass metaConceptB = getAnonymousMetaConcept();
+        OWLClass metaA = getAnonymousMetaConcept();
+        OWLClass metaB = getAnonymousMetaConcept();
         OWLIndividual role = dataFactory.getOWLAnonymousIndividual();
 
-        // (metaA ⊓ metaB)(compartment) ∧ [metaA -> (roleType)(r)] ∧ [metaB -> plays(natural,r)]
+        // (metaA ⊓ metaB)(compartment) ∧ [metaA -> (roleType)(r)] ∧ [metaB -> plays(natural, r)]
         return Stream.of(
-                dataFactory.getOWLClassAssertionAxiom(metaConceptA, compartment),
-                dataFactory.getOWLClassAssertionAxiom(metaConceptB, compartment),
-                dataFactory.getOWLClassAssertionAxiom(roleType, role, getIsDefinedBy(metaConceptA)),
-                dataFactory.getOWLObjectPropertyAssertionAxiom(plays, natural, role, getIsDefinedBy(metaConceptB)));
+                dataFactory.getOWLClassAssertionAxiom(metaA, compartment),
+                dataFactory.getOWLClassAssertionAxiom(metaB, compartment),
+                dataFactory.getOWLClassAssertionAxiom(roleType, role, getIsDefinedBy(metaA)),
+                dataFactory.getOWLObjectPropertyAssertionAxiom(plays, natural, role, getIsDefinedBy(metaB)));
     }
 
-    private Stream<OWLAxiom> addNaturalPlaysRoleInCompartmentAssertion(OWLIndividual natural, OWLIndividual role, OWLIndividual compartment) {
+    private Stream<OWLAxiom> getNaturalPlaysRoleInCompartmentAssertion(OWLIndividual natural,
+                                                                       OWLIndividual role,
+                                                                       OWLIndividual compartment) {
 
-        OWLClass metaConceptA = getAnonymousMetaConcept();
+        OWLClass metaA = getAnonymousMetaConcept();
 
-        // (metaA)(compartment) ∧ [metaA -> plays(natural,role)]
+        // (metaA)(compartment) ∧ [metaA -> plays(natural, role)]
         return Stream.of(
-                dataFactory.getOWLClassAssertionAxiom(metaConceptA, compartment),
-                dataFactory.getOWLObjectPropertyAssertionAxiom(plays, natural, role, getIsDefinedBy(metaConceptA)));
+                dataFactory.getOWLClassAssertionAxiom(metaA, compartment),
+                dataFactory.getOWLObjectPropertyAssertionAxiom(plays, natural, role, getIsDefinedBy(metaA)));
     }
 
-    private Stream<OWLAxiom> addRelationshipAssertion(OWLObjectProperty relationshipType, OWLIndividual role1, OWLIndividual role2, OWLIndividual compartment) {
+    private Stream<OWLAxiom> getRelationshipAssertion(OWLObjectProperty relationshipType,
+                                                      OWLIndividual role1,
+                                                      OWLIndividual role2,
+                                                      OWLIndividual compartment) {
 
         OWLClass metaConcept = getAnonymousMetaConcept();
 
@@ -411,33 +393,31 @@ public class CromMapperTest {
                         relationshipType,
                         role1,
                         role2,
-                        getIsDefinedBy(metaConcept))
-        );
+                        getIsDefinedBy(metaConcept)));
     }
 
     private OWLClass getAnonymousMetaConcept() {
-        return dataFactory.getOWLClass("genMetaConcept-" + unusedMetaConceptIndex++, rosiPrefix);
+
+        numberOfAnonymousMetaConcepts++;
+
+        return dataFactory.getOWLClass("genMetaConcept-" + numberOfAnonymousMetaConcepts, rosiPrefix);
     }
 
-    private OWLIndividual getAnonymousIndividual() {
-        return dataFactory.getOWLNamedIndividual("genIndividual-" + unusedIndividualIndex++, rosiPrefix);
+    private OWLIndividual createNewAnonymousIndividual() {
+
+        numberOfAnonymousIndividuals++;
+
+        return dataFactory.getOWLNamedIndividual("genIndividual-" + numberOfAnonymousIndividuals, rosiPrefix);
     }
 
     private Collection<OWLAnnotation> getIsDefinedBy(HasIRI hasIRI) {
-        return getIsDefinedBy(hasIRI.getIRI());
-    }
 
-    private Collection<OWLAnnotation> getIsDefinedBy(IRI iri) {
-        return Stream.of(
-                dataFactory.getOWLAnnotation(
-                        dataFactory.getRDFSIsDefinedBy(),
-                        iri))
-                .collect(Collectors.toSet());
+        return Arrays.asList(dataFactory.getOWLAnnotation(dataFactory.getRDFSIsDefinedBy(), hasIRI.getIRI()));
     }
 
     private Collection<OWLAnnotation> getObjectGlobal() {
-        return Stream.of(dataFactory.getRDFSLabel("objectGlobal"))
-                .collect(Collectors.toSet());
+
+        return Arrays.asList(dataFactory.getRDFSLabel("objectGlobal"));
     }
 
 }
