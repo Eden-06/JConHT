@@ -1,0 +1,395 @@
+#
+# This ontology is automatically written by the FRaMED OWL Ontology generator
+#
+# The following features are not supported:
+#       - Compartment inheritance, because too many weird things can happen, which are not checked in FRaMED
+#
+#       - Compartments that play a role in another compartment, because on object level it would enforce a new
+#         compartment instance, i.e. a new individual on meta level
+#
+#       - intra relationship constraints like reflexive or symmetric, since actually that are constraints on the
+#         objects that play the roles and not on the roles themselves.
+#
+Prefix: owl: <http://www.w3.org/2002/07/owl#>
+Prefix: rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+Prefix: xml: <http://www.w3.org/XML/1998/namespace>
+Prefix: xsd: <http://www.w3.org/2001/XMLSchema#>
+Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+Prefix: rosi: <http://www.rosi-project.org/ontologies#>
+
+Ontology: <http://www.rosi-project.org/ontologies/2016-11-09/CROMMapperTest>
+
+
+
+
+#
+# Used OWL datatypes
+#
+
+Datatype: xsd:boolean
+
+#
+# Used OWL annotations
+#
+
+AnnotationProperty: rosi:rigidity
+    Range: <http://www.w3.org/2001/XMLSchema#boolean>
+
+AnnotationProperty: rosi:isMeta
+    Range: <http://www.w3.org/2001/XMLSchema#boolean>
+
+AnnotationProperty: rdfs:isDefinedBy
+
+
+
+
+#
+# General axioms and declarations, independent of the CROModel
+#
+Class: owl:Thing
+    SubClassOf:
+        rosi:CompartmentTypes
+    DisjointUnionOf:
+        Annotations: rdfs:label "objectGlobal"
+         rosi:NaturalTypes, rosi:RoleTypes, {rosi:cardinalityCounter}
+
+Class: owl:Nothing
+
+Class: rosi:Object
+    EquivalentTo:
+        owl:Nothing,
+        Annotations: rdfs:label "objectGlobal"
+        owl:Thing
+
+Individual: rosi:cardinalityCounter
+
+
+
+
+#
+# The declaration of all compartment types that occur in the model
+#
+
+Class: rosi:CompartmentTypes
+   SubClassOf:
+        Annotations: rdfs:label "objectGlobal"
+        owl:Nothing
+    DisjointUnionOf: rosi:CompartmentType1, rosi:CompartmentType2, rosi:CompartmentType3
+
+Class: rosi:CompartmentType1
+	SubClassOf: rosi:PlaysRoleType1InCompartmentType1
+	SubClassOf: rosi:PlaysRoleType2InCompartmentType1
+	SubClassOf: rosi:PlaysRoleType3IsBottom
+	SubClassOf: rosi:PlaysRoleType4IsBottom
+	SubClassOf: rosi:PlaysRT5IsBottom
+	SubClassOf: rosi:PlaysRT6IsBottom
+	SubClassOf: rosi:RelationshipType1DomainInCompartmentType1
+	SubClassOf: rosi:RelationshipType1RangeInCompartmentType1
+	SubClassOf: rosi:RST1IsBottom
+
+Class: rosi:CompartmentType2
+	SubClassOf: rosi:PlaysRoleType3InCompartmentType2
+	SubClassOf: rosi:PlaysRoleType1IsBottom
+	SubClassOf: rosi:PlaysRoleType2IsBottom
+	SubClassOf: rosi:PlaysRoleType4IsBottom
+	SubClassOf: rosi:PlaysRT5IsBottom
+	SubClassOf: rosi:PlaysRT6IsBottom
+	SubClassOf: rosi:RST1DomainInCompartmentType2
+	SubClassOf: rosi:RST1RangeInCompartmentType2
+	SubClassOf: rosi:RelationshipType1IsBottom
+
+Class: rosi:CompartmentType3
+	SubClassOf: rosi:PlaysRoleType1IsBottom
+	SubClassOf: rosi:PlaysRoleType2IsBottom
+	SubClassOf: rosi:PlaysRoleType3IsBottom
+	SubClassOf: rosi:PlaysRoleType4IsBottom
+	SubClassOf: rosi:PlaysRT5IsBottom
+	SubClassOf: rosi:PlaysRT6IsBottom
+	SubClassOf: rosi:RST1DomainInCompartmentType3
+	SubClassOf: rosi:RST1RangeInCompartmentType3
+	SubClassOf: rosi:RelationshipType1IsBottom
+
+
+
+
+#
+# The declaration of all natural types that occur in the model
+#
+
+Class: rosi:NaturalTypes
+    SubClassOf:
+        owl:Nothing
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:NaturalType2, rosi:NaturalType1
+	SubclassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RoleType1
+	SubclassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RoleType2
+	SubclassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RoleType3
+	SubclassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RoleType4
+	SubclassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RT5
+	SubclassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RT6
+
+Class: rosi:NaturalType2
+	Annotations: rosi:rigidity true
+
+Class: rosi:NaturalType1
+	Annotations: rosi:rigidity true
+DisjointClasses:
+	Annotations: rdfs:label "objectGlobal"
+	rosi:NaturalType3, rosi:NaturalType4
+
+Class: rosi:NaturalType3
+	Annotations: rosi:rigidity true
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:NaturalType1
+DisjointClasses:
+	Annotations: rdfs:label "objectGlobal"
+	rosi:NaturalType5
+
+Class: rosi:NaturalType4
+	Annotations: rosi:rigidity true
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:NaturalType1
+DisjointClasses:
+	Annotations: rdfs:label "objectGlobal"
+	rosi:NaturalType5
+
+Class: rosi:NaturalType5
+	Annotations: rosi:rigidity true
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:NaturalType3
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:NaturalType4
+
+
+
+
+
+#
+# The declaration of all role types that occur in the model
+#
+
+Class: rosi:RoleTypes
+    SubClassOf:
+        Annotations: rdfs:label "objectGlobal"
+        rosi:Object
+    SubClassOf:
+        Annotations: rdfs:label "objectGlobal"
+        inverse (rosi:plays) exactly 1 owl:Thing
+    EquivalentTo:
+        Annotations: rdfs:label "objectGlobal"
+        inverse (rosi:roleCount) exactly 1 {rosi:cardinalityCounter}
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RoleType1, rosi:RoleType2, rosi:RoleType3, rosi:RoleType4, rosi:RT5, rosi:RT6
+ObjectProperty: rosi:roleCount
+
+Class: rosi:RoleType1
+    Annotations: rosi:rigidity false
+Class: rosi:RelationshipType1CardinalConstraintOfDomain
+Class: rosi:RelationshipType1CardinalConstraintOfRange
+
+
+Class: rosi:PlaysRoleType1
+    EquivalentTo:
+        Annotations: rdfs:label "objectGlobal"
+        rosi:plays some rosi:RoleType1
+    SubClassOf:
+        Annotations: rdfs:isDefinedBy rosi:PlaysRoleType1IsBottom
+        owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:PlaysRoleType1InCompartmentType1
+		rosi:NaturalType2
+Class: rosi:PlaysRoleType1InCompartmentType1
+Class: rosi:PlaysRoleType1IsBottom
+
+Class: rosi:RoleType2
+    Annotations: rosi:rigidity false
+
+
+Class: rosi:PlaysRoleType2
+    EquivalentTo:
+        Annotations: rdfs:label "objectGlobal"
+        rosi:plays some rosi:RoleType2
+    SubClassOf:
+        Annotations: rdfs:isDefinedBy rosi:PlaysRoleType2IsBottom
+        owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:PlaysRoleType2InCompartmentType1
+		rosi:NaturalType4
+Class: rosi:PlaysRoleType2InCompartmentType1
+Class: rosi:PlaysRoleType2IsBottom
+
+Class: rosi:RoleType3
+    Annotations: rosi:rigidity false
+
+Class: rosi:RST1CardinalConstraintOfDomain
+Class: rosi:RST1CardinalConstraintOfRange
+
+Class: rosi:PlaysRoleType3
+    EquivalentTo:
+        Annotations: rdfs:label "objectGlobal"
+        rosi:plays some rosi:RoleType3
+    SubClassOf:
+        Annotations: rdfs:isDefinedBy rosi:PlaysRoleType3IsBottom
+        owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:PlaysRoleType3InCompartmentType2
+		rosi:NaturalType1
+Class: rosi:PlaysRoleType3InCompartmentType2
+Class: rosi:PlaysRoleType3IsBottom
+
+Class: rosi:RoleType4
+    Annotations: rosi:rigidity false
+
+
+Class: rosi:PlaysRoleType4
+    EquivalentTo:
+        Annotations: rdfs:label "objectGlobal"
+        rosi:plays some rosi:RoleType4
+    SubClassOf:
+        Annotations: rdfs:isDefinedBy rosi:PlaysRoleType4IsBottom
+        owl:Nothing
+Class: rosi:PlaysRoleType4IsBottom
+
+Class: rosi:RT5
+    Annotations: rosi:rigidity false
+
+
+Class: rosi:RST1CardinalConstraintOfDomain
+Class: rosi:RST1CardinalConstraintOfRange
+Class: rosi:PlaysRT5
+    EquivalentTo:
+        Annotations: rdfs:label "objectGlobal"
+        rosi:plays some rosi:RT5
+    SubClassOf:
+        Annotations: rdfs:isDefinedBy rosi:PlaysRT5IsBottom
+        owl:Nothing
+Class: rosi:PlaysRT5IsBottom
+
+Class: rosi:RT6
+    Annotations: rosi:rigidity false
+
+
+Class: rosi:PlaysRT6
+    EquivalentTo:
+        Annotations: rdfs:label "objectGlobal"
+        rosi:plays some rosi:RT6
+    SubClassOf:
+        Annotations: rdfs:isDefinedBy rosi:PlaysRT6IsBottom
+        owl:Nothing
+Class: rosi:PlaysRT6IsBottom
+
+
+
+
+#
+# The declaration of the plays relation as OWL object property
+#
+
+ObjectProperty: owl:bottomObjectProperty
+
+ObjectProperty: rosi:plays
+    Domain:
+        Annotations: rdfs:label "objectGlobal"
+        rosi:NaturalTypes
+    Range:
+        Annotations: rdfs:label "objectGlobal"
+        rosi:RoleTypes
+    SubPropertyOf:
+        owl:bottomObjectProperty
+
+
+
+
+#
+# The declaration of all relationship types that occur in the model
+#
+
+Class: rosi:RelationshipType1IsBottom
+Class: rosi:RelationshipType1DomainInCompartmentType1
+Class: rosi:RelationshipType1RangeInCompartmentType1
+ObjectProperty: rosi:RelationshipType1
+    SubPropertyOf:
+        owl:bottomObjectProperty
+    Domain:
+        Annotations: rdfs:isDefinedBy rosi:RelationshipType1IsBottom
+        owl:Nothing
+    Domain:
+    	Annotations: rdfs:isDefinedBy rosi:RelationshipType1DomainInCompartmentType1
+        rosi:RoleType1
+    Range:
+        Annotations: rdfs:isDefinedBy rosi:RelationshipType1RangeInCompartmentType1
+        rosi:RoleType2
+
+Class: rosi:RST1IsBottom
+Class: rosi:RST1DomainInCompartmentType2
+Class: rosi:RST1RangeInCompartmentType2
+Class: rosi:RST1DomainInCompartmentType3
+Class: rosi:RST1RangeInCompartmentType3
+ObjectProperty: rosi:RST1
+    SubPropertyOf:
+        owl:bottomObjectProperty
+    Domain:
+        Annotations: rdfs:isDefinedBy rosi:RST1IsBottom
+        owl:Nothing
+    Domain:
+    	Annotations: rdfs:isDefinedBy rosi:RST1DomainInCompartmentType2
+        rosi:RoleType3
+    Range:
+        Annotations: rdfs:isDefinedBy rosi:RST1RangeInCompartmentType2
+        rosi:RoleType4
+    Domain:
+    	Annotations: rdfs:isDefinedBy rosi:RST1DomainInCompartmentType3
+        rosi:RT5
+    Range:
+        Annotations: rdfs:isDefinedBy rosi:RST1RangeInCompartmentType3
+        rosi:RT6
+
+# TODO:
+# Thema Rollengruppen, wo steht fills
+# occurence constraints
+# cardinal constraints: [RT1] 2..5 -------rst1-------- 1..* [RT1] bedeutet jede Rolle vom Typ RT1 hat rst1-Verbindungen zu min 1 und max inf anderen Rollen
+
+#
+# crom.nt: [NaturalType2, NaturalType1, NaturalType3, NaturalType4, NaturalType5]
+# crom.ct: [CompartmentType1, CompartmentType2, CompartmentType3]
+# crom.rt: [RoleType1, RoleType2, RoleType3, RoleType4, RT5, RT6]
+# crom.rst: [RelationshipType1, RST1]
+#
+# crom.ntinh: [NaturalType3->NaturalType1, NaturalType4->NaturalType1, NaturalType5->NaturalType3, NaturalType5->NaturalType4]
+# crom.ctinh: []
+# crom.fills: [NaturalType2->CompartmentType1->RoleType1, NaturalType1->CompartmentType2->RoleType3, NaturalType4->CompartmentType1->RoleType2]
+# crom.newFills: [NaturalType2->RoleType1, NaturalType1->RoleType3, NaturalType4->RoleType2]
+# crom.rel: {RelationshipType1->CompartmentType1=RoleType1->RoleType2, RST1->CompartmentType3=RT5->RT6, RST1->CompartmentType2=RoleType3->RoleType4}
+#
+# crom.card: {RelationshipType1->CompartmentType1=(2,3)->(1,inf), RST1->CompartmentType3=(0,inf)->(0,inf), RST1->CompartmentType2=(0,inf)->(0,inf)}
+# crom.rolec: {CompartmentType1=[(0,inf)->RoleType1, (0,inf)->RoleType2], CompartmentType2=[(0,inf)->RoleType3, (0,inf)->RoleType4], CompartmentType3=[(0,inf)->RT5, (0,inf)->RT6]}
+# crom.intra: []
+# crom.inter: {}
+#
+#
+# Contraint model:
+# rolec
+# card
+# intra
+# inter
+#
+#

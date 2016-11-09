@@ -72,7 +72,8 @@ Class: rosi:Object
 
 Individual: rosi:cardinalityCounter
 
-
+DisjointClasses:
+    rosi:Meta, rosi:Object
 
 
 
