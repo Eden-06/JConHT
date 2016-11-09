@@ -14,8 +14,6 @@ import org.semanticweb.HermiT.Reasoner;
  */
 public class ContextReasoner extends Reasoner {
 
-    private ContextOntology rootOntology;
-
     /**
      * This is the standard constructor, which calls the super constructor and then
      * adjusts the tableau used by the reasoner.
@@ -30,7 +28,6 @@ public class ContextReasoner extends Reasoner {
 
         super(configuration, rootOntology.getMetaOntology());
 
-        this.rootOntology = rootOntology;
         this.m_tableau = new ContextTableau(getTableau(), rootOntology, configuration);
     }
 

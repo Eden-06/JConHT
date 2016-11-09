@@ -299,6 +299,7 @@ public class ContextTableau extends Tableau {
      * @return A stream of HermiT's tableau nodes.
      */
     private Stream<Node> getTableauNodes() {
+
         return StreamSupport.stream(new NodeIterator().spliterator(), false);
     }
 }
