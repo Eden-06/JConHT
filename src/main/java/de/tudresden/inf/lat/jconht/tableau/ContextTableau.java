@@ -2,10 +2,10 @@ package de.tudresden.inf.lat.jconht.tableau;
 
 import de.tudresden.inf.lat.jconht.model.ContextOntology;
 import org.semanticweb.HermiT.Configuration;
+import org.semanticweb.HermiT.Prefixes;
+import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.HermiT.ReasonerFactory;
-import org.semanticweb.HermiT.model.AtomicConcept;
-import org.semanticweb.HermiT.model.AtomicNegationConcept;
-import org.semanticweb.HermiT.model.Concept;
+import org.semanticweb.HermiT.model.*;
 import org.semanticweb.HermiT.tableau.DependencySet;
 import org.semanticweb.HermiT.tableau.ExtensionTable;
 import org.semanticweb.HermiT.tableau.Node;
@@ -16,6 +16,7 @@ import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
@@ -63,6 +64,7 @@ public class ContextTableau extends Tableau {
         if (super.runCalculus()) {
 
             // Possibly a model is found.
+            System.out.println(contextOntology);
 
             // Debug output
             System.out.println("meta ontology is consistent, following context model is found:");
@@ -118,6 +120,37 @@ public class ContextTableau extends Tableau {
                 contextOntology.getObjectOntology(getClassesOfNode(node)));
 
         boolean result = !reasoner.isConsistent();
+
+        String str;
+        Prefixes prefix = new Prefixes();
+        prefix.declarePrefix(":","http://www.rosi-project.org/ontologies#");
+        prefix.declarePrefix("int:","internal:");
+        prefix.declarePrefix("intNom:","internal:nom#http://www.rosi-project.org/ontologies#");
+        prefix.declareSemanticWebPrefixes();
+
+        if (!result) {
+
+            System.out.println(String.join("", Collections.nCopies(100, "-")));
+            System.out.println("--- object ontology for node " + node + " is consistent, following object model is found:");
+            ExtensionTable binTable = ((Reasoner) reasoner).getTableau().getExtensionManager().getBinaryExtensionTable();
+            ExtensionTable terTable = ((Reasoner) reasoner).getTableau().getExtensionManager().getTernaryExtensionTable();
+
+            for (Node node1 = ((Reasoner) reasoner).getTableau().getFirstTableauNode(); node1 != null; node1 = node1.getNextTableauNode()) {
+                for (int i=0; binTable.getTupleObject(i,1) != null; i++) {
+                    if (binTable.getTupleObject(i,1) == node1) {
+                        str = ((Concept) binTable.getTupleObject(i,0)).toString(prefix);
+                        System.out.println(node1 + "   " + str);
+                    }
+
+                }
+                System.out.println();
+            }
+            for (int i=0; terTable.getTupleObject(i,1) != null; i++) {
+                str = ((DLPredicate) terTable.getTupleObject(i,0)).toString(prefix);
+                System.out.println(terTable.getTupleObject(i,1) + "   " + str + "   " + terTable.getTupleObject(i,2));
+            }
+            System.out.println(String.join("", Collections.nCopies(100, "-")));
+        }
 
         reasoner.dispose();
 
