@@ -102,6 +102,10 @@ public class ContextOntology {
                 .collect(Collectors.toSet());
     }
 
+    public void clear() {
+        ontologyManager.removeOntology(metaOntology);
+        //TODO probably more to do here
+    }
 
     /**
      * This method returns the meta ontology.
