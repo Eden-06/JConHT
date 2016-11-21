@@ -1,7 +1,10 @@
 package de.tudresden.inf.lat.jconht.model;
 
+import org.semanticweb.owlapi.io.OWLObjectRenderer;
+import org.semanticweb.owlapi.io.ToStringRenderer;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.QNameShortFormProvider;
+import org.semanticweb.owlapi.util.SimpleRenderer;
 
 import java.util.Map;
 import java.util.Optional;
@@ -23,7 +26,6 @@ public class ContextOntology {
     private Set<OWLAxiom> globalObjectOntology;
     private Set<OWLClass> outerAbstractedMetaConcepts;
     private OWLDataFactory dataFactory;
-    private QNameShortFormProvider shortFormProvider;
 
     /**
      * This is the standard constructor.
@@ -34,10 +36,14 @@ public class ContextOntology {
 
         ontologyManager = rootOntology.getOWLOntologyManager();
         dataFactory = ontologyManager.getOWLDataFactory();
-        shortFormProvider = new QNameShortFormProvider(ontologyManager
+
+        // Set renderer s.t. IRIs are shortened.
+        OWLObjectRenderer renderer = new SimpleRenderer();
+        renderer.setShortFormProvider(new QNameShortFormProvider(ontologyManager
                 .getOntologyFormat(rootOntology)
                 .asPrefixOWLDocumentFormat()
-                .getPrefixName2PrefixMap());
+                .getPrefixName2PrefixMap()));
+        ToStringRenderer.setRenderer(() -> renderer);
 
         OWLAnnotationProperty isDefinedBy = dataFactory.getRDFSIsDefinedBy();
         OWLAnnotationProperty label = dataFactory.getRDFSLabel();
@@ -176,7 +182,7 @@ public class ContextOntology {
         // Obtain meta concepts that abbreviate object axioms.
         builder.append("Meta concepts that identify object axioms:\n");
         builder.append(outerAbstractedMetaConcepts.stream()
-                .map(shortFormProvider::getShortForm)
+                .map(OWLClass::toString)
                 .collect(Collectors.joining("\n")));
         builder.append("\n\n");
 
