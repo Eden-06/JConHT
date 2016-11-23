@@ -68,17 +68,17 @@ Class: rosi:B2
 
     SubClassOf: 
         
-            Annotations: rdfs:comment "test test"
-        rosi:D2,
-        
             Annotations: rdfs:comment "blub"
-        rosi:D1
+        rosi:D1,
+        
+            Annotations: rdfs:comment "test test"
+        rosi:D2
     
-    
-Class: rosi:C1
-
     
 Class: rosi:D2
+
+    
+Class: rosi:C1
 
     
 Class: rosi:C2
@@ -110,22 +110,22 @@ Class: owl:Nothing
          and rosi:D1
     
     
+Class: <rosi:NominalA>
+
+    
 Class: <rosi:NT1>
 
     SubClassOf: 
         <rosi:NaturalTypes>
     
     
-Class: <rosi:NominalA>
-
-
 Class: rosi:A
 
     Annotations: 
         <rosi:rigidity> true,
         <rosi:isMeta> false
     
-    SubClassOf:
+    SubClassOf: 
         rosi:C1 or rosi:C2,
         rosi:B1 or rosi:B2 or rosi:C1,
         rosi:D1 or rosi:D2
@@ -134,7 +134,8 @@ Class: rosi:A
 Class: <rosi:RT1>
 
     SubClassOf: 
-        <rosi:RoleTypes>
+        <rosi:NominalA>
+         and <rosi:RoleTypes>
     
     
 Class: <rosi:NT3>
