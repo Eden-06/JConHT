@@ -37,6 +37,7 @@ public class CromMapperTest {
 
     private OWLClass naturalTypes;
     private OWLClass roleTypes;
+    private OWLClass roleGroups;
     private OWLClass compartmentTypes;
 
     private OWLObjectProperty plays;
@@ -58,6 +59,7 @@ public class CromMapperTest {
 
         naturalTypes = dataFactory.getOWLClass("NaturalTypes", rosiPrefix);
         roleTypes = dataFactory.getOWLClass("RoleTypes", rosiPrefix);
+        roleGroups = dataFactory.getOWLClass("RoleGroups", rosiPrefix);
         compartmentTypes = dataFactory.getOWLClass("CompartmentTypes", rosiPrefix);
 
         plays = dataFactory.getOWLObjectProperty("plays", rosiPrefix);
@@ -141,17 +143,18 @@ public class CromMapperTest {
     }
 
     @Test
-    public void testOnlyRolesCanBePlayed() throws Exception {
+    public void testOnlyRolesOrRoleGroupsCanBePlayed() throws Exception {
+
+        OWLClassExpression roleTypesOrGroups = dataFactory.getOWLObjectUnionOf(roleTypes, roleGroups);
 
         assertTrue(isInconsistent(
                 getGlobalObjectTypeAssertion(
-                        dataFactory.getOWLObjectSomeValuesFrom(plays, dataFactory.getOWLObjectComplementOf(roleTypes)),
+                        dataFactory.getOWLObjectSomeValuesFrom(plays, dataFactory.getOWLObjectComplementOf(roleTypesOrGroups)),
                         dataFactory.getOWLAnonymousIndividual())));
     }
 
 
-
-
+    
 
 
 
@@ -405,7 +408,7 @@ public class CromMapperTest {
     }
 
 
-    // Tests for the occurrence constraints
+    // Tests for the occurrence constraints (for role types)
 
     @Test
     public void testOccurrenceCounterIsNeitherNaturalNorRole() throws Exception {
@@ -608,8 +611,70 @@ public class CromMapperTest {
         OWLClass ct = dataFactory.getOWLClass("CTCardinalConstraints", rosiPrefix);
         OWLIndividual role1 = createNewAnonymousIndividual();
         OWLIndividual role2 = createNewAnonymousIndividual();
-        OWLClass roleType1 = dataFactory.getOWLClass("RTCardinality3", rosiPrefix);
-        OWLClass roleType2 = dataFactory.getOWLClass("RTCardinality4", rosiPrefix);
+        OWLClass roleType1 = dataFactory.getOWLClass("RTCardinality4", rosiPrefix);
+        OWLClass roleType2 = dataFactory.getOWLClass("RTCardinality3", rosiPrefix);
+
+        assertFalse(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getLocalObjectTypeAssertion(roleType1, role1, compartment),
+                getLocalObjectTypeAssertion(roleType2, role2, compartment)
+        ));
+    }
+
+    @Test
+    public void testRelationshipTypeCardinalConstraints2Max() throws Exception {
+
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass ct = dataFactory.getOWLClass("CTCardinalConstraints", rosiPrefix);
+        OWLIndividual role1 = createNewAnonymousIndividual();
+        OWLIndividual role2 = createNewAnonymousIndividual();
+        OWLIndividual role3 = createNewAnonymousIndividual();
+        OWLIndividual role4 = createNewAnonymousIndividual();
+        OWLIndividual role5 = createNewAnonymousIndividual();
+        OWLClass roleType1 = dataFactory.getOWLClass("RTCardinality4", rosiPrefix);
+        OWLClass roleType2 = dataFactory.getOWLClass("RTCardinality3", rosiPrefix);
+        OWLObjectProperty rst = dataFactory.getOWLObjectProperty("RSTCardinality2", rosiPrefix);
+
+        assertTrue(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getLocalObjectTypeAssertion(roleType1, role1, compartment),
+                getLocalObjectTypeAssertion(roleType2, role2, compartment),
+                getLocalObjectTypeAssertion(roleType2, role3, compartment),
+                getLocalObjectTypeAssertion(roleType2, role4, compartment),
+                getLocalObjectTypeAssertion(roleType2, role5, compartment),
+                getRelationshipAssertion(rst, role1, role2, compartment),
+                getRelationshipAssertion(rst, role1, role3, compartment),
+                getRelationshipAssertion(rst, role1, role4, compartment),
+                getRelationshipAssertion(rst, role1, role5, compartment),
+                getObjectDifferentIndividualAssertion(role2, role3, role4, role5)
+        ));
+    }
+
+    @Test
+    public void testRelationshipTypeCardinalConstraints2Min() throws Exception {
+
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass ct = dataFactory.getOWLClass("CTCardinalConstraints", rosiPrefix);
+        OWLIndividual role1 = createNewAnonymousIndividual();
+        OWLClass roleType1 = dataFactory.getOWLClass("RTCardinality4", rosiPrefix);
+        OWLClass rt2Player = dataFactory.getOWLClass("PlaysRTCardinality3", rosiPrefix);
+
+        assertTrue(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getLocalObjectTypeAssertion(roleType1, role1, compartment),
+                getObjectIsBottom(rt2Player, compartment)
+        ));
+    }
+
+    @Test
+    public void testRelationshipTypeCardinalConstraints3() throws Exception {
+
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass ct = dataFactory.getOWLClass("CTCardinalConstraints", rosiPrefix);
+        OWLIndividual role1 = createNewAnonymousIndividual();
+        OWLIndividual role2 = createNewAnonymousIndividual();
+        OWLClass roleType1 = dataFactory.getOWLClass("RTCardinality5", rosiPrefix);
+        OWLClass roleType2 = dataFactory.getOWLClass("RTCardinality6", rosiPrefix);
 
         assertFalse(isInconsistent(
                 getMetaTypeAssertion(ct, compartment),
@@ -619,12 +684,367 @@ public class CromMapperTest {
     }
 
 
+    // Tests for  role groups
 
-    
+    @Test
+    public void testImplicationPre1() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTRoleImplication", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass defaultNT = dataFactory.getOWLClass("DefaultNT", rosiPrefix);
+        OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
+
+        assertFalse(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getGlobalObjectTypeAssertion(defaultNT, natural)
+        ));
+    }
+
+    @Test
+    public void testImplicationPre2() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTRoleImplication", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass defaultNT = dataFactory.getOWLClass("DefaultNT", rosiPrefix);
+        OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt2Player = dataFactory.getOWLClass("PlaysRTImplication2", rosiPrefix);
+
+        assertFalse(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getGlobalObjectTypeAssertion(defaultNT, natural),
+                getObjectIsBottom(rt2Player, compartment)
+        ));
+    }
+
+    @Test
+    public void testImplicationPre3() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTRoleImplication", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass defaultNT = dataFactory.getOWLClass("DefaultNT", rosiPrefix);
+        OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt1 = dataFactory.getOWLClass("RTImplication1", rosiPrefix);
+        OWLIndividual role1 = dataFactory.getOWLAnonymousIndividual();
+
+        assertFalse(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getGlobalObjectTypeAssertion(defaultNT, natural),
+                getLocalObjectTypeAssertion(rt1, role1, compartment),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role1, compartment)
+        ));
+    }
+
+    @Test
+    public void testImplication() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTRoleImplication", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass defaultNT = dataFactory.getOWLClass("DefaultNT", rosiPrefix);
+        OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt1 = dataFactory.getOWLClass("RTImplication1", rosiPrefix);
+        OWLIndividual role1 = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt2Player = dataFactory.getOWLClass("PlaysRTImplication2", rosiPrefix);
+
+        assertTrue(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getGlobalObjectTypeAssertion(defaultNT, natural),
+                getLocalObjectTypeAssertion(rt1, role1, compartment),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role1, compartment),
+                getObjectIsBottom(rt2Player, compartment)
+        ));
+    }
+
+    @Test
+    public void testProhibitionPre1() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTRoleProhibition", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass defaultNT = dataFactory.getOWLClass("DefaultNT", rosiPrefix);
+        OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt1 = dataFactory.getOWLClass("RTProhibition1", rosiPrefix);
+        OWLIndividual role1 = dataFactory.getOWLAnonymousIndividual();
+
+        assertFalse(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getGlobalObjectTypeAssertion(defaultNT, natural),
+                getLocalObjectTypeAssertion(rt1, role1, compartment),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role1, compartment)
+        ));
+    }
+
+    @Test
+    public void testProhibitionPre2() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTRoleProhibition", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass defaultNT = dataFactory.getOWLClass("DefaultNT", rosiPrefix);
+        OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt2 = dataFactory.getOWLClass("RTProhibition2", rosiPrefix);
+        OWLIndividual role2 = dataFactory.getOWLAnonymousIndividual();
+
+        assertFalse(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getGlobalObjectTypeAssertion(defaultNT, natural),
+                getLocalObjectTypeAssertion(rt2, role2, compartment),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role2, compartment)
+        ));
+    }
+
+    @Test
+    public void testProhibition() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTRoleProhibition", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass defaultNT = dataFactory.getOWLClass("DefaultNT", rosiPrefix);
+        OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt1 = dataFactory.getOWLClass("RTProhibition1", rosiPrefix);
+        OWLIndividual role1 = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt2 = dataFactory.getOWLClass("RTProhibition2", rosiPrefix);
+        OWLIndividual role2 = dataFactory.getOWLAnonymousIndividual();
+
+        assertTrue(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getGlobalObjectTypeAssertion(defaultNT, natural),
+                getLocalObjectTypeAssertion(rt1, role1, compartment),
+                getLocalObjectTypeAssertion(rt2, role2, compartment),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role1, compartment),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role2, compartment)
+        ));
+    }
+
+    @Test
+    public void testEquivalencePre() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTRoleEquivalence", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass defaultNT = dataFactory.getOWLClass("DefaultNT", rosiPrefix);
+        OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt1 = dataFactory.getOWLClass("RTEquivalence1", rosiPrefix);
+        OWLIndividual role1 = dataFactory.getOWLAnonymousIndividual();
+
+        assertFalse(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getGlobalObjectTypeAssertion(defaultNT, natural),
+                getLocalObjectTypeAssertion(rt1, role1, compartment),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role1, compartment)
+        ));
+    }
+
+    @Test
+    public void testEquivalence1() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTRoleEquivalence", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass defaultNT = dataFactory.getOWLClass("DefaultNT", rosiPrefix);
+        OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt1 = dataFactory.getOWLClass("RTEquivalence1", rosiPrefix);
+        OWLIndividual role1 = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt2Player = dataFactory.getOWLClass("PlaysRTEquivalence2", rosiPrefix);
+
+        assertTrue(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getGlobalObjectTypeAssertion(defaultNT, natural),
+                getLocalObjectTypeAssertion(rt1, role1, compartment),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role1, compartment),
+                getObjectIsBottom(rt2Player, compartment)
+        ));
+    }
+
+    @Test
+    public void testEquivalence2() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTRoleEquivalence", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass defaultNT = dataFactory.getOWLClass("DefaultNT", rosiPrefix);
+        OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt2 = dataFactory.getOWLClass("RTEquivalence2", rosiPrefix);
+        OWLIndividual role2 = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt1Player = dataFactory.getOWLClass("PlaysRTEquivalence1", rosiPrefix);
+
+        assertTrue(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getGlobalObjectTypeAssertion(defaultNT, natural),
+                getLocalObjectTypeAssertion(rt2, role2, compartment),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role2, compartment),
+                getObjectIsBottom(rt1Player, compartment)
+        ));
+    }
+
+    @Test
+    public void testRoleConstraintsPre() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTRoleConstraints", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass defaultNT = dataFactory.getOWLClass("DefaultNT", rosiPrefix);
+        OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt2 = dataFactory.getOWLClass("RTConstraints2", rosiPrefix);
+        OWLIndividual role2 = dataFactory.getOWLAnonymousIndividual();
+
+        assertFalse(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getGlobalObjectTypeAssertion(defaultNT, natural),
+                getLocalObjectTypeAssertion(rt2, role2, compartment),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role2, compartment)
+        ));
+    }
+
+    @Test
+    public void testRoleConstraints() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTRoleConstraints", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass defaultNT = dataFactory.getOWLClass("DefaultNT", rosiPrefix);
+        OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt1 = dataFactory.getOWLClass("RTConstraints1", rosiPrefix);
+        OWLIndividual role1 = dataFactory.getOWLAnonymousIndividual();
+
+        assertTrue(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getGlobalObjectTypeAssertion(defaultNT, natural),
+                getLocalObjectTypeAssertion(rt1, role1, compartment),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role1, compartment)
+        ));
+    }
+
+    @Test
+    public void testRoleGroupMinMaxPre() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTRoleGroupsMinMax", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass defaultNT = dataFactory.getOWLClass("DefaultNT", rosiPrefix);
+        OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt1 = dataFactory.getOWLClass("RTRGMinMax1", rosiPrefix);
+        OWLIndividual role1 = dataFactory.getOWLAnonymousIndividual();
+
+        assertFalse(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getGlobalObjectTypeAssertion(defaultNT, natural),
+                getLocalObjectTypeAssertion(rt1, role1, compartment),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role1, compartment)
+        ));
+    }
+
+    @Test
+    public void testRoleGroupMin() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTRoleGroupsMinMax", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass defaultNT = dataFactory.getOWLClass("DefaultNT", rosiPrefix);
+        OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt1 = dataFactory.getOWLClass("RTRGMinMax1", rosiPrefix);
+        OWLIndividual role1 = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt2Player = dataFactory.getOWLClass("PlaysRTRGMinMax2", rosiPrefix);
+        OWLClass rt3Player = dataFactory.getOWLClass("PlaysRTRGMinMax3", rosiPrefix);
+
+        assertTrue(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getGlobalObjectTypeAssertion(defaultNT, natural),
+                getLocalObjectTypeAssertion(rt1, role1, compartment),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role1, compartment),
+                getObjectIsBottom(rt2Player, compartment),
+                getObjectIsBottom(rt3Player, compartment)
+        ));
+    }
+
+    @Test
+    public void testRoleGroupMax() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTRoleGroupsMinMax", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass defaultNT = dataFactory.getOWLClass("DefaultNT", rosiPrefix);
+        OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt1 = dataFactory.getOWLClass("RTRGMinMax1", rosiPrefix);
+        OWLIndividual role1 = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt2 = dataFactory.getOWLClass("RTRGMinMax2", rosiPrefix);
+        OWLIndividual role2 = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt3 = dataFactory.getOWLClass("RTRGMinMax3", rosiPrefix);
+        OWLIndividual role3 = dataFactory.getOWLAnonymousIndividual();
+
+        assertTrue(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getGlobalObjectTypeAssertion(defaultNT, natural),
+                getLocalObjectTypeAssertion(rt1, role1, compartment),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role1, compartment),
+                getLocalObjectTypeAssertion(rt2, role2, compartment),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role2, compartment),
+                getLocalObjectTypeAssertion(rt3, role3, compartment),
+                getNaturalPlaysRoleInCompartmentAssertion(natural, role3, compartment)
+        ));
+    }
 
 
+    // Tests for occurrence constraints of role groups
+
+    @Test
+    public void testRGOccurrenceMaxConstraints1Pre() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTOccurrenceRGs", rosiPrefix);
+        OWLClass rt = dataFactory.getOWLClass("RTRG1A", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLIndividual role1 = createNewAnonymousIndividual();
+
+        assertFalse(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getLocalObjectTypeAssertion(rt, role1, compartment)
+        ));
+    }
+
+    @Test
+    public void testRGOccurrenceMaxConstraints1() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTOccurrenceRGs1", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rt = dataFactory.getOWLClass("RTRG1A", rosiPrefix);
+        OWLIndividual role1 = createNewAnonymousIndividual();
+        OWLIndividual role2 = createNewAnonymousIndividual();
+        OWLIndividual role3 = createNewAnonymousIndividual();
+
+        assertTrue(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getLocalObjectTypeAssertion(rt, role1, compartment),
+                getLocalObjectTypeAssertion(rt, role2, compartment),
+                getLocalObjectTypeAssertion(rt, role3, compartment),
+                getObjectDifferentIndividualAssertion(role1, role2, role3)
+        ));
+    }
+
+    @Test
+    public void testRGOccurrenceMinConstraintsPre() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTOccurrenceRGs", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+
+        assertFalse(isInconsistent(
+                getMetaTypeAssertion(ct, compartment)
+        ));
+    }
+
+    @Test
+    public void testRGOccurrenceMinConstraints() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTOccurrenceRGs", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+        OWLClass rtPlayer = dataFactory.getOWLClass("PlaysRTRG1A", rosiPrefix);
+
+        assertTrue(isInconsistent(
+                getMetaTypeAssertion(ct, compartment),
+                getObjectIsBottom(rtPlayer, compartment)
+        ));
+    }
 
 
+    // Further tests about more complex situations
+
+    @Test
+    public void testInconsistentCT1() throws Exception {
+
+        OWLClass ct = dataFactory.getOWLClass("CTInconsistentConstraints", rosiPrefix);
+        OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
+
+        assertTrue(isInconsistent(
+                getMetaTypeAssertion(ct, compartment)
+        ));
+    }
 
 
 
