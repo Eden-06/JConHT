@@ -64,7 +64,9 @@ public class ContextTableau extends Tableau {
         if (super.runCalculus()) {
 
             // Possibly a model is found.
-            System.out.println(contextOntology);
+
+
+            //System.out.println(contextOntology);
 
             // Debug output
             System.out.println("meta ontology is consistent, following context model is found:");
@@ -123,7 +125,7 @@ public class ContextTableau extends Tableau {
 
         String str;
         Prefixes prefix = new Prefixes();
-        prefix.declarePrefix(":","http://www.rosi-project.org/ontologies#");
+        prefix.declarePrefix("rosi:","http://www.rosi-project.org/ontologies#");
         prefix.declarePrefix("int:","internal:");
         prefix.declarePrefix("intNom:","internal:nom#http://www.rosi-project.org/ontologies#");
         prefix.declareSemanticWebPrefixes();
