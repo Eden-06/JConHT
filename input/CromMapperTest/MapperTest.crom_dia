@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<org.framed.orm.model:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:org.framed.orm.model="http://orm/1.0">
+  <elements xsi:type="org.framed.orm.model:Shape" name="CTEmptyCompartment">
+    <firstSegment/>
+    <secondSegment/>
+    <model/>
+    <boundaries>
+      <topLeft x="408" y="120"/>
+      <bottomRight x="608" y="250"/>
+    </boundaries>
+  </elements>
+</org.framed.orm.model:Model>

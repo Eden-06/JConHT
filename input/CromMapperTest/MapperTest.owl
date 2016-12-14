@@ -1,0 +1,223 @@
+# 
+# This ontology is automatically written by the FRaMED OWL Ontology generator
+#
+# The following features are not supported:
+#       - Compartment inheritance, because too many weird things can happen, which are not checked in FRaMED
+#
+#       - Compartments that play a role in another compartment, because on object level it would enforce a new
+#         compartment instance, i.e. a new individual on meta level
+#
+#       - intra relationship constraints like reflexive or symmetric, since actually that are constraints on the
+#         objects that play the roles and not on the roles themselves.
+#
+Prefix: owl: <http://www.w3.org/2002/07/owl#>
+Prefix: rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+Prefix: xml: <http://www.w3.org/XML/1998/namespace>
+Prefix: xsd: <http://www.w3.org/2001/XMLSchema#>
+Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+Prefix: rosi: <http://www.rosi-project.org/ontologies#>
+
+Ontology: <http://www.rosi-project.org/ontologies/2016-12-14/MapperTest>
+
+
+
+
+####################################################################################################
+# Used OWL datatypes                                                                               #
+####################################################################################################
+
+Datatype: xsd:boolean
+
+#
+# Used OWL annotations
+#
+
+AnnotationProperty: rosi:rigidity
+	Range: <http://www.w3.org/2001/XMLSchema#boolean>
+
+AnnotationProperty: rosi:isMeta
+	Range: <http://www.w3.org/2001/XMLSchema#boolean>
+
+AnnotationProperty: rdfs:isDefinedBy
+
+
+
+
+####################################################################################################
+# General axioms and declarations, independent of the CROModel                                     #
+####################################################################################################
+
+Class: owl:Thing
+	SubClassOf:
+		rosi:CompartmentTypes
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:NaturalTypes,
+		rosi:RoleTypes,
+		rosi:RoleGroups,
+		{rosi:occurrenceCounter}
+
+Class: owl:Nothing
+
+Class: rosi:CompartmentTypes
+
+Class: rosi:NaturalTypes
+
+Class: rosi:RoleTypes
+
+Class: rosi:RoleGroups
+
+Individual: rosi:occurrenceCounter
+
+
+
+
+####################################################################################################
+# The declaration of all compartment types that occur in the model                                 #
+####################################################################################################
+
+
+Class: rosi:CompartmentTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		owl:Nothing
+    DisjointUnionOf:
+        rosi:CTEmptyCompartment
+
+Class: rosi:CTEmptyCompartment
+    SubClassOf: owl:Nothing
+
+
+
+
+####################################################################################################
+# The declaration of all natural types that occur in the model                                     #
+####################################################################################################
+
+
+Class: rosi:NaturalTypes
+	SubClassOf:
+		owl:Nothing
+
+
+
+
+
+####################################################################################################
+# The declaration of all role types that occur in the model                                        #
+####################################################################################################
+
+Class: rosi:RoleTypes
+
+Class: rosi:RoleTypes
+			SubClassOf:
+				Annotations: rdfs:label "objectGlobal"
+				inverse (rosi:plays) exactly 1 owl:Thing
+
+
+
+
+
+####################################################################################################
+# The declaration of the plays relation as OWL object property                                     #
+####################################################################################################
+
+
+ObjectProperty: owl:bottomObjectProperty
+
+ObjectProperty: rosi:plays
+	Domain:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:NaturalTypes
+	Range:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RoleTypes or rosi:RoleGroups
+	SubPropertyOf:
+		owl:bottomObjectProperty
+		
+
+
+
+
+####################################################################################################
+# Natural type inheritance                                                                         #
+####################################################################################################
+
+Class: rosi:NaturalTypes
+	
+
+
+
+
+####################################################################################################
+# fills relation                                                                                   #
+####################################################################################################
+
+
+
+
+
+####################################################################################################
+# The declaration of all relationship types that occur in the model                                #
+####################################################################################################
+
+
+
+
+
+
+####################################################################################################
+# The declaration of all role groups that appear in the CROM.                                      #
+####################################################################################################
+
+Class: rosi:RoleGroups
+	
+Class: rosi:RoleGroups
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		inverse (rosi:plays) exactly 1 owl:Thing
+
+
+
+
+
+####################################################################################################
+# Cardinal constraints of relationship types                                                       #
+####################################################################################################
+
+
+
+
+
+
+####################################################################################################
+# The declaration of the counter nominal and all the occurrence constraints.                       #
+####################################################################################################
+
+
+ObjectProperty: rosi:count
+
+Class: rosi:RoleTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		inverse (rosi:count) exactly 1 {rosi:occurrenceCounter}
+
+
+Class: rosi:RoleGroups
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		inverse (rosi:count) exactly 1 {rosi:occurrenceCounter}
+		
+Individual: rosi:occurrenceCounter
+
+
+
+
+
+
+####################################################################################################
+# This is the end of the automatically generated OWL File.                                         #
+# If you want to add any axioms manually you should do it below here.                              #
+####################################################################################################
+
