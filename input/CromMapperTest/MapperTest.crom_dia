@@ -1,12 +1,751 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <org.framed.orm.model:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:org.framed.orm.model="http://orm/1.0">
-  <elements xsi:type="org.framed.orm.model:Shape" name="CTEmptyCompartment">
+  <elements xsi:type="org.framed.orm.model:Shape" name="EmptyCompartment">
     <firstSegment/>
     <secondSegment/>
     <model/>
     <boundaries>
-      <topLeft x="408" y="120"/>
-      <bottomRight x="608" y="250"/>
+      <topLeft x="2292" y="12"/>
+      <bottomRight x="2497" y="147"/>
     </boundaries>
   </elements>
+  <elements xsi:type="org.framed.orm.model:Shape" name="NTFiller1" outgoingRelations="//@elements.5 //@elements.6" type="NaturalType">
+    <firstSegment/>
+    <secondSegment/>
+    <boundaries>
+      <topLeft x="2093" y="200"/>
+      <bottomRight x="2297" y="334"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Shape" name="NTFiller2" outgoingRelations="//@elements.7" type="NaturalType">
+    <firstSegment/>
+    <secondSegment/>
+    <boundaries>
+      <topLeft x="2095" y="362"/>
+      <bottomRight x="2301" y="498"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Shape" name="FillsTest1" incomingRelations="//@elements.5 //@elements.7">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTFills1" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="556" y="186"/>
+          <bottomRight x="756" y="316"/>
+        </boundaries>
+      </elements>
+    </model>
+    <boundaries>
+      <topLeft x="2415" y="284"/>
+      <bottomRight x="2619" y="418"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Shape" name="FillsTest2" incomingRelations="//@elements.6 //@elements.9">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTFills2" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="402" y="200"/>
+          <bottomRight x="602" y="330"/>
+        </boundaries>
+      </elements>
+    </model>
+    <boundaries>
+      <topLeft x="2417" y="445"/>
+      <bottomRight x="2622" y="580"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.3" source="//@elements.1" referencedRoles="//@elements.3/@model/@elements.0"/>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.4" source="//@elements.1"/>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.3" source="//@elements.2" referencedRoles="//@elements.3/@model/@elements.0"/>
+  <elements xsi:type="org.framed.orm.model:Shape" name="BottomNT" outgoingRelations="//@elements.9 //@elements.36 //@elements.37" type="NaturalType">
+    <firstSegment/>
+    <secondSegment/>
+    <boundaries>
+      <topLeft x="1555" y="589"/>
+      <bottomRight x="1766" y="730"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.4" source="//@elements.8" referencedRoles="//@elements.4/@model/@elements.0"/>
+  <elements xsi:type="org.framed.orm.model:Shape" name="CTDisjoint1" incomingRelations="//@elements.13">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RT1" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="343" y="189"/>
+          <bottomRight x="543" y="319"/>
+        </boundaries>
+      </elements>
+    </model>
+    <boundaries>
+      <topLeft x="1185" y="9"/>
+      <bottomRight x="1389" y="143"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Shape" name="CTDisjoint2" incomingRelations="//@elements.14">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RT2" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="206" y="213"/>
+          <bottomRight x="406" y="343"/>
+        </boundaries>
+      </elements>
+    </model>
+    <boundaries>
+      <topLeft x="1268" y="155"/>
+      <bottomRight x="1472" y="289"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Shape" name="DefaultNT" outgoingRelations="//@elements.13 //@elements.14 //@elements.25 //@elements.27 //@elements.29 //@elements.31 //@elements.35 //@elements.39 //@elements.41 //@elements.43 //@elements.45 //@elements.47 //@elements.49 //@elements.51 //@elements.53" type="NaturalType">
+    <firstSegment/>
+    <secondSegment/>
+    <boundaries>
+      <topLeft x="493" y="288"/>
+      <bottomRight x="698" y="423"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.10" source="//@elements.12" referencedRoles="//@elements.10/@model/@elements.0"/>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.11" source="//@elements.12" referencedRoles="//@elements.11/@model/@elements.0"/>
+  <elements xsi:type="org.framed.orm.model:Shape" name="NTInheritance1" type="NaturalType">
+    <firstSegment/>
+    <secondSegment/>
+    <boundaries>
+      <topLeft x="1529" y="12"/>
+      <bottomRight x="1734" y="147"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Shape" name="NTInheritance2" incomingRelations="//@elements.20 //@elements.21" type="NaturalType">
+    <firstSegment/>
+    <secondSegment/>
+    <boundaries>
+      <topLeft x="1858" y="98"/>
+      <bottomRight x="2063" y="233"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Shape" name="NTInheritance3" incomingRelations="//@elements.22" outgoingRelations="//@elements.20" type="NaturalType">
+    <firstSegment/>
+    <secondSegment/>
+    <boundaries>
+      <topLeft x="1576" y="185"/>
+      <bottomRight x="1780" y="319"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Shape" name="NTInheritance4" incomingRelations="//@elements.23" outgoingRelations="//@elements.21" type="NaturalType">
+    <firstSegment/>
+    <secondSegment/>
+    <boundaries>
+      <topLeft x="1821" y="285"/>
+      <bottomRight x="2026" y="420"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Shape" name="NTInheritance5" outgoingRelations="//@elements.22 //@elements.23" type="NaturalType">
+    <firstSegment/>
+    <secondSegment/>
+    <boundaries>
+      <topLeft x="1518" y="363"/>
+      <bottomRight x="1722" y="497"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Inheritance" target="//@elements.16" source="//@elements.17"/>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Inheritance" target="//@elements.16" source="//@elements.18"/>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Inheritance" target="//@elements.17" source="//@elements.19"/>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Inheritance" target="//@elements.18" source="//@elements.19"/>
+  <elements xsi:type="org.framed.orm.model:Shape" name="RolesCantBePlayedTwice" incomingRelations="//@elements.25">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTCantBePlayedTwice" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="526" y="175"/>
+          <bottomRight x="726" y="305"/>
+        </boundaries>
+      </elements>
+    </model>
+    <boundaries>
+      <topLeft x="929" y="7"/>
+      <bottomRight x="1132" y="140"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.24" source="//@elements.12" referencedRoles="//@elements.24/@model/@elements.0"/>
+  <elements xsi:type="org.framed.orm.model:Shape" name="RoleTypesAreDisjoint" incomingRelations="//@elements.27">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTDisjoint1" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="443" y="99"/>
+          <bottomRight x="643" y="229"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTDisjoint2" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="516" y="297"/>
+          <bottomRight x="716" y="427"/>
+        </boundaries>
+      </elements>
+    </model>
+    <boundaries>
+      <topLeft x="607" y="19"/>
+      <bottomRight x="810" y="152"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.26" source="//@elements.12" referencedRoles="//@elements.26/@model/@elements.0 //@elements.26/@model/@elements.1"/>
+  <elements xsi:type="org.framed.orm.model:Shape" name="RSTDomainRange1" incomingRelations="//@elements.29">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTRSTDomain" outgoingRelations="//@elements.28/@model/@elements.4" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="247" y="131"/>
+          <bottomRight x="448" y="262"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTRSTRange" incomingRelations="//@elements.28/@model/@elements.4" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="694" y="162"/>
+          <bottomRight x="895" y="293"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="" type="RelationshipShapeChild">
+        <boundaries>
+          <topLeft y="1"/>
+          <bottomRight x="1"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="" type="RelationshipShapeChild">
+        <boundaries>
+          <topLeft y="1"/>
+          <bottomRight x="1"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Relation" name="RSTDomRan" type="Relationship" target="//@elements.28/@model/@elements.1" source="//@elements.28/@model/@elements.0" connectionAnchor="//@elements.28/@model/@elements.3">
+        <sourceLabel name="*"/>
+        <targetLabel name="*"/>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="" type="RelationshipShapeChild">
+        <boundaries>
+          <topLeft y="1"/>
+          <bottomRight x="1"/>
+        </boundaries>
+      </elements>
+    </model>
+    <boundaries>
+      <topLeft x="1047" y="257"/>
+      <bottomRight x="1254" y="394"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.28" source="//@elements.12" referencedRoles="//@elements.28/@model/@elements.0 //@elements.28/@model/@elements.1"/>
+  <elements xsi:type="org.framed.orm.model:Shape" name="RSTDomainRangeDifferent" incomingRelations="//@elements.31">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTRSTDomRan" incomingRelations="//@elements.30/@model/@elements.2" outgoingRelations="//@elements.30/@model/@elements.2" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="230" y="131"/>
+          <bottomRight x="434" y="265"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="" type="RelationshipShapeChild">
+        <boundaries>
+          <topLeft y="1"/>
+          <bottomRight x="1"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Relation" name="RSTSameDomRan" type="Relationship" target="//@elements.30/@model/@elements.0" source="//@elements.30/@model/@elements.0" connectionAnchor="//@elements.30/@model/@elements.1">
+        <sourceLabel name="*"/>
+        <targetLabel name="*"/>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="" type="RelationshipShapeChild">
+        <boundaries>
+          <topLeft y="1"/>
+          <bottomRight x="1"/>
+        </boundaries>
+      </elements>
+    </model>
+    <boundaries>
+      <topLeft x="1207" y="398"/>
+      <bottomRight x="1413" y="534"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.30" source="//@elements.12" referencedRoles="//@elements.30/@model/@elements.0"/>
+  <elements xsi:type="org.framed.orm.model:Shape" name="OccurrenceRTTest1" incomingRelations="//@elements.35">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTOccurrence1" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="0..1"/>
+        <boundaries>
+          <topLeft x="64" y="146"/>
+          <bottomRight x="265" y="277"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTOccurrence2" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="2..3"/>
+        <boundaries>
+          <topLeft x="303" y="150"/>
+          <bottomRight x="504" y="281"/>
+        </boundaries>
+      </elements>
+    </model>
+    <boundaries>
+      <topLeft x="769" y="438"/>
+      <bottomRight x="972" y="571"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Shape" name="OccurrenceRTTest2" incomingRelations="//@elements.36">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTOccurrence3" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="0..*"/>
+        <boundaries>
+          <topLeft x="388" y="200"/>
+          <bottomRight x="588" y="330"/>
+        </boundaries>
+      </elements>
+    </model>
+    <boundaries>
+      <topLeft x="989" y="481"/>
+      <bottomRight x="1194" y="616"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Shape" name="OccurrenceRTTest3" incomingRelations="//@elements.37">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTOccurrence4" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="1..*"/>
+        <boundaries>
+          <topLeft x="417" y="234"/>
+          <bottomRight x="617" y="364"/>
+        </boundaries>
+      </elements>
+    </model>
+    <boundaries>
+      <topLeft x="886" y="636"/>
+      <bottomRight x="1092" y="772"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.32" source="//@elements.12" referencedRoles="//@elements.32/@model/@elements.0 //@elements.32/@model/@elements.1"/>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.33" source="//@elements.8" referencedRoles="//@elements.33/@model/@elements.0"/>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.34" source="//@elements.8" referencedRoles="//@elements.34/@model/@elements.0"/>
+  <elements xsi:type="org.framed.orm.model:Shape" name="CardinalConstraints" incomingRelations="//@elements.39">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTCard1" outgoingRelations="//@elements.38/@model/@elements.7" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="157" y="82"/>
+          <bottomRight x="357" y="212"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTCard2" incomingRelations="//@elements.38/@model/@elements.7" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="722" y="84"/>
+          <bottomRight x="923" y="215"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTCard3" outgoingRelations="//@elements.38/@model/@elements.9" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="165" y="263"/>
+          <bottomRight x="366" y="394"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTCard4" incomingRelations="//@elements.38/@model/@elements.9" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="714" y="288"/>
+          <bottomRight x="915" y="419"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTCard5" outgoingRelations="//@elements.38/@model/@elements.11" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="156" y="479"/>
+          <bottomRight x="357" y="610"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTCard6" incomingRelations="//@elements.38/@model/@elements.11" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="698" y="517"/>
+          <bottomRight x="898" y="647"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="" type="RelationshipShapeChild">
+        <boundaries>
+          <topLeft y="1"/>
+          <bottomRight x="1"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Relation" name="RSTCard1" type="Relationship" target="//@elements.38/@model/@elements.1" source="//@elements.38/@model/@elements.0" connectionAnchor="//@elements.38/@model/@elements.6">
+        <sourceLabel name="*"/>
+        <targetLabel name="2..3"/>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="" type="RelationshipShapeChild">
+        <boundaries>
+          <topLeft y="1"/>
+          <bottomRight x="1"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Relation" name="RSTCard2" type="Relationship" target="//@elements.38/@model/@elements.3" source="//@elements.38/@model/@elements.2" connectionAnchor="//@elements.38/@model/@elements.8">
+        <sourceLabel name="2..3"/>
+        <targetLabel name="*"/>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="" type="RelationshipShapeChild">
+        <boundaries>
+          <topLeft y="1"/>
+          <bottomRight x="1"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Relation" name="RSTCard3" type="Relationship" target="//@elements.38/@model/@elements.5" source="//@elements.38/@model/@elements.4" connectionAnchor="//@elements.38/@model/@elements.10">
+        <sourceLabel name="2..2"/>
+        <targetLabel name="3..3"/>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="" type="RelationshipShapeChild">
+        <boundaries>
+          <topLeft y="1"/>
+          <bottomRight x="1"/>
+        </boundaries>
+      </elements>
+    </model>
+    <boundaries>
+      <topLeft x="364" y="1"/>
+      <bottomRight x="567" y="153"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.38" source="//@elements.12" referencedRoles="//@elements.38/@model/@elements.0 //@elements.38/@model/@elements.1 //@elements.38/@model/@elements.2 //@elements.38/@model/@elements.3 //@elements.38/@model/@elements.4 //@elements.38/@model/@elements.5"/>
+  <elements xsi:type="org.framed.orm.model:Shape" name="RoleImplication" incomingRelations="//@elements.41">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTImplication1" outgoingRelations="//@elements.40/@model/@elements.2" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="196" y="171"/>
+          <bottomRight x="397" y="302"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTImplication2" incomingRelations="//@elements.40/@model/@elements.2" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="577" y="178"/>
+          <bottomRight x="779" y="310"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Relation" type="RoleImplication" target="//@elements.40/@model/@elements.1" source="//@elements.40/@model/@elements.0"/>
+    </model>
+    <boundaries>
+      <topLeft x="652" y="638"/>
+      <bottomRight x="858" y="774"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.40" source="//@elements.12" referencedRoles="//@elements.40/@model/@elements.0 //@elements.40/@model/@elements.1"/>
+  <elements xsi:type="org.framed.orm.model:Shape" name="RoleProhibition" incomingRelations="//@elements.43">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTProhibition1" outgoingRelations="//@elements.42/@model/@elements.2" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="188" y="207"/>
+          <bottomRight x="388" y="337"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTProhibition2" incomingRelations="//@elements.42/@model/@elements.2" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="582" y="217"/>
+          <bottomRight x="783" y="348"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Relation" type="RoleProhibition" target="//@elements.42/@model/@elements.1" source="//@elements.42/@model/@elements.0"/>
+    </model>
+    <boundaries>
+      <topLeft x="418" y="642"/>
+      <bottomRight x="627" y="781"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.42" source="//@elements.12" referencedRoles="//@elements.42/@model/@elements.0 //@elements.42/@model/@elements.1"/>
+  <elements xsi:type="org.framed.orm.model:Shape" name="RoleEquivalence" incomingRelations="//@elements.45">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTEquivalence1" outgoingRelations="//@elements.44/@model/@elements.2" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="193" y="290"/>
+          <bottomRight x="393" y="420"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTEquivalence2" incomingRelations="//@elements.44/@model/@elements.2" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="647" y="284"/>
+          <bottomRight x="847" y="414"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Relation" type="RoleEquivalence" target="//@elements.44/@model/@elements.1" source="//@elements.44/@model/@elements.0"/>
+    </model>
+    <boundaries>
+      <topLeft x="182" y="647"/>
+      <bottomRight x="390" y="785"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.44" source="//@elements.12" referencedRoles="//@elements.44/@model/@elements.0 //@elements.44/@model/@elements.1"/>
+  <elements xsi:type="org.framed.orm.model:Shape" name="ComplexRiehle" incomingRelations="//@elements.47">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTRiehle1" outgoingRelations="//@elements.46/@model/@elements.3 //@elements.46/@model/@elements.5" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="102" y="200"/>
+          <bottomRight x="303" y="331"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTRiehle2" incomingRelations="//@elements.46/@model/@elements.3" outgoingRelations="//@elements.46/@model/@elements.4" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="471" y="204"/>
+          <bottomRight x="673" y="336"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTRiehle3" incomingRelations="//@elements.46/@model/@elements.4 //@elements.46/@model/@elements.5" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="275" y="453"/>
+          <bottomRight x="477" y="585"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Relation" type="RoleImplication" target="//@elements.46/@model/@elements.1" source="//@elements.46/@model/@elements.0"/>
+      <elements xsi:type="org.framed.orm.model:Relation" type="RoleImplication" target="//@elements.46/@model/@elements.2" source="//@elements.46/@model/@elements.1"/>
+      <elements xsi:type="org.framed.orm.model:Relation" type="RoleProhibition" target="//@elements.46/@model/@elements.2" source="//@elements.46/@model/@elements.0"/>
+    </model>
+    <boundaries>
+      <topLeft x="25" y="465"/>
+      <bottomRight x="225" y="595"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.46" source="//@elements.12" referencedRoles="//@elements.46/@model/@elements.0 //@elements.46/@model/@elements.1 //@elements.46/@model/@elements.2"/>
+  <elements xsi:type="org.framed.orm.model:Shape" name="RGsMinMaxTest" incomingRelations="//@elements.49">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RG (2..2)" type="RoleGroup">
+        <model>
+          <elements xsi:type="org.framed.orm.model:Shape" name="RT_A" type="RoleType">
+            <firstSegment/>
+            <secondSegment/>
+            <description name="*"/>
+            <boundaries>
+              <topLeft x="63" y="118"/>
+              <bottomRight x="264" y="249"/>
+            </boundaries>
+          </elements>
+          <elements xsi:type="org.framed.orm.model:Shape" name="RT_B" type="RoleType">
+            <firstSegment/>
+            <secondSegment/>
+            <description name="*"/>
+            <boundaries>
+              <topLeft x="304" y="122"/>
+              <bottomRight x="506" y="254"/>
+            </boundaries>
+          </elements>
+          <elements xsi:type="org.framed.orm.model:Shape" name="RT_C" type="RoleType">
+            <firstSegment/>
+            <secondSegment/>
+            <description name="*"/>
+            <boundaries>
+              <topLeft x="553" y="121"/>
+              <bottomRight x="754" y="252"/>
+            </boundaries>
+          </elements>
+        </model>
+        <description name="*"/>
+        <boundaries>
+          <topLeft x="65" y="72"/>
+          <bottomRight x="888" y="416"/>
+        </boundaries>
+      </elements>
+    </model>
+    <boundaries>
+      <topLeft x="38" y="322"/>
+      <bottomRight x="241" y="455"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.48" source="//@elements.12" referencedRoles="//@elements.48/@model/@elements.0"/>
+  <elements xsi:type="org.framed.orm.model:Shape" name="OccurrenceRGTest" incomingRelations="//@elements.51">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RG (2..2)" type="RoleGroup">
+        <model>
+          <elements xsi:type="org.framed.orm.model:Shape" name="RT_D" type="RoleType">
+            <firstSegment/>
+            <secondSegment/>
+            <description name="*"/>
+            <boundaries>
+              <topLeft x="160" y="145"/>
+              <bottomRight x="360" y="275"/>
+            </boundaries>
+          </elements>
+          <elements xsi:type="org.framed.orm.model:Shape" name="RT_E" type="RoleType">
+            <firstSegment/>
+            <secondSegment/>
+            <description name="*"/>
+            <boundaries>
+              <topLeft x="481" y="127"/>
+              <bottomRight x="682" y="258"/>
+            </boundaries>
+          </elements>
+        </model>
+        <description name="2..2"/>
+        <boundaries>
+          <topLeft x="78" y="68"/>
+          <bottomRight x="952" y="451"/>
+        </boundaries>
+      </elements>
+    </model>
+    <boundaries>
+      <topLeft x="28" y="175"/>
+      <bottomRight x="229" y="306"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.50" source="//@elements.12" referencedRoles="//@elements.50/@model/@elements.0"/>
+  <elements xsi:type="org.framed.orm.model:Shape" name="Inconsistent1" incomingRelations="//@elements.53">
+    <firstSegment/>
+    <secondSegment/>
+    <model>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTIncons1_1" outgoingRelations="//@elements.52/@model/@elements.3 //@elements.52/@model/@elements.5" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="2..2"/>
+        <boundaries>
+          <topLeft x="63" y="182"/>
+          <bottomRight x="266" y="315"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RG(1..2)" type="RoleGroup">
+        <model>
+          <elements xsi:type="org.framed.orm.model:Shape" name="RTIncons1_2" incomingRelations="//@elements.52/@model/@elements.3" type="RoleType">
+            <firstSegment/>
+            <secondSegment/>
+            <description name="*"/>
+            <boundaries>
+              <topLeft x="145" y="36"/>
+              <bottomRight x="349" y="170"/>
+            </boundaries>
+          </elements>
+          <elements xsi:type="org.framed.orm.model:Shape" name="RTIncons1_3" incomingRelations="//@elements.52/@model/@elements.4" type="RoleType">
+            <firstSegment/>
+            <secondSegment/>
+            <description name="*"/>
+            <boundaries>
+              <topLeft x="137" y="217"/>
+              <bottomRight x="340" y="350"/>
+            </boundaries>
+          </elements>
+        </model>
+        <description name="3..3"/>
+        <boundaries>
+          <topLeft x="359" y="122"/>
+          <bottomRight x="925" y="564"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Shape" name="RTIncons1_4" incomingRelations="//@elements.52/@model/@elements.5" outgoingRelations="//@elements.52/@model/@elements.4" type="RoleType">
+        <firstSegment/>
+        <secondSegment/>
+        <description name="2..2"/>
+        <boundaries>
+          <topLeft x="88" y="409"/>
+          <bottomRight x="288" y="539"/>
+        </boundaries>
+      </elements>
+      <elements xsi:type="org.framed.orm.model:Relation" type="RoleEquivalence" target="//@elements.52/@model/@elements.1/@model/@elements.0" source="//@elements.52/@model/@elements.0"/>
+      <elements xsi:type="org.framed.orm.model:Relation" type="RoleEquivalence" target="//@elements.52/@model/@elements.1/@model/@elements.1" source="//@elements.52/@model/@elements.2"/>
+      <elements xsi:type="org.framed.orm.model:Relation" type="RoleProhibition" target="//@elements.52/@model/@elements.2" source="//@elements.52/@model/@elements.0"/>
+    </model>
+    <boundaries>
+      <topLeft x="74" y="10"/>
+      <bottomRight x="275" y="141"/>
+    </boundaries>
+  </elements>
+  <elements xsi:type="org.framed.orm.model:Relation" type="Fulfillment" target="//@elements.52" source="//@elements.12" referencedRoles="//@elements.52/@model/@elements.0 //@elements.52/@model/@elements.1 //@elements.52/@model/@elements.2"/>
 </org.framed.orm.model:Model>

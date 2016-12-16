@@ -18,7 +18,7 @@ Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 Prefix: rosi: <http://www.rosi-project.org/ontologies#>
 
-Ontology: <http://www.rosi-project.org/ontologies/2016-12-14/MapperTest>
+Ontology: <http://www.rosi-project.org/ontologies/2016-12-16/MapperTest>
 
 
 
@@ -83,10 +83,67 @@ Class: rosi:CompartmentTypes
 		Annotations: rdfs:label "objectGlobal"
 		owl:Nothing
     DisjointUnionOf:
-        rosi:CTEmptyCompartment
+        rosi:EmptyCompartment,
+        rosi:FillsTest1,
+        rosi:FillsTest2,
+        rosi:CTDisjoint1,
+        rosi:CTDisjoint2,
+        rosi:RolesCantBePlayedTwice,
+        rosi:RoleTypesAreDisjoint,
+        rosi:RSTDomainRange1,
+        rosi:RSTDomainRangeDifferent,
+        rosi:OccurrenceRTTest1,
+        rosi:OccurrenceRTTest2,
+        rosi:OccurrenceRTTest3,
+        rosi:CardinalConstraints,
+        rosi:RoleImplication,
+        rosi:RoleProhibition,
+        rosi:RoleEquivalence,
+        rosi:ComplexRiehle,
+        rosi:RGsMinMaxTest,
+        rosi:OccurrenceRGTest,
+        rosi:Inconsistent1
 
-Class: rosi:CTEmptyCompartment
+Class: rosi:EmptyCompartment
     SubClassOf: owl:Nothing
+
+Class: rosi:FillsTest1
+
+Class: rosi:FillsTest2
+
+Class: rosi:CTDisjoint1
+
+Class: rosi:CTDisjoint2
+
+Class: rosi:RolesCantBePlayedTwice
+
+Class: rosi:RoleTypesAreDisjoint
+
+Class: rosi:RSTDomainRange1
+
+Class: rosi:RSTDomainRangeDifferent
+
+Class: rosi:OccurrenceRTTest1
+
+Class: rosi:OccurrenceRTTest2
+
+Class: rosi:OccurrenceRTTest3
+
+Class: rosi:CardinalConstraints
+
+Class: rosi:RoleImplication
+
+Class: rosi:RoleProhibition
+
+Class: rosi:RoleEquivalence
+
+Class: rosi:ComplexRiehle
+
+Class: rosi:RGsMinMaxTest
+
+Class: rosi:OccurrenceRGTest
+
+Class: rosi:Inconsistent1
 
 
 
@@ -100,6 +157,32 @@ Class: rosi:NaturalTypes
 	SubClassOf:
 		owl:Nothing
 
+Class: rosi:NTFiller1
+	Annotations: rosi:rigidity true
+
+Class: rosi:NTFiller2
+	Annotations: rosi:rigidity true
+
+Class: rosi:BottomNT
+	Annotations: rosi:rigidity true
+
+Class: rosi:DefaultNT
+	Annotations: rosi:rigidity true
+
+Class: rosi:NTInheritance1
+	Annotations: rosi:rigidity true
+
+Class: rosi:NTInheritance2
+	Annotations: rosi:rigidity true
+
+Class: rosi:NTInheritance3
+	Annotations: rosi:rigidity true
+
+Class: rosi:NTInheritance4
+	Annotations: rosi:rigidity true
+
+Class: rosi:NTInheritance5
+	Annotations: rosi:rigidity true
 
 
 
@@ -109,12 +192,696 @@ Class: rosi:NaturalTypes
 ####################################################################################################
 
 Class: rosi:RoleTypes
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTFills1,
+	    rosi:RTFills2,
+	    rosi:RT1,
+	    rosi:RT2,
+	    rosi:RTCantBePlayedTwice,
+	    rosi:RTDisjoint1,
+	    rosi:RTDisjoint2,
+	    rosi:RTRSTDomain,
+	    rosi:RTRSTRange,
+	    rosi:RTRSTDomRan,
+	    rosi:RTOccurrence1,
+	    rosi:RTOccurrence2,
+	    rosi:RTOccurrence3,
+	    rosi:RTOccurrence4,
+	    rosi:RTCard1,
+	    rosi:RTCard2,
+	    rosi:RTCard3,
+	    rosi:RTCard4,
+	    rosi:RTCard5,
+	    rosi:RTCard6,
+	    rosi:RTImplication1,
+	    rosi:RTImplication2,
+	    rosi:RTProhibition1,
+	    rosi:RTProhibition2,
+	    rosi:RTEquivalence1,
+	    rosi:RTEquivalence2,
+	    rosi:RTRiehle1,
+	    rosi:RTRiehle2,
+	    rosi:RTRiehle3,
+	    rosi:RT_A,
+	    rosi:RT_B,
+	    rosi:RT_C,
+	    rosi:RT_D,
+	    rosi:RT_E,
+	    rosi:RTIncons1_1,
+	    rosi:RTIncons1_2,
+	    rosi:RTIncons1_3,
+	    rosi:RTIncons1_4
 
 Class: rosi:RoleTypes
 			SubClassOf:
 				Annotations: rdfs:label "objectGlobal"
 				inverse (rosi:plays) exactly 1 owl:Thing
 
+### RTFills1 ###
+################
+
+Class: rosi:RTFills1
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTFills1
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTFills1
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTFills1
+
+
+### RTFills2 ###
+################
+
+Class: rosi:RTFills2
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTFills2
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTFills2
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTFills2
+
+
+### RT1 ###
+###########
+
+Class: rosi:RT1
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRT1
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RT1
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RT1
+
+
+### RT2 ###
+###########
+
+Class: rosi:RT2
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRT2
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RT2
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RT2
+
+
+### RTCantBePlayedTwice ###
+###########################
+
+Class: rosi:RTCantBePlayedTwice
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTCantBePlayedTwice
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTCantBePlayedTwice
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTCantBePlayedTwice
+
+
+### RTDisjoint1 ###
+###################
+
+Class: rosi:RTDisjoint1
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTDisjoint1
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTDisjoint1
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTDisjoint1
+
+
+### RTDisjoint2 ###
+###################
+
+Class: rosi:RTDisjoint2
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTDisjoint2
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTDisjoint2
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTDisjoint2
+
+
+### RTRSTDomain ###
+###################
+
+Class: rosi:RTRSTDomain
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTRSTDomain
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTRSTDomain
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTRSTDomain
+
+
+### RTRSTRange ###
+##################
+
+Class: rosi:RTRSTRange
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTRSTRange
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTRSTRange
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTRSTRange
+
+
+### RTRSTDomRan ###
+###################
+
+Class: rosi:RTRSTDomRan
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTRSTDomRan
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTRSTDomRan
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTRSTDomRan
+
+
+### RTOccurrence1 ###
+#####################
+
+Class: rosi:RTOccurrence1
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTOccurrence1
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTOccurrence1
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTOccurrence1
+
+
+### RTOccurrence2 ###
+#####################
+
+Class: rosi:RTOccurrence2
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTOccurrence2
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTOccurrence2
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTOccurrence2
+
+
+### RTOccurrence3 ###
+#####################
+
+Class: rosi:RTOccurrence3
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTOccurrence3
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTOccurrence3
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTOccurrence3
+
+
+### RTOccurrence4 ###
+#####################
+
+Class: rosi:RTOccurrence4
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTOccurrence4
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTOccurrence4
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTOccurrence4
+
+
+### RTCard1 ###
+###############
+
+Class: rosi:RTCard1
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTCard1
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTCard1
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTCard1
+
+
+### RTCard2 ###
+###############
+
+Class: rosi:RTCard2
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTCard2
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTCard2
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTCard2
+
+
+### RTCard3 ###
+###############
+
+Class: rosi:RTCard3
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTCard3
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTCard3
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTCard3
+
+
+### RTCard4 ###
+###############
+
+Class: rosi:RTCard4
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTCard4
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTCard4
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTCard4
+
+
+### RTCard5 ###
+###############
+
+Class: rosi:RTCard5
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTCard5
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTCard5
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTCard5
+
+
+### RTCard6 ###
+###############
+
+Class: rosi:RTCard6
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTCard6
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTCard6
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTCard6
+
+
+### RTImplication1 ###
+######################
+
+Class: rosi:RTImplication1
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTImplication1
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTImplication1
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTImplication1
+
+
+### RTImplication2 ###
+######################
+
+Class: rosi:RTImplication2
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTImplication2
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTImplication2
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTImplication2
+
+
+### RTProhibition1 ###
+######################
+
+Class: rosi:RTProhibition1
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTProhibition1
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTProhibition1
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTProhibition1
+
+
+### RTProhibition2 ###
+######################
+
+Class: rosi:RTProhibition2
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTProhibition2
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTProhibition2
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTProhibition2
+
+
+### RTEquivalence1 ###
+######################
+
+Class: rosi:RTEquivalence1
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTEquivalence1
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTEquivalence1
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTEquivalence1
+
+
+### RTEquivalence2 ###
+######################
+
+Class: rosi:RTEquivalence2
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTEquivalence2
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTEquivalence2
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTEquivalence2
+
+
+### RTRiehle1 ###
+#################
+
+Class: rosi:RTRiehle1
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTRiehle1
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTRiehle1
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTRiehle1
+
+
+### RTRiehle2 ###
+#################
+
+Class: rosi:RTRiehle2
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTRiehle2
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTRiehle2
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTRiehle2
+
+
+### RTRiehle3 ###
+#################
+
+Class: rosi:RTRiehle3
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTRiehle3
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTRiehle3
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTRiehle3
+
+
+### RT_A ###
+############
+
+Class: rosi:RT_A
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRT_A
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RT_A
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RT_A
+
+
+### RT_B ###
+############
+
+Class: rosi:RT_B
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRT_B
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RT_B
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RT_B
+
+
+### RT_C ###
+############
+
+Class: rosi:RT_C
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRT_C
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RT_C
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RT_C
+
+
+### RT_D ###
+############
+
+Class: rosi:RT_D
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRT_D
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RT_D
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RT_D
+
+
+### RT_E ###
+############
+
+Class: rosi:RT_E
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRT_E
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RT_E
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RT_E
+
+
+### RTIncons1_1 ###
+###################
+
+Class: rosi:RTIncons1_1
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTIncons1_1
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTIncons1_1
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTIncons1_1
+
+
+### RTIncons1_2 ###
+###################
+
+Class: rosi:RTIncons1_2
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTIncons1_2
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTIncons1_2
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTIncons1_2
+
+
+### RTIncons1_3 ###
+###################
+
+Class: rosi:RTIncons1_3
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTIncons1_3
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTIncons1_3
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTIncons1_3
+
+
+### RTIncons1_4 ###
+###################
+
+Class: rosi:RTIncons1_4
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysRTIncons1_4
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:RTIncons1_4
+		
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:RTIncons1_4
 
 
 
@@ -145,7 +912,61 @@ ObjectProperty: rosi:plays
 ####################################################################################################
 
 Class: rosi:NaturalTypes
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:NTFiller1, rosi:NTFiller2, rosi:BottomNT, rosi:DefaultNT, rosi:NTInheritance1, rosi:NTInheritance2
 	
+Class: rosi:NTFiller1
+
+
+Class: rosi:NTFiller2
+
+
+Class: rosi:BottomNT
+
+
+Class: rosi:DefaultNT
+
+
+Class: rosi:NTInheritance1
+
+
+Class: rosi:NTInheritance2
+
+DisjointClasses:
+	Annotations: rdfs:label "objectGlobal"
+	rosi:NTInheritance3, rosi:NTInheritance4
+
+
+Class: rosi:NTInheritance3
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:NTInheritance2
+
+DisjointClasses:
+	Annotations: rdfs:label "objectGlobal"
+	rosi:NTInheritance5
+
+
+Class: rosi:NTInheritance4
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:NTInheritance2
+
+DisjointClasses:
+	Annotations: rdfs:label "objectGlobal"
+	rosi:NTInheritance5
+
+
+Class: rosi:NTInheritance5
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:NTInheritance3
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:NTInheritance4
+
+
 
 
 
@@ -154,6 +975,2893 @@ Class: rosi:NaturalTypes
 # fills relation                                                                                   #
 ####################################################################################################
 
+### RTFills1 ###
+################
+
+
+Class: rosi:PlaysRTFills1
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTFills1IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTFills1InFillsTest1
+		rosi:NTFiller1 or rosi:NTFiller2
+
+Class: rosi:___FillsRTFills1InFillsTest1
+
+Class: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTFills1InFillsTest1
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTFills1IsBottom
+
+### RTFills2 ###
+################
+
+
+Class: rosi:PlaysRTFills2
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTFills2IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTFills2InFillsTest2
+		rosi:BottomNT
+
+Class: rosi:___FillsRTFills2InFillsTest2
+
+Class: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTFills2InFillsTest2
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTFills2IsBottom
+
+### RT1 ###
+###########
+
+
+Class: rosi:PlaysRT1
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRT1IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRT1InCTDisjoint1
+		rosi:DefaultNT
+
+Class: rosi:___FillsRT1InCTDisjoint1
+
+Class: rosi:___FillsRT1IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRT1InCTDisjoint1
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRT1IsBottom
+
+### RT2 ###
+###########
+
+
+Class: rosi:PlaysRT2
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRT2IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRT2InCTDisjoint2
+		rosi:DefaultNT
+
+Class: rosi:___FillsRT2InCTDisjoint2
+
+Class: rosi:___FillsRT2IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRT2InCTDisjoint2
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRT2IsBottom
+
+### RTCantBePlayedTwice ###
+###########################
+
+
+Class: rosi:PlaysRTCantBePlayedTwice
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTCantBePlayedTwiceIsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTCantBePlayedTwiceInRolesCantBePlayedTwice
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTCantBePlayedTwiceInRolesCantBePlayedTwice
+
+Class: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceInRolesCantBePlayedTwice
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTCantBePlayedTwiceIsBottom
+
+### RTDisjoint1 ###
+###################
+
+
+Class: rosi:PlaysRTDisjoint1
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTDisjoint1IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTDisjoint1InRoleTypesAreDisjoint
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTDisjoint1InRoleTypesAreDisjoint
+
+Class: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTDisjoint1InRoleTypesAreDisjoint
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTDisjoint1IsBottom
+
+### RTDisjoint2 ###
+###################
+
+
+Class: rosi:PlaysRTDisjoint2
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTDisjoint2IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTDisjoint2InRoleTypesAreDisjoint
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTDisjoint2InRoleTypesAreDisjoint
+
+Class: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTDisjoint2InRoleTypesAreDisjoint
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTDisjoint2IsBottom
+
+### RTRSTDomain ###
+###################
+
+
+Class: rosi:PlaysRTRSTDomain
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTRSTDomainIsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTRSTDomainInRSTDomainRange1
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTRSTDomainInRSTDomainRange1
+
+Class: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTRSTDomainInRSTDomainRange1
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTRSTDomainIsBottom
+
+### RTRSTRange ###
+##################
+
+
+Class: rosi:PlaysRTRSTRange
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTRSTRangeIsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTRSTRangeInRSTDomainRange1
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTRSTRangeInRSTDomainRange1
+
+Class: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTRSTRangeInRSTDomainRange1
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTRSTRangeIsBottom
+
+### RTRSTDomRan ###
+###################
+
+
+Class: rosi:PlaysRTRSTDomRan
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTRSTDomRanIsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTRSTDomRanInRSTDomainRangeDifferent
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTRSTDomRanInRSTDomainRangeDifferent
+
+Class: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTRSTDomRanInRSTDomainRangeDifferent
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTRSTDomRanIsBottom
+
+### RTOccurrence1 ###
+#####################
+
+
+Class: rosi:PlaysRTOccurrence1
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTOccurrence1IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTOccurrence1InOccurrenceRTTest1
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTOccurrence1InOccurrenceRTTest1
+
+Class: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTOccurrence1InOccurrenceRTTest1
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTOccurrence1IsBottom
+
+### RTOccurrence2 ###
+#####################
+
+
+Class: rosi:PlaysRTOccurrence2
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTOccurrence2IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTOccurrence2InOccurrenceRTTest1
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTOccurrence2InOccurrenceRTTest1
+
+Class: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTOccurrence2InOccurrenceRTTest1
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTOccurrence2IsBottom
+
+### RTOccurrence3 ###
+#####################
+
+
+Class: rosi:PlaysRTOccurrence3
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTOccurrence3IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTOccurrence3InOccurrenceRTTest2
+		rosi:BottomNT
+
+Class: rosi:___FillsRTOccurrence3InOccurrenceRTTest2
+
+Class: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTOccurrence3InOccurrenceRTTest2
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTOccurrence3IsBottom
+
+### RTOccurrence4 ###
+#####################
+
+
+Class: rosi:PlaysRTOccurrence4
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTOccurrence4IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTOccurrence4InOccurrenceRTTest3
+		rosi:BottomNT
+
+Class: rosi:___FillsRTOccurrence4InOccurrenceRTTest3
+
+Class: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTOccurrence4InOccurrenceRTTest3
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTOccurrence4IsBottom
+
+### RTCard1 ###
+###############
+
+
+Class: rosi:PlaysRTCard1
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTCard1IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTCard1InCardinalConstraints
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTCard1InCardinalConstraints
+
+Class: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTCard1InCardinalConstraints
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTCard1IsBottom
+
+### RTCard2 ###
+###############
+
+
+Class: rosi:PlaysRTCard2
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTCard2IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTCard2InCardinalConstraints
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTCard2InCardinalConstraints
+
+Class: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTCard2InCardinalConstraints
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTCard2IsBottom
+
+### RTCard3 ###
+###############
+
+
+Class: rosi:PlaysRTCard3
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTCard3IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTCard3InCardinalConstraints
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTCard3InCardinalConstraints
+
+Class: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTCard3InCardinalConstraints
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTCard3IsBottom
+
+### RTCard4 ###
+###############
+
+
+Class: rosi:PlaysRTCard4
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTCard4IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTCard4InCardinalConstraints
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTCard4InCardinalConstraints
+
+Class: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTCard4InCardinalConstraints
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTCard4IsBottom
+
+### RTCard5 ###
+###############
+
+
+Class: rosi:PlaysRTCard5
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTCard5IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTCard5InCardinalConstraints
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTCard5InCardinalConstraints
+
+Class: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTCard5InCardinalConstraints
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTCard5IsBottom
+
+### RTCard6 ###
+###############
+
+
+Class: rosi:PlaysRTCard6
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTCard6IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTCard6InCardinalConstraints
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTCard6InCardinalConstraints
+
+Class: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTCard6InCardinalConstraints
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTCard6IsBottom
+
+### RTImplication1 ###
+######################
+
+
+Class: rosi:PlaysRTImplication1
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTImplication1IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTImplication1InRoleImplication
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTImplication1InRoleImplication
+
+Class: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTImplication1InRoleImplication
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTImplication1IsBottom
+
+### RTImplication2 ###
+######################
+
+
+Class: rosi:PlaysRTImplication2
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTImplication2IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTImplication2InRoleImplication
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTImplication2InRoleImplication
+
+Class: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTImplication2InRoleImplication
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTImplication2IsBottom
+
+### RTProhibition1 ###
+######################
+
+
+Class: rosi:PlaysRTProhibition1
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTProhibition1IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTProhibition1InRoleProhibition
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTProhibition1InRoleProhibition
+
+Class: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTProhibition1InRoleProhibition
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTProhibition1IsBottom
+
+### RTProhibition2 ###
+######################
+
+
+Class: rosi:PlaysRTProhibition2
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTProhibition2IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTProhibition2InRoleProhibition
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTProhibition2InRoleProhibition
+
+Class: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTProhibition2InRoleProhibition
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTProhibition2IsBottom
+
+### RTEquivalence1 ###
+######################
+
+
+Class: rosi:PlaysRTEquivalence1
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTEquivalence1IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTEquivalence1InRoleEquivalence
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTEquivalence1InRoleEquivalence
+
+Class: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTEquivalence1InRoleEquivalence
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTEquivalence1IsBottom
+
+### RTEquivalence2 ###
+######################
+
+
+Class: rosi:PlaysRTEquivalence2
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTEquivalence2IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTEquivalence2InRoleEquivalence
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTEquivalence2InRoleEquivalence
+
+Class: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTEquivalence2InRoleEquivalence
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTEquivalence2IsBottom
+
+### RTRiehle1 ###
+#################
+
+
+Class: rosi:PlaysRTRiehle1
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTRiehle1IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTRiehle1InComplexRiehle
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTRiehle1InComplexRiehle
+
+Class: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTRiehle1InComplexRiehle
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTRiehle1IsBottom
+
+### RTRiehle2 ###
+#################
+
+
+Class: rosi:PlaysRTRiehle2
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTRiehle2IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTRiehle2InComplexRiehle
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTRiehle2InComplexRiehle
+
+Class: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTRiehle2InComplexRiehle
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTRiehle2IsBottom
+
+### RTRiehle3 ###
+#################
+
+
+Class: rosi:PlaysRTRiehle3
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTRiehle3IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTRiehle3InComplexRiehle
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTRiehle3InComplexRiehle
+
+Class: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTRiehle3InComplexRiehle
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTRiehle3IsBottom
+
+### RT_A ###
+############
+
+
+Class: rosi:PlaysRT_A
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRT_AIsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRT_AInRGsMinMaxTest
+		rosi:DefaultNT
+
+Class: rosi:___FillsRT_AInRGsMinMaxTest
+
+Class: rosi:___FillsRT_AIsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRT_AInRGsMinMaxTest
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRT_AIsBottom
+
+### RT_B ###
+############
+
+
+Class: rosi:PlaysRT_B
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRT_BIsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRT_BInRGsMinMaxTest
+		rosi:DefaultNT
+
+Class: rosi:___FillsRT_BInRGsMinMaxTest
+
+Class: rosi:___FillsRT_BIsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRT_BInRGsMinMaxTest
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRT_BIsBottom
+
+### RT_C ###
+############
+
+
+Class: rosi:PlaysRT_C
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRT_CIsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRT_CInRGsMinMaxTest
+		rosi:DefaultNT
+
+Class: rosi:___FillsRT_CInRGsMinMaxTest
+
+Class: rosi:___FillsRT_CIsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRT_CInRGsMinMaxTest
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRT_CIsBottom
+
+### RT_D ###
+############
+
+
+Class: rosi:PlaysRT_D
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRT_DIsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRT_DInOccurrenceRGTest
+		rosi:DefaultNT
+
+Class: rosi:___FillsRT_DInOccurrenceRGTest
+
+Class: rosi:___FillsRT_DIsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRT_DInOccurrenceRGTest
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRT_DIsBottom
+
+### RT_E ###
+############
+
+
+Class: rosi:PlaysRT_E
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRT_EIsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRT_EInOccurrenceRGTest
+		rosi:DefaultNT
+
+Class: rosi:___FillsRT_EInOccurrenceRGTest
+
+Class: rosi:___FillsRT_EIsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRT_EInOccurrenceRGTest
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRT_EIsBottom
+
+### RTIncons1_1 ###
+###################
+
+
+Class: rosi:PlaysRTIncons1_1
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTIncons1_1IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTIncons1_1InInconsistent1
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTIncons1_1InInconsistent1
+
+Class: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTIncons1_1InInconsistent1
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTIncons1_1IsBottom
+
+### RTIncons1_2 ###
+###################
+
+
+Class: rosi:PlaysRTIncons1_2
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTIncons1_2IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTIncons1_2InInconsistent1
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTIncons1_2InInconsistent1
+
+Class: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTIncons1_2InInconsistent1
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTIncons1_2IsBottom
+
+### RTIncons1_3 ###
+###################
+
+
+Class: rosi:PlaysRTIncons1_3
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTIncons1_3IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTIncons1_3InInconsistent1
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTIncons1_3InInconsistent1
+
+Class: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTIncons1_3InInconsistent1
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTIncons1_3IsBottom
+
+### RTIncons1_4 ###
+###################
+
+
+Class: rosi:PlaysRTIncons1_4
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTIncons1_4IsBottom
+		owl:Nothing
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsRTIncons1_4InInconsistent1
+		rosi:DefaultNT
+
+Class: rosi:___FillsRTIncons1_4InInconsistent1
+
+Class: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___FillsRTIncons1_4InInconsistent1
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___FillsRTIncons1_4IsBottom
 
 
 
@@ -163,6 +3871,434 @@ Class: rosi:NaturalTypes
 ####################################################################################################
 
 
+### RSTDomRan ###
+#################
+
+ObjectProperty: rosi:RSTDomRan
+	SubPropertyOf:
+		owl:bottomObjectProperty
+	Domain:
+		Annotations: rdfs:isDefinedBy rosi:___RSTDomRanIsBottom
+		owl:Nothing
+	Domain:
+		Annotations: rdfs:isDefinedBy rosi:___RSTDomRanDomainInRSTDomainRange1
+		rosi:RTRSTDomain
+	Range:
+		Annotations: rdfs:isDefinedBy rosi:___RSTDomRanRangeInRSTDomainRange1
+		rosi:RTRSTRange
+
+DisjointClasses:
+	Annotations: rdfs:label "objectGlobal"
+		inverse (rosi:RSTDomRan) some owl:Thing, rosi:RTRSTDomain
+
+Class: rosi:___RSTDomRanIsBottom
+Class: rosi:___RSTDomRanDomainInRSTDomainRange1
+Class: rosi:___RSTDomRanRangeInRSTDomainRange1
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___RSTDomRanDomainInRSTDomainRange1
+	SubClassOf: rosi:___RSTDomRanRangeInRSTDomainRange1
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___RSTDomRanIsBottom
+
+
+### RSTSameDomRan ###
+#####################
+
+ObjectProperty: rosi:RSTSameDomRan
+	SubPropertyOf:
+		owl:bottomObjectProperty
+	Domain:
+		Annotations: rdfs:isDefinedBy rosi:___RSTSameDomRanIsBottom
+		owl:Nothing
+	Domain:
+		Annotations: rdfs:isDefinedBy rosi:___RSTSameDomRanDomainInRSTDomainRangeDifferent
+		rosi:RTRSTDomRan
+	Range:
+		Annotations: rdfs:isDefinedBy rosi:___RSTSameDomRanRangeInRSTDomainRangeDifferent
+		rosi:RTRSTDomRan
+
+DisjointClasses:
+	Annotations: rdfs:label "objectGlobal"
+		inverse (rosi:RSTSameDomRan) some owl:Thing, rosi:RTRSTDomRan
+
+Class: rosi:___RSTSameDomRanIsBottom
+Class: rosi:___RSTSameDomRanDomainInRSTDomainRangeDifferent
+Class: rosi:___RSTSameDomRanRangeInRSTDomainRangeDifferent
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___RSTSameDomRanDomainInRSTDomainRangeDifferent
+	SubClassOf: rosi:___RSTSameDomRanRangeInRSTDomainRangeDifferent
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___RSTSameDomRanIsBottom
+
+
+### RSTCard1 ###
+################
+
+ObjectProperty: rosi:RSTCard1
+	SubPropertyOf:
+		owl:bottomObjectProperty
+	Domain:
+		Annotations: rdfs:isDefinedBy rosi:___RSTCard1IsBottom
+		owl:Nothing
+	Domain:
+		Annotations: rdfs:isDefinedBy rosi:___RSTCard1DomainInCardinalConstraints
+		rosi:RTCard1
+	Range:
+		Annotations: rdfs:isDefinedBy rosi:___RSTCard1RangeInCardinalConstraints
+		rosi:RTCard2
+
+DisjointClasses:
+	Annotations: rdfs:label "objectGlobal"
+		inverse (rosi:RSTCard1) some owl:Thing, rosi:RTCard1
+
+Class: rosi:___RSTCard1IsBottom
+Class: rosi:___RSTCard1DomainInCardinalConstraints
+Class: rosi:___RSTCard1RangeInCardinalConstraints
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___RSTCard1DomainInCardinalConstraints
+	SubClassOf: rosi:___RSTCard1RangeInCardinalConstraints
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___RSTCard1IsBottom
+
+
+### RSTCard2 ###
+################
+
+ObjectProperty: rosi:RSTCard2
+	SubPropertyOf:
+		owl:bottomObjectProperty
+	Domain:
+		Annotations: rdfs:isDefinedBy rosi:___RSTCard2IsBottom
+		owl:Nothing
+	Domain:
+		Annotations: rdfs:isDefinedBy rosi:___RSTCard2DomainInCardinalConstraints
+		rosi:RTCard3
+	Range:
+		Annotations: rdfs:isDefinedBy rosi:___RSTCard2RangeInCardinalConstraints
+		rosi:RTCard4
+
+DisjointClasses:
+	Annotations: rdfs:label "objectGlobal"
+		inverse (rosi:RSTCard2) some owl:Thing, rosi:RTCard3
+
+Class: rosi:___RSTCard2IsBottom
+Class: rosi:___RSTCard2DomainInCardinalConstraints
+Class: rosi:___RSTCard2RangeInCardinalConstraints
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___RSTCard2DomainInCardinalConstraints
+	SubClassOf: rosi:___RSTCard2RangeInCardinalConstraints
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___RSTCard2IsBottom
+
+
+### RSTCard3 ###
+################
+
+ObjectProperty: rosi:RSTCard3
+	SubPropertyOf:
+		owl:bottomObjectProperty
+	Domain:
+		Annotations: rdfs:isDefinedBy rosi:___RSTCard3IsBottom
+		owl:Nothing
+	Domain:
+		Annotations: rdfs:isDefinedBy rosi:___RSTCard3DomainInCardinalConstraints
+		rosi:RTCard5
+	Range:
+		Annotations: rdfs:isDefinedBy rosi:___RSTCard3RangeInCardinalConstraints
+		rosi:RTCard6
+
+DisjointClasses:
+	Annotations: rdfs:label "objectGlobal"
+		inverse (rosi:RSTCard3) some owl:Thing, rosi:RTCard5
+
+Class: rosi:___RSTCard3IsBottom
+Class: rosi:___RSTCard3DomainInCardinalConstraints
+Class: rosi:___RSTCard3RangeInCardinalConstraints
+
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___RSTCard3DomainInCardinalConstraints
+	SubClassOf: rosi:___RSTCard3RangeInCardinalConstraints
+
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___RSTCard3IsBottom
+
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___RSTCard3IsBottom
 
 
 
@@ -172,12 +4308,725 @@ Class: rosi:NaturalTypes
 ####################################################################################################
 
 Class: rosi:RoleGroups
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:GeneratedRoleGroup9,
+		rosi:GeneratedRoleGroup8,
+		rosi:GeneratedRoleGroup7,
+		rosi:GeneratedRoleGroup6,
+		rosi:GeneratedRoleGroup5,
+		rosi:GeneratedRoleGroup4,
+		rosi:GeneratedRoleGroup3,
+		rosi:GeneratedRoleGroup2,
+		rosi:GeneratedRoleGroup10,
+		rosi:GeneratedRoleGroup1,
+		rosi:GeneratedRoleGroup12,
+		rosi:GeneratedRoleGroup11,
+		rosi:GeneratedRoleGroup14,
+		rosi:GeneratedRoleGroup13,
+		rosi:GeneratedRoleGroup15
 	
 Class: rosi:RoleGroups
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		inverse (rosi:plays) exactly 1 owl:Thing
 
+### GeneratedRoleGroup9 ###
+###########################
+
+Class: rosi:GeneratedRoleGroup9
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysGeneratedRoleGroup9
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:GeneratedRoleGroup9
+
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:GeneratedRoleGroup9
+
+Class: rosi:GeneratedRoleGroup9Elements
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTRiehle2, rosi:GeneratedRoleGroup8
+
+Class: rosi:GeneratedRoleGroup9Atoms
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTRiehle2 or rosi:RTRiehle1
+
+Class: rosi:PlaysGeneratedRoleGroup9
+    EquivalentTo:
+        Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup9InComplexRiehle
+        rosi:NaturalTypes and (rosi:plays min 1 rosi:GeneratedRoleGroup9Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup9Elements)
+
+Class: rosi:___SatisfyGeneratedRoleGroup9InComplexRiehle
+
+Class: rosi:ComplexRiehle
+    SubClassOf:
+        rosi:___SatisfyGeneratedRoleGroup9InComplexRiehle
+
+
+Class: rosi:MustPlayGeneratedRoleGroup9
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysRTRiehle2 or rosi:PlaysRTRiehle1
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysGeneratedRoleGroup9
+
+
+
+### GeneratedRoleGroup8 ###
+###########################
+
+Class: rosi:GeneratedRoleGroup8
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysGeneratedRoleGroup8
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:GeneratedRoleGroup8
+
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:GeneratedRoleGroup8
+
+Class: rosi:GeneratedRoleGroup8Elements
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTRiehle1
+
+Class: rosi:GeneratedRoleGroup8Atoms
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTRiehle1
+
+Class: rosi:PlaysGeneratedRoleGroup8
+    EquivalentTo:
+        Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup8InComplexRiehle
+        rosi:NaturalTypes and (rosi:plays max 0 rosi:GeneratedRoleGroup8Elements)
+
+Class: rosi:___SatisfyGeneratedRoleGroup8InComplexRiehle
+
+Class: rosi:ComplexRiehle
+    SubClassOf:
+        rosi:___SatisfyGeneratedRoleGroup8InComplexRiehle
+
+
+
+
+
+### GeneratedRoleGroup7 ###
+###########################
+
+Class: rosi:GeneratedRoleGroup7
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysGeneratedRoleGroup7
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:GeneratedRoleGroup7
+
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:GeneratedRoleGroup7
+
+Class: rosi:GeneratedRoleGroup7Elements
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RT_D, rosi:RT_E
+
+Class: rosi:GeneratedRoleGroup7Atoms
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RT_D or rosi:RT_E
+
+Class: rosi:PlaysGeneratedRoleGroup7
+    EquivalentTo:
+        Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup7InOccurrenceRGTest
+        rosi:NaturalTypes and (rosi:plays min 2 rosi:GeneratedRoleGroup7Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup7Elements)
+
+Class: rosi:___SatisfyGeneratedRoleGroup7InOccurrenceRGTest
+
+Class: rosi:OccurrenceRGTest
+    SubClassOf:
+        rosi:___SatisfyGeneratedRoleGroup7InOccurrenceRGTest
+
+
+Class: rosi:MustPlayGeneratedRoleGroup7
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysRT_D or rosi:PlaysRT_E
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysGeneratedRoleGroup7
+
+
+
+### GeneratedRoleGroup6 ###
+###########################
+
+Class: rosi:GeneratedRoleGroup6
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysGeneratedRoleGroup6
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:GeneratedRoleGroup6
+
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:GeneratedRoleGroup6
+
+Class: rosi:GeneratedRoleGroup6Elements
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTIncons1_1, rosi:RTIncons1_4
+
+Class: rosi:GeneratedRoleGroup6Atoms
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTIncons1_1 or rosi:RTIncons1_4
+
+Class: rosi:PlaysGeneratedRoleGroup6
+    EquivalentTo:
+        Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup6InInconsistent1
+        rosi:NaturalTypes and (rosi:plays min 1 rosi:GeneratedRoleGroup6Elements) and (rosi:plays max 1 rosi:GeneratedRoleGroup6Elements)
+
+Class: rosi:___SatisfyGeneratedRoleGroup6InInconsistent1
+
+Class: rosi:Inconsistent1
+    SubClassOf:
+        rosi:___SatisfyGeneratedRoleGroup6InInconsistent1
+
+
+Class: rosi:MustPlayGeneratedRoleGroup6
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysRTIncons1_1 or rosi:PlaysRTIncons1_4
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysGeneratedRoleGroup6
+
+
+
+### GeneratedRoleGroup5 ###
+###########################
+
+Class: rosi:GeneratedRoleGroup5
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysGeneratedRoleGroup5
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:GeneratedRoleGroup5
+
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:GeneratedRoleGroup5
+
+Class: rosi:GeneratedRoleGroup5Elements
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTIncons1_4, rosi:RTIncons1_3
+
+Class: rosi:GeneratedRoleGroup5Atoms
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTIncons1_4 or rosi:RTIncons1_3
+
+Class: rosi:PlaysGeneratedRoleGroup5
+    EquivalentTo:
+        Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup5InInconsistent1
+        rosi:NaturalTypes and (rosi:plays min 2 rosi:GeneratedRoleGroup5Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup5Elements)
+
+Class: rosi:___SatisfyGeneratedRoleGroup5InInconsistent1
+
+Class: rosi:Inconsistent1
+    SubClassOf:
+        rosi:___SatisfyGeneratedRoleGroup5InInconsistent1
+
+
+Class: rosi:MustPlayGeneratedRoleGroup5
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysRTIncons1_4 or rosi:PlaysRTIncons1_3
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysGeneratedRoleGroup5
+
+
+
+### GeneratedRoleGroup4 ###
+###########################
+
+Class: rosi:GeneratedRoleGroup4
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysGeneratedRoleGroup4
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:GeneratedRoleGroup4
+
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:GeneratedRoleGroup4
+
+Class: rosi:GeneratedRoleGroup4Elements
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTIncons1_1, rosi:RTIncons1_2
+
+Class: rosi:GeneratedRoleGroup4Atoms
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTIncons1_1 or rosi:RTIncons1_2
+
+Class: rosi:PlaysGeneratedRoleGroup4
+    EquivalentTo:
+        Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup4InInconsistent1
+        rosi:NaturalTypes and (rosi:plays min 2 rosi:GeneratedRoleGroup4Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup4Elements)
+
+Class: rosi:___SatisfyGeneratedRoleGroup4InInconsistent1
+
+Class: rosi:Inconsistent1
+    SubClassOf:
+        rosi:___SatisfyGeneratedRoleGroup4InInconsistent1
+
+
+Class: rosi:MustPlayGeneratedRoleGroup4
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysRTIncons1_1 or rosi:PlaysRTIncons1_2
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysGeneratedRoleGroup4
+
+
+
+### GeneratedRoleGroup3 ###
+###########################
+
+Class: rosi:GeneratedRoleGroup3
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysGeneratedRoleGroup3
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:GeneratedRoleGroup3
+
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:GeneratedRoleGroup3
+
+Class: rosi:GeneratedRoleGroup3Elements
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTIncons1_2, rosi:RTIncons1_3
+
+Class: rosi:GeneratedRoleGroup3Atoms
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTIncons1_2 or rosi:RTIncons1_3
+
+Class: rosi:PlaysGeneratedRoleGroup3
+    EquivalentTo:
+        Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup3InInconsistent1
+        rosi:NaturalTypes and (rosi:plays min 1 rosi:GeneratedRoleGroup3Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup3Elements)
+
+Class: rosi:___SatisfyGeneratedRoleGroup3InInconsistent1
+
+Class: rosi:Inconsistent1
+    SubClassOf:
+        rosi:___SatisfyGeneratedRoleGroup3InInconsistent1
+
+
+Class: rosi:MustPlayGeneratedRoleGroup3
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysRTIncons1_2 or rosi:PlaysRTIncons1_3
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysGeneratedRoleGroup3
+
+
+
+### GeneratedRoleGroup2 ###
+###########################
+
+Class: rosi:GeneratedRoleGroup2
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysGeneratedRoleGroup2
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:GeneratedRoleGroup2
+
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:GeneratedRoleGroup2
+
+Class: rosi:GeneratedRoleGroup2Elements
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RT_A, rosi:RT_B, rosi:RT_C
+
+Class: rosi:GeneratedRoleGroup2Atoms
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RT_A or rosi:RT_B or rosi:RT_C
+
+Class: rosi:PlaysGeneratedRoleGroup2
+    EquivalentTo:
+        Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup2InRGsMinMaxTest
+        rosi:NaturalTypes and (rosi:plays min 2 rosi:GeneratedRoleGroup2Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup2Elements)
+
+Class: rosi:___SatisfyGeneratedRoleGroup2InRGsMinMaxTest
+
+Class: rosi:RGsMinMaxTest
+    SubClassOf:
+        rosi:___SatisfyGeneratedRoleGroup2InRGsMinMaxTest
+
+
+Class: rosi:MustPlayGeneratedRoleGroup2
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysRT_A or rosi:PlaysRT_B or rosi:PlaysRT_C
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysGeneratedRoleGroup2
+
+
+
+### GeneratedRoleGroup10 ###
+############################
+
+Class: rosi:GeneratedRoleGroup10
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysGeneratedRoleGroup10
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:GeneratedRoleGroup10
+
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:GeneratedRoleGroup10
+
+Class: rosi:GeneratedRoleGroup10Elements
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTRiehle2
+
+Class: rosi:GeneratedRoleGroup10Atoms
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTRiehle2
+
+Class: rosi:PlaysGeneratedRoleGroup10
+    EquivalentTo:
+        Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup10InComplexRiehle
+        rosi:NaturalTypes and (rosi:plays max 0 rosi:GeneratedRoleGroup10Elements)
+
+Class: rosi:___SatisfyGeneratedRoleGroup10InComplexRiehle
+
+Class: rosi:ComplexRiehle
+    SubClassOf:
+        rosi:___SatisfyGeneratedRoleGroup10InComplexRiehle
+
+
+
+
+
+### GeneratedRoleGroup1 ###
+###########################
+
+Class: rosi:GeneratedRoleGroup1
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysGeneratedRoleGroup1
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:GeneratedRoleGroup1
+
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:GeneratedRoleGroup1
+
+Class: rosi:GeneratedRoleGroup1Elements
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTProhibition1, rosi:RTProhibition2
+
+Class: rosi:GeneratedRoleGroup1Atoms
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTProhibition1 or rosi:RTProhibition2
+
+Class: rosi:PlaysGeneratedRoleGroup1
+    EquivalentTo:
+        Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup1InRoleProhibition
+        rosi:NaturalTypes and (rosi:plays min 1 rosi:GeneratedRoleGroup1Elements) and (rosi:plays max 1 rosi:GeneratedRoleGroup1Elements)
+
+Class: rosi:___SatisfyGeneratedRoleGroup1InRoleProhibition
+
+Class: rosi:RoleProhibition
+    SubClassOf:
+        rosi:___SatisfyGeneratedRoleGroup1InRoleProhibition
+
+
+Class: rosi:MustPlayGeneratedRoleGroup1
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysRTProhibition1 or rosi:PlaysRTProhibition2
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysGeneratedRoleGroup1
+
+
+
+### GeneratedRoleGroup12 ###
+############################
+
+Class: rosi:GeneratedRoleGroup12
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysGeneratedRoleGroup12
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:GeneratedRoleGroup12
+
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:GeneratedRoleGroup12
+
+Class: rosi:GeneratedRoleGroup12Elements
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTRiehle1, rosi:RTRiehle3
+
+Class: rosi:GeneratedRoleGroup12Atoms
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTRiehle1 or rosi:RTRiehle3
+
+Class: rosi:PlaysGeneratedRoleGroup12
+    EquivalentTo:
+        Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup12InComplexRiehle
+        rosi:NaturalTypes and (rosi:plays min 1 rosi:GeneratedRoleGroup12Elements) and (rosi:plays max 1 rosi:GeneratedRoleGroup12Elements)
+
+Class: rosi:___SatisfyGeneratedRoleGroup12InComplexRiehle
+
+Class: rosi:ComplexRiehle
+    SubClassOf:
+        rosi:___SatisfyGeneratedRoleGroup12InComplexRiehle
+
+
+Class: rosi:MustPlayGeneratedRoleGroup12
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysRTRiehle1 or rosi:PlaysRTRiehle3
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysGeneratedRoleGroup12
+
+
+
+### GeneratedRoleGroup11 ###
+############################
+
+Class: rosi:GeneratedRoleGroup11
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysGeneratedRoleGroup11
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:GeneratedRoleGroup11
+
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:GeneratedRoleGroup11
+
+Class: rosi:GeneratedRoleGroup11Elements
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTRiehle3, rosi:GeneratedRoleGroup10
+
+Class: rosi:GeneratedRoleGroup11Atoms
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTRiehle3 or rosi:RTRiehle2
+
+Class: rosi:PlaysGeneratedRoleGroup11
+    EquivalentTo:
+        Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup11InComplexRiehle
+        rosi:NaturalTypes and (rosi:plays min 1 rosi:GeneratedRoleGroup11Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup11Elements)
+
+Class: rosi:___SatisfyGeneratedRoleGroup11InComplexRiehle
+
+Class: rosi:ComplexRiehle
+    SubClassOf:
+        rosi:___SatisfyGeneratedRoleGroup11InComplexRiehle
+
+
+Class: rosi:MustPlayGeneratedRoleGroup11
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysRTRiehle3 or rosi:PlaysRTRiehle2
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysGeneratedRoleGroup11
+
+
+
+### GeneratedRoleGroup14 ###
+############################
+
+Class: rosi:GeneratedRoleGroup14
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysGeneratedRoleGroup14
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:GeneratedRoleGroup14
+
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:GeneratedRoleGroup14
+
+Class: rosi:GeneratedRoleGroup14Elements
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTImplication2, rosi:GeneratedRoleGroup13
+
+Class: rosi:GeneratedRoleGroup14Atoms
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTImplication2 or rosi:RTImplication1
+
+Class: rosi:PlaysGeneratedRoleGroup14
+    EquivalentTo:
+        Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup14InRoleImplication
+        rosi:NaturalTypes and (rosi:plays min 1 rosi:GeneratedRoleGroup14Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup14Elements)
+
+Class: rosi:___SatisfyGeneratedRoleGroup14InRoleImplication
+
+Class: rosi:RoleImplication
+    SubClassOf:
+        rosi:___SatisfyGeneratedRoleGroup14InRoleImplication
+
+
+Class: rosi:MustPlayGeneratedRoleGroup14
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysRTImplication2 or rosi:PlaysRTImplication1
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysGeneratedRoleGroup14
+
+
+
+### GeneratedRoleGroup13 ###
+############################
+
+Class: rosi:GeneratedRoleGroup13
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysGeneratedRoleGroup13
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:GeneratedRoleGroup13
+
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:GeneratedRoleGroup13
+
+Class: rosi:GeneratedRoleGroup13Elements
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTImplication1
+
+Class: rosi:GeneratedRoleGroup13Atoms
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTImplication1
+
+Class: rosi:PlaysGeneratedRoleGroup13
+    EquivalentTo:
+        Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup13InRoleImplication
+        rosi:NaturalTypes and (rosi:plays max 0 rosi:GeneratedRoleGroup13Elements)
+
+Class: rosi:___SatisfyGeneratedRoleGroup13InRoleImplication
+
+Class: rosi:RoleImplication
+    SubClassOf:
+        rosi:___SatisfyGeneratedRoleGroup13InRoleImplication
+
+
+
+
+
+### GeneratedRoleGroup15 ###
+############################
+
+Class: rosi:GeneratedRoleGroup15
+	Annotations: rosi:rigidity false
+
+Class: rosi:PlaysGeneratedRoleGroup15
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays some rosi:GeneratedRoleGroup15
+
+Class: rosi:NaturalTypes
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:plays max 1 rosi:GeneratedRoleGroup15
+
+Class: rosi:GeneratedRoleGroup15Elements
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTEquivalence1, rosi:RTEquivalence2
+
+Class: rosi:GeneratedRoleGroup15Atoms
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RTEquivalence1 or rosi:RTEquivalence2
+
+Class: rosi:PlaysGeneratedRoleGroup15
+    EquivalentTo:
+        Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup15InRoleEquivalence
+        rosi:NaturalTypes and (rosi:plays min 2 rosi:GeneratedRoleGroup15Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup15Elements)
+
+Class: rosi:___SatisfyGeneratedRoleGroup15InRoleEquivalence
+
+Class: rosi:RoleEquivalence
+    SubClassOf:
+        rosi:___SatisfyGeneratedRoleGroup15InRoleEquivalence
+
+
+Class: rosi:MustPlayGeneratedRoleGroup15
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysRTEquivalence1 or rosi:PlaysRTEquivalence2
+	SubClassOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:PlaysGeneratedRoleGroup15
 
 
 
@@ -186,6 +5035,69 @@ Class: rosi:RoleGroups
 # Cardinal constraints of relationship types                                                       #
 ####################################################################################################
 
+
+### RSTDomRan ###
+#################
+
+
+### RSTSameDomRan ###
+#####################
+
+
+### RSTCard1 ###
+################
+
+Class: rosi:RTCard1
+    SubClassOf:
+        Annotations: rdfs:isDefinedBy rosi:___RSTCard1CardinalConstraintOfDomainInCardinalConstraints
+        (rosi:RSTCard1 min 2 owl:Thing) and (rosi:RSTCard1 max 3 owl:Thing)
+
+Class: rosi:___RSTCard1CardinalConstraintOfDomainInCardinalConstraints
+
+Class: rosi:CardinalConstraints
+    SubClassOf:
+        rosi:___RSTCard1CardinalConstraintOfDomainInCardinalConstraints
+
+
+### RSTCard2 ###
+################
+
+Class: rosi:RTCard4
+    SubClassOf:
+        Annotations: rdfs:isDefinedBy rosi:___RSTCard2CardinalConstraintOfRangeInCardinalConstraints
+        (inverse (rosi:RSTCard2) min 2 owl:Thing) and (inverse (rosi:RSTCard2) max 3 owl:Thing)
+
+Class: rosi:___RSTCard2CardinalConstraintOfRangeInCardinalConstraints
+
+Class: rosi:CardinalConstraints
+    SubClassOf:
+        rosi:___RSTCard2CardinalConstraintOfRangeInCardinalConstraints
+
+
+### RSTCard3 ###
+################
+
+Class: rosi:RTCard5
+    SubClassOf:
+        Annotations: rdfs:isDefinedBy rosi:___RSTCard3CardinalConstraintOfDomainInCardinalConstraints
+        (rosi:RSTCard3 min 3 owl:Thing) and (rosi:RSTCard3 max 3 owl:Thing)
+
+Class: rosi:___RSTCard3CardinalConstraintOfDomainInCardinalConstraints
+
+Class: rosi:CardinalConstraints
+    SubClassOf:
+        rosi:___RSTCard3CardinalConstraintOfDomainInCardinalConstraints
+
+Class: rosi:RTCard6
+    SubClassOf:
+        Annotations: rdfs:isDefinedBy rosi:___RSTCard3CardinalConstraintOfRangeInCardinalConstraints
+        (inverse (rosi:RSTCard3) min 2 owl:Thing) and (inverse (rosi:RSTCard3) max 2 owl:Thing)
+
+Class: rosi:___RSTCard3CardinalConstraintOfRangeInCardinalConstraints
+
+Class: rosi:CardinalConstraints
+    SubClassOf:
+        rosi:___RSTCard3CardinalConstraintOfRangeInCardinalConstraints
 
 
 
@@ -211,6 +5123,123 @@ Class: rosi:RoleGroups
 		
 Individual: rosi:occurrenceCounter
 
+
+
+### RTOccurrence1, OccurrenceRTTest1 ###
+########################################
+
+Individual: rosi:occurrenceCounter
+    Types:
+        Annotations: rdfs:isDefinedBy rosi:___RTOccurrence1OccurrenceConstraintInOccurrenceRTTest1
+        (rosi:count max 1 rosi:RTOccurrence1)
+
+Class: rosi:___RTOccurrence1OccurrenceConstraintInOccurrenceRTTest1
+
+Class: rosi:OccurrenceRTTest1
+    SubClassOf:
+        rosi:___RTOccurrence1OccurrenceConstraintInOccurrenceRTTest1
+
+
+### RTOccurrence2, OccurrenceRTTest1 ###
+########################################
+
+Individual: rosi:occurrenceCounter
+    Types:
+        Annotations: rdfs:isDefinedBy rosi:___RTOccurrence2OccurrenceConstraintInOccurrenceRTTest1
+        (rosi:count min 2 rosi:RTOccurrence2) and (rosi:count max 3 rosi:RTOccurrence2)
+
+Class: rosi:___RTOccurrence2OccurrenceConstraintInOccurrenceRTTest1
+
+Class: rosi:OccurrenceRTTest1
+    SubClassOf:
+        rosi:___RTOccurrence2OccurrenceConstraintInOccurrenceRTTest1
+
+### RTOccurrence4, OccurrenceRTTest3 ###
+########################################
+
+Individual: rosi:occurrenceCounter
+    Types:
+        Annotations: rdfs:isDefinedBy rosi:___RTOccurrence4OccurrenceConstraintInOccurrenceRTTest3
+        (rosi:count min 1 rosi:RTOccurrence4)
+
+Class: rosi:___RTOccurrence4OccurrenceConstraintInOccurrenceRTTest3
+
+Class: rosi:OccurrenceRTTest3
+    SubClassOf:
+        rosi:___RTOccurrence4OccurrenceConstraintInOccurrenceRTTest3
+
+
+
+
+
+
+
+
+
+
+
+### RTIncons1_1, Inconsistent1 ###
+##################################
+
+Individual: rosi:occurrenceCounter
+    Types:
+        Annotations: rdfs:isDefinedBy rosi:___RTIncons1_1OccurrenceConstraintInInconsistent1
+        (rosi:count min 2 rosi:RTIncons1_1) and (rosi:count max 2 rosi:RTIncons1_1)
+
+Class: rosi:___RTIncons1_1OccurrenceConstraintInInconsistent1
+
+Class: rosi:Inconsistent1
+    SubClassOf:
+        rosi:___RTIncons1_1OccurrenceConstraintInInconsistent1
+
+
+### RTIncons1_4, Inconsistent1 ###
+##################################
+
+Individual: rosi:occurrenceCounter
+    Types:
+        Annotations: rdfs:isDefinedBy rosi:___RTIncons1_4OccurrenceConstraintInInconsistent1
+        (rosi:count min 2 rosi:RTIncons1_4) and (rosi:count max 2 rosi:RTIncons1_4)
+
+Class: rosi:___RTIncons1_4OccurrenceConstraintInInconsistent1
+
+Class: rosi:Inconsistent1
+    SubClassOf:
+        rosi:___RTIncons1_4OccurrenceConstraintInInconsistent1
+
+
+
+
+### GeneratedRoleGroup7, OccurrenceRGTest ###
+#############################################
+
+Individual: rosi:occurrenceCounter
+    Types:
+        Annotations: rdfs:isDefinedBy rosi:___GeneratedRoleGroup7OccurrenceConstraintInOccurrenceRGTest
+        (rosi:count min 2 rosi:GeneratedRoleGroup7) and (rosi:count max 2 rosi:GeneratedRoleGroup7)
+
+Class: rosi:___GeneratedRoleGroup7OccurrenceConstraintInOccurrenceRGTest
+
+Class: rosi:OccurrenceRGTest
+    SubClassOf:
+        rosi:___GeneratedRoleGroup7OccurrenceConstraintInOccurrenceRGTest
+
+
+
+
+### GeneratedRoleGroup3, Inconsistent1 ###
+##########################################
+
+Individual: rosi:occurrenceCounter
+    Types:
+        Annotations: rdfs:isDefinedBy rosi:___GeneratedRoleGroup3OccurrenceConstraintInInconsistent1
+        (rosi:count min 3 rosi:GeneratedRoleGroup3) and (rosi:count max 3 rosi:GeneratedRoleGroup3)
+
+Class: rosi:___GeneratedRoleGroup3OccurrenceConstraintInInconsistent1
+
+Class: rosi:Inconsistent1
+    SubClassOf:
+        rosi:___GeneratedRoleGroup3OccurrenceConstraintInInconsistent1
 
 
 
