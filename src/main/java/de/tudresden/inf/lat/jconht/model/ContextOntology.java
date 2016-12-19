@@ -26,6 +26,11 @@ public class ContextOntology {
     private Set<OWLAxiom> globalObjectOntology;
     private Set<OWLClass> outerAbstractedMetaConcepts;
     private OWLDataFactory dataFactory;
+    private boolean containsRigidNames;
+    private Set<OWLClass> rigidClasses; // todo müssen wir rigid names wirklich als set speichern? welche Alternativen?
+    private Set<OWLClass> flexibleClasses;
+    private Set<OWLObjectProperty> rigidObjectProperties;
+    private Set<OWLObjectProperty> flexibleObjectProperties;
 
     /**
      * This is the standard constructor.
@@ -48,6 +53,52 @@ public class ContextOntology {
         OWLAnnotationProperty isDefinedBy = dataFactory.getRDFSIsDefinedBy();
         OWLAnnotationProperty label = dataFactory.getRDFSLabel();
         OWLLiteral objectGlobal = dataFactory.getOWLLiteral("objectGlobal");
+
+        // check whether the context ontology contains rigid names
+        containsRigidNames = rootOntology
+                .axioms(AxiomType.ANNOTATION_ASSERTION)
+                .filter(axiom -> axiom.getAnnotation().getProperty().equals(dataFactory.getRDFSLabel()))
+                // todo ist das get hier gefährlich?
+                .filter(axiom -> axiom.getValue().asLiteral().get().getLiteral().equals("rigid"))
+                .count() != 0;
+
+        // todo das ist 4 mal fast der gleiche Code. Kann man das nicht irgendwie abkürzen? Mit Collectors.groupingBy?
+        rigidClasses = rootOntology
+                .axioms(AxiomType.ANNOTATION_ASSERTION)
+                .filter(axiom -> axiom.getAnnotation().getProperty().equals(dataFactory.getRDFSLabel()))
+                .filter(axiom -> axiom.getValue().asLiteral().get().getLiteral().equals("rigid"))
+                .map(axiom -> axiom.getSubject().asIRI().get())
+                .filter(iri -> rootOntology.classesInSignature().map(HasIRI::getIRI).anyMatch(iri1 -> iri1.equals(iri)))
+                .map(iri -> dataFactory.getOWLClass(iri))
+                .collect(Collectors.toSet());
+
+        rigidObjectProperties = rootOntology
+                .axioms(AxiomType.ANNOTATION_ASSERTION)
+                .filter(axiom -> axiom.getAnnotation().getProperty().equals(dataFactory.getRDFSLabel()))
+                .filter(axiom -> axiom.getValue().asLiteral().get().getLiteral().equals("rigid"))
+                .map(axiom -> axiom.getSubject().asIRI().get())
+                .filter(iri -> rootOntology.objectPropertiesInSignature().map(HasIRI::getIRI).anyMatch(iri1 -> iri1.equals(iri)))
+                .map(iri -> dataFactory.getOWLObjectProperty(iri))
+                .collect(Collectors.toSet());
+
+        flexibleClasses = rootOntology
+                .axioms(AxiomType.ANNOTATION_ASSERTION)
+                .filter(axiom -> axiom.getAnnotation().getProperty().equals(dataFactory.getRDFSLabel()))
+                .filter(axiom -> axiom.getValue().asLiteral().get().getLiteral().equals("non-rigid"))
+                .map(axiom -> axiom.getSubject().asIRI().get())
+                .filter(iri -> rootOntology.classesInSignature().map(HasIRI::getIRI).anyMatch(iri1 -> iri1.equals(iri)))
+                .map(iri -> dataFactory.getOWLClass(iri))
+                .collect(Collectors.toSet());
+
+        flexibleObjectProperties = rootOntology
+                .axioms(AxiomType.ANNOTATION_ASSERTION)
+                .filter(axiom -> axiom.getAnnotation().getProperty().equals(dataFactory.getRDFSLabel()))
+                .filter(axiom -> axiom.getValue().asLiteral().get().getLiteral().equals("non-rigid"))
+                .map(axiom -> axiom.getSubject().asIRI().get())
+                .filter(iri -> rootOntology.objectPropertiesInSignature().map(HasIRI::getIRI).anyMatch(iri1 -> iri1.equals(iri)))
+                .map(iri -> dataFactory.getOWLObjectProperty(iri))
+                .collect(Collectors.toSet());
+
 
         // Obtain meta ontology
         try {
@@ -129,6 +180,51 @@ public class ContextOntology {
         return metaOntology;
     }
 
+
+    /**
+     * This method returns all rigid classes (object level).
+     *
+     * @return The set of all rigid classes.
+     */
+    public Set<OWLClass> getRigidClasses() {
+
+        return rigidClasses;
+    }
+
+
+    /**
+     * This method returns all rigid object properties (object level).
+     *
+     * @return The set of all rigid classes.
+     */
+    public Set<OWLObjectProperty> getRigidObjectProperties() {
+
+        return rigidObjectProperties;
+    }
+
+
+    /**
+     * This method returns all flexible classes (object level).
+     *
+     * @return The set of all flexible classes.
+     */
+    public Set<OWLClass> getFlexibleClasses() {
+
+        return flexibleClasses;
+    }
+
+
+    /**
+     * This method returns all flexible object properties (object level).
+     *
+     * @return The set of all flexible classes.
+     */
+    public Set<OWLObjectProperty> getFlexibleObjectProperties() {
+
+        return flexibleObjectProperties;
+    }
+
+
     /**
      * This method returns an object ontology associated to the given set of meta classes.
      *
@@ -166,6 +262,7 @@ public class ContextOntology {
 
         return ontologyManager.getOWLDataFactory();
     }
+
 
     @Override
     public String toString() {
@@ -208,6 +305,11 @@ public class ContextOntology {
                 .sorted()
                 .map(OWLAxiom::toString)
                 .collect(Collectors.joining("\n")));
+        builder.append("\n");
+
+        // Are there rigid names?
+        builder.append("Rigid Names: ");
+        builder.append(containsRigidNames);
         builder.append("\n\n");
 
         return builder.toString();
