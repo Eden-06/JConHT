@@ -18,7 +18,7 @@ Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 Prefix: rosi: <http://www.rosi-project.org/ontologies#>
 
-Ontology: <http://www.rosi-project.org/ontologies/2016-12-16/MapperTest>
+Ontology: <http://www.rosi-project.org/ontologies/2016-12-20/MapperTest>
 
 
 
@@ -32,9 +32,6 @@ Datatype: xsd:boolean
 #
 # Used OWL annotations
 #
-
-AnnotationProperty: rosi:rigidity
-	Range: <http://www.w3.org/2001/XMLSchema#boolean>
 
 AnnotationProperty: rosi:isMeta
 	Range: <http://www.w3.org/2001/XMLSchema#boolean>
@@ -158,31 +155,31 @@ Class: rosi:NaturalTypes
 		owl:Nothing
 
 Class: rosi:NTFiller1
-	Annotations: rosi:rigidity true
+	Annotations: rdfs:label "rigid"
 
 Class: rosi:NTFiller2
-	Annotations: rosi:rigidity true
+	Annotations: rdfs:label "rigid"
 
 Class: rosi:BottomNT
-	Annotations: rosi:rigidity true
+	Annotations: rdfs:label "rigid"
 
 Class: rosi:DefaultNT
-	Annotations: rosi:rigidity true
+	Annotations: rdfs:label "rigid"
 
 Class: rosi:NTInheritance1
-	Annotations: rosi:rigidity true
+	Annotations: rdfs:label "rigid"
 
 Class: rosi:NTInheritance2
-	Annotations: rosi:rigidity true
+	Annotations: rdfs:label "rigid"
 
 Class: rosi:NTInheritance3
-	Annotations: rosi:rigidity true
+	Annotations: rdfs:label "rigid"
 
 Class: rosi:NTInheritance4
-	Annotations: rosi:rigidity true
+	Annotations: rdfs:label "rigid"
 
 Class: rosi:NTInheritance5
-	Annotations: rosi:rigidity true
+	Annotations: rdfs:label "rigid"
 
 
 
@@ -242,7 +239,7 @@ Class: rosi:RoleTypes
 ################
 
 Class: rosi:RTFills1
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTFills1
 	EquivalentTo:
@@ -259,7 +256,7 @@ Class: rosi:NaturalTypes
 ################
 
 Class: rosi:RTFills2
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTFills2
 	EquivalentTo:
@@ -276,7 +273,7 @@ Class: rosi:NaturalTypes
 ###########
 
 Class: rosi:RT1
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRT1
 	EquivalentTo:
@@ -293,7 +290,7 @@ Class: rosi:NaturalTypes
 ###########
 
 Class: rosi:RT2
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRT2
 	EquivalentTo:
@@ -310,7 +307,7 @@ Class: rosi:NaturalTypes
 ###########################
 
 Class: rosi:RTCantBePlayedTwice
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTCantBePlayedTwice
 	EquivalentTo:
@@ -327,7 +324,7 @@ Class: rosi:NaturalTypes
 ###################
 
 Class: rosi:RTDisjoint1
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTDisjoint1
 	EquivalentTo:
@@ -344,7 +341,7 @@ Class: rosi:NaturalTypes
 ###################
 
 Class: rosi:RTDisjoint2
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTDisjoint2
 	EquivalentTo:
@@ -361,7 +358,7 @@ Class: rosi:NaturalTypes
 ###################
 
 Class: rosi:RTRSTDomain
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTRSTDomain
 	EquivalentTo:
@@ -378,7 +375,7 @@ Class: rosi:NaturalTypes
 ##################
 
 Class: rosi:RTRSTRange
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTRSTRange
 	EquivalentTo:
@@ -395,7 +392,7 @@ Class: rosi:NaturalTypes
 ###################
 
 Class: rosi:RTRSTDomRan
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTRSTDomRan
 	EquivalentTo:
@@ -412,7 +409,7 @@ Class: rosi:NaturalTypes
 #####################
 
 Class: rosi:RTOccurrence1
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTOccurrence1
 	EquivalentTo:
@@ -429,7 +426,7 @@ Class: rosi:NaturalTypes
 #####################
 
 Class: rosi:RTOccurrence2
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTOccurrence2
 	EquivalentTo:
@@ -446,7 +443,7 @@ Class: rosi:NaturalTypes
 #####################
 
 Class: rosi:RTOccurrence3
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTOccurrence3
 	EquivalentTo:
@@ -463,7 +460,7 @@ Class: rosi:NaturalTypes
 #####################
 
 Class: rosi:RTOccurrence4
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTOccurrence4
 	EquivalentTo:
@@ -480,7 +477,7 @@ Class: rosi:NaturalTypes
 ###############
 
 Class: rosi:RTCard1
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTCard1
 	EquivalentTo:
@@ -497,7 +494,7 @@ Class: rosi:NaturalTypes
 ###############
 
 Class: rosi:RTCard2
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTCard2
 	EquivalentTo:
@@ -514,7 +511,7 @@ Class: rosi:NaturalTypes
 ###############
 
 Class: rosi:RTCard3
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTCard3
 	EquivalentTo:
@@ -531,7 +528,7 @@ Class: rosi:NaturalTypes
 ###############
 
 Class: rosi:RTCard4
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTCard4
 	EquivalentTo:
@@ -548,7 +545,7 @@ Class: rosi:NaturalTypes
 ###############
 
 Class: rosi:RTCard5
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTCard5
 	EquivalentTo:
@@ -565,7 +562,7 @@ Class: rosi:NaturalTypes
 ###############
 
 Class: rosi:RTCard6
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTCard6
 	EquivalentTo:
@@ -582,7 +579,7 @@ Class: rosi:NaturalTypes
 ######################
 
 Class: rosi:RTImplication1
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTImplication1
 	EquivalentTo:
@@ -599,7 +596,7 @@ Class: rosi:NaturalTypes
 ######################
 
 Class: rosi:RTImplication2
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTImplication2
 	EquivalentTo:
@@ -616,7 +613,7 @@ Class: rosi:NaturalTypes
 ######################
 
 Class: rosi:RTProhibition1
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTProhibition1
 	EquivalentTo:
@@ -633,7 +630,7 @@ Class: rosi:NaturalTypes
 ######################
 
 Class: rosi:RTProhibition2
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTProhibition2
 	EquivalentTo:
@@ -650,7 +647,7 @@ Class: rosi:NaturalTypes
 ######################
 
 Class: rosi:RTEquivalence1
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTEquivalence1
 	EquivalentTo:
@@ -667,7 +664,7 @@ Class: rosi:NaturalTypes
 ######################
 
 Class: rosi:RTEquivalence2
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTEquivalence2
 	EquivalentTo:
@@ -684,7 +681,7 @@ Class: rosi:NaturalTypes
 #################
 
 Class: rosi:RTRiehle1
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTRiehle1
 	EquivalentTo:
@@ -701,7 +698,7 @@ Class: rosi:NaturalTypes
 #################
 
 Class: rosi:RTRiehle2
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTRiehle2
 	EquivalentTo:
@@ -718,7 +715,7 @@ Class: rosi:NaturalTypes
 #################
 
 Class: rosi:RTRiehle3
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTRiehle3
 	EquivalentTo:
@@ -735,7 +732,7 @@ Class: rosi:NaturalTypes
 ############
 
 Class: rosi:RT_A
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRT_A
 	EquivalentTo:
@@ -752,7 +749,7 @@ Class: rosi:NaturalTypes
 ############
 
 Class: rosi:RT_B
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRT_B
 	EquivalentTo:
@@ -769,7 +766,7 @@ Class: rosi:NaturalTypes
 ############
 
 Class: rosi:RT_C
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRT_C
 	EquivalentTo:
@@ -786,7 +783,7 @@ Class: rosi:NaturalTypes
 ############
 
 Class: rosi:RT_D
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRT_D
 	EquivalentTo:
@@ -803,7 +800,7 @@ Class: rosi:NaturalTypes
 ############
 
 Class: rosi:RT_E
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRT_E
 	EquivalentTo:
@@ -820,7 +817,7 @@ Class: rosi:NaturalTypes
 ###################
 
 Class: rosi:RTIncons1_1
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTIncons1_1
 	EquivalentTo:
@@ -837,7 +834,7 @@ Class: rosi:NaturalTypes
 ###################
 
 Class: rosi:RTIncons1_2
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTIncons1_2
 	EquivalentTo:
@@ -854,7 +851,7 @@ Class: rosi:NaturalTypes
 ###################
 
 Class: rosi:RTIncons1_3
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTIncons1_3
 	EquivalentTo:
@@ -871,7 +868,7 @@ Class: rosi:NaturalTypes
 ###################
 
 Class: rosi:RTIncons1_4
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTIncons1_4
 	EquivalentTo:
@@ -894,6 +891,7 @@ Class: rosi:NaturalTypes
 ObjectProperty: owl:bottomObjectProperty
 
 ObjectProperty: rosi:plays
+	Annotations: rdfs:label "non-rigid"
 	Domain:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:NaturalTypes
@@ -3875,6 +3873,7 @@ Class: rosi:OccurrenceRGTest
 #################
 
 ObjectProperty: rosi:RSTDomRan
+	Annotations: rdfs:label "non-rigid"
 	SubPropertyOf:
 		owl:bottomObjectProperty
 	Domain:
@@ -3961,6 +3960,7 @@ Class: rosi:Inconsistent1
 #####################
 
 ObjectProperty: rosi:RSTSameDomRan
+	Annotations: rdfs:label "non-rigid"
 	SubPropertyOf:
 		owl:bottomObjectProperty
 	Domain:
@@ -4047,6 +4047,7 @@ Class: rosi:Inconsistent1
 ################
 
 ObjectProperty: rosi:RSTCard1
+	Annotations: rdfs:label "non-rigid"
 	SubPropertyOf:
 		owl:bottomObjectProperty
 	Domain:
@@ -4133,6 +4134,7 @@ Class: rosi:Inconsistent1
 ################
 
 ObjectProperty: rosi:RSTCard2
+	Annotations: rdfs:label "non-rigid"
 	SubPropertyOf:
 		owl:bottomObjectProperty
 	Domain:
@@ -4219,6 +4221,7 @@ Class: rosi:Inconsistent1
 ################
 
 ObjectProperty: rosi:RSTCard3
+	Annotations: rdfs:label "non-rigid"
 	SubPropertyOf:
 		owl:bottomObjectProperty
 	Domain:
@@ -4335,7 +4338,7 @@ Class: rosi:RoleGroups
 ###########################
 
 Class: rosi:GeneratedRoleGroup9
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup9
 	EquivalentTo:
@@ -4383,7 +4386,7 @@ Class: rosi:MustPlayGeneratedRoleGroup9
 ###########################
 
 Class: rosi:GeneratedRoleGroup8
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup8
 	EquivalentTo:
@@ -4424,7 +4427,7 @@ Class: rosi:ComplexRiehle
 ###########################
 
 Class: rosi:GeneratedRoleGroup7
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup7
 	EquivalentTo:
@@ -4472,7 +4475,7 @@ Class: rosi:MustPlayGeneratedRoleGroup7
 ###########################
 
 Class: rosi:GeneratedRoleGroup6
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup6
 	EquivalentTo:
@@ -4520,7 +4523,7 @@ Class: rosi:MustPlayGeneratedRoleGroup6
 ###########################
 
 Class: rosi:GeneratedRoleGroup5
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup5
 	EquivalentTo:
@@ -4568,7 +4571,7 @@ Class: rosi:MustPlayGeneratedRoleGroup5
 ###########################
 
 Class: rosi:GeneratedRoleGroup4
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup4
 	EquivalentTo:
@@ -4616,7 +4619,7 @@ Class: rosi:MustPlayGeneratedRoleGroup4
 ###########################
 
 Class: rosi:GeneratedRoleGroup3
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup3
 	EquivalentTo:
@@ -4664,7 +4667,7 @@ Class: rosi:MustPlayGeneratedRoleGroup3
 ###########################
 
 Class: rosi:GeneratedRoleGroup2
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup2
 	EquivalentTo:
@@ -4712,7 +4715,7 @@ Class: rosi:MustPlayGeneratedRoleGroup2
 ############################
 
 Class: rosi:GeneratedRoleGroup10
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup10
 	EquivalentTo:
@@ -4753,7 +4756,7 @@ Class: rosi:ComplexRiehle
 ###########################
 
 Class: rosi:GeneratedRoleGroup1
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup1
 	EquivalentTo:
@@ -4801,7 +4804,7 @@ Class: rosi:MustPlayGeneratedRoleGroup1
 ############################
 
 Class: rosi:GeneratedRoleGroup12
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup12
 	EquivalentTo:
@@ -4849,7 +4852,7 @@ Class: rosi:MustPlayGeneratedRoleGroup12
 ############################
 
 Class: rosi:GeneratedRoleGroup11
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup11
 	EquivalentTo:
@@ -4897,7 +4900,7 @@ Class: rosi:MustPlayGeneratedRoleGroup11
 ############################
 
 Class: rosi:GeneratedRoleGroup14
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup14
 	EquivalentTo:
@@ -4945,7 +4948,7 @@ Class: rosi:MustPlayGeneratedRoleGroup14
 ############################
 
 Class: rosi:GeneratedRoleGroup13
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup13
 	EquivalentTo:
@@ -4986,7 +4989,7 @@ Class: rosi:RoleImplication
 ############################
 
 Class: rosi:GeneratedRoleGroup15
-	Annotations: rosi:rigidity false
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup15
 	EquivalentTo:
@@ -5109,6 +5112,7 @@ Class: rosi:CardinalConstraints
 
 
 ObjectProperty: rosi:count
+	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:RoleTypes
 	SubClassOf:
