@@ -170,6 +170,36 @@ public class ContextOntology {
         //TODO probably more to do here
     }
 
+    public Stream<OWLEntity> metaSignature() {
+        return this.getMetaOntology().signature();
+    }
+
+    public Stream<OWLClass> metaClassesInSignature() {
+        return this.getMetaOntology().classesInSignature();
+    }
+
+    public Stream<OWLObjectProperty> metaObjectPropertiesInSignature() {
+        return this.getMetaOntology().objectPropertiesInSignature();
+    }
+
+    public Stream<OWLEntity> objectSignature() {
+        return objectAxiomsMap.entrySet().stream()
+                .map(Map.Entry::getValue)
+                .flatMap(HasSignature::signature);
+    }
+
+    public Stream<OWLClass> objectClassesInSignature() {
+        return objectAxiomsMap.entrySet().stream()
+                .map(Map.Entry::getValue)
+                .flatMap(HasClassesInSignature::classesInSignature);
+    }
+
+    public Stream<OWLObjectProperty> objectObjectPropertiesInSignature() {
+        return objectAxiomsMap.entrySet().stream()
+                .map(Map.Entry::getValue)
+                .flatMap(HasObjectPropertiesInSignature::objectPropertiesInSignature);
+    }
+
     /**
      * This method returns the meta ontology.
      *
@@ -277,6 +307,9 @@ public class ContextOntology {
         builder.append("\n\n");
 
         // Obtain meta concepts that abbreviate object axioms.
+        builder.append("Meta signature: ");
+        builder.append(this.metaClassesInSignature().collect(Collectors.toSet()));
+        builder.append("\n");
         builder.append("Meta concepts that identify object axioms:\n");
         builder.append(outerAbstractedMetaConcepts.stream()
                 .map(OWLClass::toString)
