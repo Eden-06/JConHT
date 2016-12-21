@@ -5,12 +5,16 @@ import org.semanticweb.HermiT.Configuration;
 import org.semanticweb.HermiT.Prefixes;
 import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.HermiT.ReasonerFactory;
-import org.semanticweb.HermiT.model.*;
+import org.semanticweb.HermiT.model.AtomicConcept;
+import org.semanticweb.HermiT.model.AtomicNegationConcept;
+import org.semanticweb.HermiT.model.Concept;
+import org.semanticweb.HermiT.model.DLPredicate;
 import org.semanticweb.HermiT.tableau.DependencySet;
 import org.semanticweb.HermiT.tableau.ExtensionTable;
 import org.semanticweb.HermiT.tableau.Node;
 import org.semanticweb.HermiT.tableau.Tableau;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
@@ -165,12 +169,14 @@ public class ContextTableau extends Tableau {
      * @param node A node.
      * @return The set of associated OWLClassExpressions.
      */
-    private Set<OWLClassExpression> getClassesOfNode(Node node) {
+    private Set<OWLClass> getClassesOfNode(Node node) {
 
-        return binaryTupleTableEntries()
+        Set<OWLClass> result = binaryTupleTableEntries()
                 .filter(entry -> entry.getNode().equals(node))
-                .map(BinaryTupleTableEntry::getClassExpression)
+                .map(BinaryTupleTableEntry::getOWLClass)
                 .collect(Collectors.toSet());
+        System.out.println("result = " + result);
+        return result;
     }
 
     /**
@@ -266,6 +272,20 @@ public class ContextTableau extends Tableau {
             }
 
             return classExpression;
+        }
+
+        public OWLClass getOWLClass() {
+
+            OWLClass owlClass = null;
+            OWLDataFactory dataFactory = contextOntology.getDataFactory();
+
+            // The following code is necessary because of legacy HermiT code.
+            if (concept instanceof AtomicConcept) {
+                owlClass = dataFactory.getOWLClass(
+                        IRI.create(((AtomicConcept) concept).getIRI()));
+            }
+
+            return owlClass;
         }
 
         @Override

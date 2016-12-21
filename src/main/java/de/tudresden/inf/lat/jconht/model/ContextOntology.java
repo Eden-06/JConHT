@@ -9,6 +9,7 @@ import org.semanticweb.owlapi.util.SimpleRenderer;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,16 +22,32 @@ import java.util.stream.Stream;
 public class ContextOntology {
 
     private final OWLOntologyManager ontologyManager;
+    private final OWLDataFactory dataFactory;
+    private final OWLOntology rootOntology;
+    private final OWLAnnotationProperty isDefinedBy;
+    private final OWLAnnotationProperty label;
+    private final OWLLiteral objectGlobal;
+    private final OWLAnnotationValue rigid;
+    private final OWLAnnotationValue nonRigid;
+    private final Predicate<IRI> iriIsOWLClass;
+    private final Predicate<IRI> iriIsOWLObjectProperty;
     private OWLOntology metaOntology;
-    private Map<OWLClassExpression, OWLAxiom> objectAxiomsMap;
-    private Set<OWLAxiom> globalObjectOntology;
-    private Set<OWLClass> outerAbstractedMetaConcepts;
-    private OWLDataFactory dataFactory;
-    private boolean containsRigidNames;
-    private Set<OWLClass> rigidClasses; // todo müssen wir rigid names wirklich als set speichern? welche Alternativen?
-    private Set<OWLClass> flexibleClasses;
-    private Set<OWLObjectProperty> rigidObjectProperties;
-    private Set<OWLObjectProperty> flexibleObjectProperties;
+    private Map<OWLClass, OWLAxiom> objectAxiomsMap;
+    //private Set<OWLClass> rigidClasses; // todo müssen wir rigid names wirklich als set speichern? welche Alternativen? siehe 10 Zeilen weiter unten
+
+
+    //todo prinzipielle Frage: Wenn ich es richtig verstanden habe, dann ist die Situation folgende.
+    // Ich kann z.B. die rigiden Konzepte als field "rigidConcepts" speichern, dann wird es einmal berechnet und dann als Set
+    // gespeichert, als Stream kann ich es nicht speichern, da dieser nur einmal verwendet werden könnte. Vorteil:
+    // muss nur einmal berechnet werden, Nachteil: Speicherbedarf des Sets, selbst wenn ich nie das Feld aufrufe.
+    // Alternative: eine Methode "rigidConcepts()", die einen Stream zurückgibt. Vorteil: Kein Speicherbedarf,
+    // Nachteil: wird jedes Mal neu berechnet, wenn benötigt.
+    //
+    // Habe ich es bis hierher soweit richtig verstanden?
+    //
+    // In Anlehnung an die OWLAPI, wo überall Getter, die Sets zurückgegeben hätten, mit Stream-Methoden ersetzt wurden,
+    // schätze ich, ist bei Ontologien eher der Speicherbedarf problematisch. Deshalb würde ich das auch so machen.
+    // Was ist deine Meinung dazu?
 
     /**
      * This is the standard constructor.
@@ -41,64 +58,19 @@ public class ContextOntology {
 
         ontologyManager = rootOntology.getOWLOntologyManager();
         dataFactory = ontologyManager.getOWLDataFactory();
+        this.rootOntology = rootOntology;
 
-        // Set renderer s.t. IRIs are shortened.
-        OWLObjectRenderer renderer = new SimpleRenderer();
-        renderer.setShortFormProvider(new QNameShortFormProvider(ontologyManager
-                .getOntologyFormat(rootOntology)
-                .asPrefixOWLDocumentFormat()
-                .getPrefixName2PrefixMap()));
-        ToStringRenderer.setRenderer(() -> renderer);
 
-        OWLAnnotationProperty isDefinedBy = dataFactory.getRDFSIsDefinedBy();
-        OWLAnnotationProperty label = dataFactory.getRDFSLabel();
-        OWLLiteral objectGlobal = dataFactory.getOWLLiteral("objectGlobal");
-
-        // check whether the context ontology contains rigid names
-        containsRigidNames = rootOntology
-                .axioms(AxiomType.ANNOTATION_ASSERTION)
-                .filter(axiom -> axiom.getAnnotation().getProperty().equals(dataFactory.getRDFSLabel()))
-                // todo ist das get hier gefährlich?
-                .filter(axiom -> axiom.getValue().asLiteral().get().getLiteral().equals("rigid"))
-                .count() != 0;
-
-        // todo das ist 4 mal fast der gleiche Code. Kann man das nicht irgendwie abkürzen? Mit Collectors.groupingBy?
-        rigidClasses = rootOntology
-                .axioms(AxiomType.ANNOTATION_ASSERTION)
-                .filter(axiom -> axiom.getAnnotation().getProperty().equals(dataFactory.getRDFSLabel()))
-                .filter(axiom -> axiom.getValue().asLiteral().get().getLiteral().equals("rigid"))
-                .map(axiom -> axiom.getSubject().asIRI().get())
-                .filter(iri -> rootOntology.classesInSignature().map(HasIRI::getIRI).anyMatch(iri1 -> iri1.equals(iri)))
-                .map(iri -> dataFactory.getOWLClass(iri))
-                .collect(Collectors.toSet());
-
-        rigidObjectProperties = rootOntology
-                .axioms(AxiomType.ANNOTATION_ASSERTION)
-                .filter(axiom -> axiom.getAnnotation().getProperty().equals(dataFactory.getRDFSLabel()))
-                .filter(axiom -> axiom.getValue().asLiteral().get().getLiteral().equals("rigid"))
-                .map(axiom -> axiom.getSubject().asIRI().get())
-                .filter(iri -> rootOntology.objectPropertiesInSignature().map(HasIRI::getIRI).anyMatch(iri1 -> iri1.equals(iri)))
-                .map(iri -> dataFactory.getOWLObjectProperty(iri))
-                .collect(Collectors.toSet());
-
-        flexibleClasses = rootOntology
-                .axioms(AxiomType.ANNOTATION_ASSERTION)
-                .filter(axiom -> axiom.getAnnotation().getProperty().equals(dataFactory.getRDFSLabel()))
-                .filter(axiom -> axiom.getValue().asLiteral().get().getLiteral().equals("non-rigid"))
-                .map(axiom -> axiom.getSubject().asIRI().get())
-                .filter(iri -> rootOntology.classesInSignature().map(HasIRI::getIRI).anyMatch(iri1 -> iri1.equals(iri)))
-                .map(iri -> dataFactory.getOWLClass(iri))
-                .collect(Collectors.toSet());
-
-        flexibleObjectProperties = rootOntology
-                .axioms(AxiomType.ANNOTATION_ASSERTION)
-                .filter(axiom -> axiom.getAnnotation().getProperty().equals(dataFactory.getRDFSLabel()))
-                .filter(axiom -> axiom.getValue().asLiteral().get().getLiteral().equals("non-rigid"))
-                .map(axiom -> axiom.getSubject().asIRI().get())
-                .filter(iri -> rootOntology.objectPropertiesInSignature().map(HasIRI::getIRI).anyMatch(iri1 -> iri1.equals(iri)))
-                .map(iri -> dataFactory.getOWLObjectProperty(iri))
-                .collect(Collectors.toSet());
-
+        // Define OWLAnnotationProperties and -Values, OWLLiterals
+        isDefinedBy = dataFactory.getRDFSIsDefinedBy();
+        label = dataFactory.getRDFSLabel();
+        objectGlobal = dataFactory.getOWLLiteral("objectGlobal");
+        rigid = dataFactory.getOWLLiteral("rigid");
+        nonRigid = dataFactory.getOWLLiteral("non-rigid");
+        iriIsOWLClass =
+                iri -> rootOntology.classesInSignature().map(HasIRI::getIRI).anyMatch(iri1 -> iri1.equals(iri));
+        iriIsOWLObjectProperty =
+                iri -> rootOntology.objectPropertiesInSignature().map(HasIRI::getIRI).anyMatch(iri1 -> iri1.equals(iri));
 
         // Obtain meta ontology
         try {
@@ -127,6 +99,15 @@ public class ContextOntology {
         }
 
 
+        // Set renderer s.t. IRIs are shortened.
+        OWLObjectRenderer renderer = new SimpleRenderer();
+        renderer.setShortFormProvider(new QNameShortFormProvider(ontologyManager
+                .getOntologyFormat(rootOntology)
+                .asPrefixOWLDocumentFormat()
+                .getPrefixName2PrefixMap()));
+        ToStringRenderer.setRenderer(() -> renderer);
+
+
         // Obtain object axioms map
         objectAxiomsMap = rootOntology.axioms()
                 .filter(owlAxiom -> owlAxiom.annotations(isDefinedBy).count() > 0)
@@ -141,28 +122,6 @@ public class ContextOntology {
                                         // This get() does not fail, because values are always IRIs ;-).
                                         .get()),
                         owlAxiom -> owlAxiom.getAxiomWithoutAnnotations()));
-
-        // Retrieve all meta concepts that identify object axioms
-        outerAbstractedMetaConcepts = objectAxiomsMap.keySet().stream()
-                .map(OWLClassExpression::asOWLClass)
-                .collect(Collectors.toSet());
-
-        // Create negated axioms for negated keys and add them to object axioms map
-        objectAxiomsMap.putAll(objectAxiomsMap.entrySet().stream()
-                .collect(Collectors.toMap(
-                        entry -> entry.getKey().accept(new ConceptNegator(dataFactory)),
-                        entry -> entry.getValue().accept(new AxiomNegator(dataFactory)))));
-
-        // Obtain global object axioms
-        globalObjectOntology = rootOntology.axioms()
-                // consider only logical axioms
-                .filter(owlAxiom -> owlAxiom.isOfType(AxiomType.LOGICAL_AXIOM_TYPES))
-                // consider only axioms that are labelled with 'global'
-                .filter(owlAxiom -> owlAxiom.annotations(label)
-                        .filter(owlAnnotation -> owlAnnotation.getValue().equals(objectGlobal))
-                        .count() > 0)
-                .map(owlAxiom -> (OWLAxiom) owlAxiom.getAxiomWithoutAnnotations())
-                .collect(Collectors.toSet());
     }
 
     public void clear() {
@@ -200,6 +159,86 @@ public class ContextOntology {
                 .flatMap(HasObjectPropertiesInSignature::objectPropertiesInSignature);
     }
 
+    // todo das ist 4 mal fast der gleiche Code. Kann man das nicht irgendwie abkürzen? Mit Collectors.groupingBy?
+    public Stream<OWLClass> rigidClasses() {
+        return rootOntology
+                .axioms(AxiomType.ANNOTATION_ASSERTION)
+                .filter(axiom -> axiom.getAnnotation().getProperty().equals(label))
+                .filter(axiom -> axiom.getValue().equals(rigid))
+                .map(axiom -> axiom.getSubject().asIRI().get())
+                .filter(iriIsOWLClass)
+                .map(dataFactory::getOWLClass);
+    }
+
+    public Stream<OWLObjectProperty> rigidObjectProperties() {
+        return rootOntology
+                .axioms(AxiomType.ANNOTATION_ASSERTION)
+                .filter(axiom -> axiom.getAnnotation().getProperty().equals(label))
+                .filter(axiom -> axiom.getValue().equals(rigid))
+                .map(axiom -> axiom.getSubject().asIRI().get())
+                .filter(iriIsOWLObjectProperty)
+                .map(dataFactory::getOWLObjectProperty);
+    }
+
+    public Stream<OWLClass> flexibleClasses() {
+        return rootOntology
+                .axioms(AxiomType.ANNOTATION_ASSERTION)
+                .filter(axiom -> axiom.getAnnotation().getProperty().equals(label))
+                .filter(axiom -> axiom.getValue().equals(nonRigid))
+                .map(axiom -> axiom.getSubject().asIRI().get())
+                .filter(iriIsOWLClass)
+                .map(dataFactory::getOWLClass);
+    }
+
+    public Stream<OWLObjectProperty> flexibleObjectProperties() {
+        return rootOntology
+                .axioms(AxiomType.ANNOTATION_ASSERTION)
+                .filter(axiom -> axiom.getAnnotation().getProperty().equals(label))
+                .filter(axiom -> axiom.getValue().equals(nonRigid))
+                .map(axiom -> axiom.getSubject().asIRI().get())
+                .filter(iriIsOWLObjectProperty)
+                .map(dataFactory::getOWLObjectProperty);
+    }
+
+    /**
+     * This method checks whether the context ontology contains rigid names.
+     *
+     * @return
+     */
+    public Boolean containsRigidNames() {
+        return rootOntology
+                .axioms(AxiomType.ANNOTATION_ASSERTION)
+                .filter(axiom -> axiom.getAnnotation().getProperty().equals(label))
+                .filter(axiom -> axiom.getValue().equals(rigid))
+                .count() != 0;
+    }
+
+
+    /**
+     * This method retrieves all meta concepts that identify object axioms
+     *
+     * @return Stream of OWL classes that identify object axioms.
+     */
+    public Stream<OWLClass> outerAbstractedMetaConcepts() {
+        return objectAxiomsMap.keySet().stream().map(OWLClassExpression::asOWLClass);
+    }
+
+    /**
+     * This method obtains all global object axioms.
+     *
+     * @return Stream of OWL axioms that must hold in every context.
+     */
+    public Stream<OWLAxiom> globalObjectOntology() {
+        return rootOntology.axioms()
+                // consider only logical axioms
+                .filter(owlAxiom -> owlAxiom.isOfType(AxiomType.LOGICAL_AXIOM_TYPES))
+                // consider only axioms that are labelled with 'global'
+                .filter(owlAxiom -> owlAxiom.annotations(label)
+                        .filter(owlAnnotation -> owlAnnotation.getValue().equals(objectGlobal))
+                        .count() > 0)
+                .map(owlAxiom -> (OWLAxiom) owlAxiom.getAxiomWithoutAnnotations());
+    }
+
     /**
      * This method returns the meta ontology.
      *
@@ -210,58 +249,13 @@ public class ContextOntology {
         return metaOntology;
     }
 
-
-    /**
-     * This method returns all rigid classes (object level).
-     *
-     * @return The set of all rigid classes.
-     */
-    public Set<OWLClass> getRigidClasses() {
-
-        return rigidClasses;
-    }
-
-
-    /**
-     * This method returns all rigid object properties (object level).
-     *
-     * @return The set of all rigid classes.
-     */
-    public Set<OWLObjectProperty> getRigidObjectProperties() {
-
-        return rigidObjectProperties;
-    }
-
-
-    /**
-     * This method returns all flexible classes (object level).
-     *
-     * @return The set of all flexible classes.
-     */
-    public Set<OWLClass> getFlexibleClasses() {
-
-        return flexibleClasses;
-    }
-
-
-    /**
-     * This method returns all flexible object properties (object level).
-     *
-     * @return The set of all flexible classes.
-     */
-    public Set<OWLObjectProperty> getFlexibleObjectProperties() {
-
-        return flexibleObjectProperties;
-    }
-
-
     /**
      * This method returns an object ontology associated to the given set of meta classes.
      *
      * @param metaClasses A set of meta classes.
      * @return The associated object ontology.
      */
-    public OWLOntology getObjectOntology(Set<OWLClassExpression> metaClasses) {
+    public OWLOntology getObjectOntology(Set<OWLClass> metaClasses) {
 
         OWLOntology objectOntology = null;
 
@@ -270,7 +264,7 @@ public class ContextOntology {
             //create the object ontology
             objectOntology = ontologyManager.createOntology(
                     Stream.concat(
-                            globalObjectOntology.stream(),
+                            globalObjectOntology(),
                             objectAxiomsMap.entrySet().stream()
                                     .filter(entry -> metaClasses.contains(entry.getKey()))
                                     .map(Map.Entry::getValue))
@@ -311,7 +305,7 @@ public class ContextOntology {
         builder.append(this.metaClassesInSignature().collect(Collectors.toSet()));
         builder.append("\n");
         builder.append("Meta concepts that identify object axioms:\n");
-        builder.append(outerAbstractedMetaConcepts.stream()
+        builder.append(outerAbstractedMetaConcepts()
                 .map(OWLClass::toString)
                 .collect(Collectors.joining("\n")));
         builder.append("\n\n");
@@ -334,7 +328,7 @@ public class ContextOntology {
 
         // Obtain global object-axioms.
         builder.append("Global object-axioms:\n");
-        builder.append(globalObjectOntology.stream()
+        builder.append(globalObjectOntology()
                 .sorted()
                 .map(OWLAxiom::toString)
                 .collect(Collectors.joining("\n")));
@@ -342,7 +336,9 @@ public class ContextOntology {
 
         // Are there rigid names?
         builder.append("Rigid Names: ");
-        builder.append(containsRigidNames);
+        builder.append(containsRigidNames());
+        builder.append("\nRigid Concept Names: ");
+        builder.append(rigidClasses().collect(Collectors.toSet()));
         builder.append("\n\n");
 
         return builder.toString();
