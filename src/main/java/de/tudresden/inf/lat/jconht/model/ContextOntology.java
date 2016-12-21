@@ -266,9 +266,9 @@ public class ContextOntology {
                     Stream.concat(
                             globalObjectOntology(),
                             objectAxiomsMap.entrySet().stream()
-                                    .filter(entry -> metaClasses.contains(entry.getKey()))
-                                    .map(Map.Entry::getValue))
-                            .collect(Collectors.toSet()));
+                                    .map(entry -> metaClasses.contains(entry.getKey()) ?
+                                            entry.getValue() :
+                                            entry.getValue().accept(new AxiomNegator(dataFactory)))));
 
         } catch (OWLOntologyCreationException e) {
 
