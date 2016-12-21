@@ -1,5 +1,6 @@
 package de.tudresden.inf.lat.jconht.model;
 
+import de.tudresden.inf.lat.jconht.tableau.AxiomRenamer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +12,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * This is a test class for <code>AxiomRenamer</code>.
@@ -33,6 +36,11 @@ public class AxiomRenamerTest {
     private OWLIndividual indB;
     private OWLObjectProperty roleR;
     private OWLObjectProperty roleS;
+    private OWLAxiom ax1;
+    private OWLAxiom ax2;
+    private OWLAxiom ax3;
+    private OWLAxiom ax4;
+    private OWLAxiom ax5;
 
     @Before
     public void setUp() throws Exception {
@@ -48,6 +56,16 @@ public class AxiomRenamerTest {
         indB = dataFactory.getOWLNamedIndividual("ind:b");
         roleR = dataFactory.getOWLObjectProperty("rol:r");
         roleS = dataFactory.getOWLObjectProperty("rol:s");
+
+        ax1 = dataFactory.getOWLSubClassOfAxiom(clsA, clsB);
+        ax2 = dataFactory.getOWLSubClassOfAxiom(clsA, clsC);
+        ax3 = dataFactory.getOWLSubClassOfAxiom(clsB, clsC);
+        ax4 = dataFactory.getOWLSubClassOfAxiom(
+                dataFactory.getOWLObjectSomeValuesFrom(roleR, clsC),
+                dataFactory.getOWLObjectAllValuesFrom(roleR, clsC));
+        ax5 = dataFactory.getOWLSubClassOfAxiom(clsA,
+                dataFactory.getOWLObjectSomeValuesFrom(roleS, dataFactory.getOWLThing()));
+
     }
 
     @After
@@ -62,25 +80,35 @@ public class AxiomRenamerTest {
 
         //Todo test not finished yet
 
-        OWLAxiom ax1 = dataFactory.getOWLSubClassOfAxiom(clsA, clsB);
-        OWLAxiom ax2 = dataFactory.getOWLSubClassOfAxiom(clsA, clsC);
-        OWLAxiom ax3 = dataFactory.getOWLSubClassOfAxiom(clsB, clsC);
-        OWLAxiom ax4 = dataFactory.getOWLSubClassOfAxiom(
-                dataFactory.getOWLObjectSomeValuesFrom(roleR, clsC),
-                dataFactory.getOWLObjectAllValuesFrom(roleR, clsC));
-        OWLAxiom ax5 = dataFactory.getOWLSubClassOfAxiom(clsA,
-                dataFactory.getOWLObjectSomeValuesFrom(roleS,dataFactory.getOWLThing()));
-
         OWLOntology ontology = manager.createOntology(Stream.of(ax1, ax2, ax3, ax4, ax5));
 
         ontology.axioms().forEach(System.out::println);
         System.out.println("\n");
 
         AxiomRenamer renamer = new AxiomRenamer(ontology);
-        Set<OWLEntity> flexibleNames = new HashSet<>(Arrays.asList(clsC,roleR));
+        Set<OWLEntity> flexibleNames = new HashSet<>(Arrays.asList(clsC, roleR));
         renamer.rename(flexibleNames, 3);
 
         ontology.axioms().forEach(System.out::println);
 
+        ontology.signature().forEach(System.out::println);
+
     }
+
+    @Test
+    public void testNoOriginalNamesInResult() throws Exception {
+
+        OWLOntology ontology = manager.createOntology(Stream.of(ax1, ax2, ax3, ax4, ax5));
+        AxiomRenamer renamer = new AxiomRenamer(ontology);
+        Set<OWLEntity> flexibleNames = new HashSet<>(Arrays.asList(clsC, roleR));
+        renamer.rename(flexibleNames, 3);
+
+        assertTrue("After renaming the original concepts cannot appear in ontology",
+                ontology.signature().noneMatch(owlEntity -> flexibleNames.contains(owlEntity)));
+
+    }
+
+    //todo Angenommen in original onto ist C ⊑ D, beide non-rigid (und es gibt mehrere Meta-Welten).
+    // Dann muss es C ⊑ D, C ⊑ D, usw geben, aber nicht C ⊑ D. Kann man das irgendwie testen? Ist
+    // ja nur syntaktisch.
 }

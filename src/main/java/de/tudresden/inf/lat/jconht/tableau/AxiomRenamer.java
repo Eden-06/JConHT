@@ -1,4 +1,4 @@
-package de.tudresden.inf.lat.jconht.model;
+package de.tudresden.inf.lat.jconht.tableau;
 
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.OWLEntityRenamer;
@@ -37,7 +37,6 @@ public class AxiomRenamer {
                         Stream.of(ontology).collect(Collectors.toSet()));
                 flexibleNames.forEach(name -> manager.applyChanges(renamer.changeIRI(name, IRI.create(name.getIRI().getIRIString() + "_" + i))));
                 manager.addAxioms(ontologyToChange, ontology.axioms());
-                System.out.println("ontology = " + ontology);
             } catch (OWLOntologyCreationException e) {
                 e.printStackTrace();
             }
