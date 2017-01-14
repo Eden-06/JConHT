@@ -16,28 +16,24 @@ public class Main {
 
         System.out.println("Welcome to JConHT!");
 
-        String inputDir = new File("input").getAbsolutePath();
-
-
-        IRI iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-2.owl");
+        File file = new File("input/hermit-testonto-2.owl");
         if (args.length != 0) {
             switch (args[0]) {
                 case "framed":
-                    iri = IRI.create("file://" + inputDir + "/" + "Bank.owl");
+                    file = new File("input/Bank.owl");
                     break;
                 default:
-                    iri = IRI.create("file://" + inputDir + "/" + "hermit-testonto-" + args[0] + ".owl");
+                    file = new File("input/hermit-testonto-" + args[0] + ".owl");
             }
         }
-
 
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 
         try {
 
-            OWLOntology onto = manager.loadOntology(iri);
-
-
+            //TODO oder hier lieber manager.loadOntologyFromOntologyDocument(file) ?
+            OWLOntology onto = manager.loadOntology(IRI.create(file));
+            
             ContextOntology contextOntology = new ContextOntology(onto);
             System.out.println(contextOntology);
             System.out.println("---------------------------------------------");
