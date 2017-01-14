@@ -51,8 +51,9 @@ public class CromMapperTest {
         rosiPrefix = new DefaultPrefixManager("http://www.rosi-project.org/ontologies#");
 
         String inputDir = new File("input").getAbsolutePath();
-        IRI cromMapperTestOntologyIRI = IRI.create("file://" + inputDir + "/" + "CROMMapperTest/MapperTest.owl");
-        rawOntology = manager.loadOntology(cromMapperTestOntologyIRI);
+        File cromMapperTestOntologyFile = new File("input/CROMMapperTest/MapperTest.owl");
+        //TODO hier auch wieder die Frage, wie man die Ontology richtig lädt
+        rawOntology = manager.loadOntology(IRI.create(cromMapperTestOntologyFile));
 
         numberOfAnonymousMetaConcepts = 0;
         numberOfAnonymousIndividuals = 0;
