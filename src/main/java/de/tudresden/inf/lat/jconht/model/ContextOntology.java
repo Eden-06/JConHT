@@ -28,7 +28,6 @@ public class ContextOntology {
     private final OWLAnnotationProperty label;
     private final OWLLiteral objectGlobal;
     private final OWLAnnotationValue rigid;
-    private final OWLAnnotationValue nonRigid;
     private final Predicate<IRI> iriIsOWLClass;
     private final Predicate<IRI> iriIsOWLObjectProperty;
     private final Predicate<IRI> iriIsObjectLevel;
@@ -70,7 +69,6 @@ public class ContextOntology {
         label = dataFactory.getRDFSLabel();
         objectGlobal = dataFactory.getOWLLiteral("objectGlobal");
         rigid = dataFactory.getOWLLiteral("rigid");
-        nonRigid = dataFactory.getOWLLiteral("non-rigid");
 
         //TODO kann man das hier schöner aufschreiben?
         iriIsOWLClass =
@@ -81,10 +79,12 @@ public class ContextOntology {
                 entity -> rootOntology.classesInSignature().anyMatch(cls -> cls.equals(entity));
         entityIsOWLObjectProperty =
                 entity -> rootOntology.objectPropertiesInSignature().anyMatch(cls -> cls.equals(entity));
-
-        // TODO OWLThing, OWLNothing, OWLTopObjProp, OWLBottomObjProp noch rausfiltern
         iriIsObjectLevel =
-                iri -> objectSignature().map(HasIRI::getIRI).anyMatch(iri1 -> iri1.equals(iri));
+                iri -> objectSignature().map(HasIRI::getIRI).anyMatch(iri1 -> iri1.equals(iri))
+                        && !(dataFactory.getOWLThing().getIRI().equals(iri)
+                        || dataFactory.getOWLNothing().getIRI().equals(iri)
+                        || dataFactory.getOWLBottomObjectProperty().getIRI().equals(iri)
+                        || dataFactory.getOWLTopObjectProperty().getIRI().equals(iri));
         iriIsRigid =
                 iri -> rootOntology
                         .axioms(AxiomType.ANNOTATION_ASSERTION)

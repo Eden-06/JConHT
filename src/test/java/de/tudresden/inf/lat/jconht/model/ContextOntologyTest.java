@@ -227,7 +227,6 @@ public class ContextOntologyTest {
 
     @Test
     public void testFlexibleClasses() throws Exception {
-        // TODO siehe Predicate<IRI> isiIsObjectLevel
 
         Stream<OWLEntity> streamOfFlexibleClasses = Stream.of(
                 clsA, clsB3);
