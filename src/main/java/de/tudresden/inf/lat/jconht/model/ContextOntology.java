@@ -31,6 +31,10 @@ public class ContextOntology {
     private final OWLAnnotationValue nonRigid;
     private final Predicate<IRI> iriIsOWLClass;
     private final Predicate<IRI> iriIsOWLObjectProperty;
+    private final Predicate<IRI> iriIsObjectLevel;
+    private final Predicate<IRI> iriIsRigid;
+    private final Predicate<OWLEntity> entityIsOWLClass;
+    private final Predicate<OWLEntity> entityIsOWLObjectProperty;
     private OWLOntology metaOntology;
     private Map<OWLClass, OWLAxiom> objectAxiomsMap;
     //private Set<OWLClass> rigidClasses; // todo müssen wir rigid names wirklich als set speichern? welche Alternativen? siehe 10 Zeilen weiter unten
@@ -61,20 +65,37 @@ public class ContextOntology {
         this.rootOntology = rootOntology;
 
 
-        // Define OWLAnnotationProperties and -Values, OWLLiterals
+        // Define OWLAnnotationProperties and -Values, OWLLiterals, Predicates
         isDefinedBy = dataFactory.getRDFSIsDefinedBy();
         label = dataFactory.getRDFSLabel();
         objectGlobal = dataFactory.getOWLLiteral("objectGlobal");
         rigid = dataFactory.getOWLLiteral("rigid");
         nonRigid = dataFactory.getOWLLiteral("non-rigid");
+
+        //TODO kann man das hier schöner aufschreiben?
         iriIsOWLClass =
                 iri -> rootOntology.classesInSignature().map(HasIRI::getIRI).anyMatch(iri1 -> iri1.equals(iri));
         iriIsOWLObjectProperty =
                 iri -> rootOntology.objectPropertiesInSignature().map(HasIRI::getIRI).anyMatch(iri1 -> iri1.equals(iri));
+        entityIsOWLClass =
+                entity -> rootOntology.classesInSignature().anyMatch(cls -> cls.equals(entity));
+        entityIsOWLObjectProperty =
+                entity -> rootOntology.objectPropertiesInSignature().anyMatch(cls -> cls.equals(entity));
+
+        // TODO OWLThing, OWLNothing, OWLTopObjProp, OWLBottomObjProp noch rausfiltern
+        iriIsObjectLevel =
+                iri -> objectSignature().map(HasIRI::getIRI).anyMatch(iri1 -> iri1.equals(iri));
+        iriIsRigid =
+                iri -> rootOntology
+                        .axioms(AxiomType.ANNOTATION_ASSERTION)
+                        .filter(axiom -> axiom.getAnnotation().getProperty().equals(label))
+                        .filter(axiom -> axiom.getValue().equals(rigid))
+                        .map(axiom -> axiom.getSubject().asIRI().get())
+                        .anyMatch(iri1 -> iri1.equals(iri));
 
         // Obtain meta ontology
         try {
-
+            //TODO hier auch wieder die Frage: metaOntology 1x im Constructor erzeugen und speichern oder Methode die Stream zurück gibt?
             metaOntology = ontologyManager.createOntology(rootOntology.axioms()
                     .filter(owlAxiom -> owlAxiom.isOfType(AxiomType.LOGICAL_AXIOM_TYPES))
                     .filter(owlAxiom -> owlAxiom.annotations(isDefinedBy).count() == 0)
@@ -133,84 +154,77 @@ public class ContextOntology {
         return this.getMetaOntology().signature();
     }
 
-    public Stream<OWLClass> metaClassesInSignature() {
+    public Stream<OWLClass> classesInMetaSignature() {
         return this.getMetaOntology().classesInSignature();
     }
 
-    public Stream<OWLObjectProperty> metaObjectPropertiesInSignature() {
+    public Stream<OWLObjectProperty> objectPropertiesInMetaSignature() {
         return this.getMetaOntology().objectPropertiesInSignature();
     }
 
     public Stream<OWLEntity> objectSignature() {
-        return objectAxiomsMap.entrySet().stream()
+        // TODO Wenn object names öfter in objectAxiomMap vorkommen, stehen sie auch öfters in objectSignature. Eigentlich doof, aber ist uns das egal?
+        return Stream.concat(
+                objectAxiomsMap.entrySet().stream()
                 .map(Map.Entry::getValue)
-                .flatMap(HasSignature::signature);
+                .flatMap(HasSignature::signature),
+                globalObjectOntology().flatMap(HasSignature::signature)
+                );
     }
 
-    public Stream<OWLClass> objectClassesInSignature() {
-        return objectAxiomsMap.entrySet().stream()
-                .map(Map.Entry::getValue)
-                .flatMap(HasClassesInSignature::classesInSignature);
+    public Stream<OWLClass> classesInObjectSignature() {
+        return objectSignature()
+                .filter(entityIsOWLClass)
+                .map(dataFactory::getOWLClass);
     }
 
-    public Stream<OWLObjectProperty> objectObjectPropertiesInSignature() {
-        return objectAxiomsMap.entrySet().stream()
-                .map(Map.Entry::getValue)
-                .flatMap(HasObjectPropertiesInSignature::objectPropertiesInSignature);
+    public Stream<OWLObjectProperty> objectPropertiesInObjectSignature() {
+        return objectSignature()
+                .filter(entityIsOWLObjectProperty)
+                .map(dataFactory::getOWLObjectProperty);
     }
+
 
     // todo das ist 4 mal fast der gleiche Code. Kann man das nicht irgendwie abkürzen? Mit Collectors.groupingBy?
     public Stream<OWLClass> rigidClasses() {
         return rootOntology
-                .axioms(AxiomType.ANNOTATION_ASSERTION)
-                .filter(axiom -> axiom.getAnnotation().getProperty().equals(label))
-                .filter(axiom -> axiom.getValue().equals(rigid))
-                .map(axiom -> axiom.getSubject().asIRI().get())
-                .filter(iriIsOWLClass)
+                .signature()
+                .map(HasIRI::getIRI)
+                .filter(iriIsObjectLevel.and(iriIsRigid).and(iriIsOWLClass))
                 .map(dataFactory::getOWLClass);
     }
 
     public Stream<OWLObjectProperty> rigidObjectProperties() {
         return rootOntology
-                .axioms(AxiomType.ANNOTATION_ASSERTION)
-                .filter(axiom -> axiom.getAnnotation().getProperty().equals(label))
-                .filter(axiom -> axiom.getValue().equals(rigid))
-                .map(axiom -> axiom.getSubject().asIRI().get())
-                .filter(iriIsOWLObjectProperty)
+                .signature()
+                .map(HasIRI::getIRI)
+                .filter(iriIsObjectLevel.and(iriIsRigid).and(iriIsOWLObjectProperty))
                 .map(dataFactory::getOWLObjectProperty);
     }
 
     public Stream<OWLClass> flexibleClasses() {
         return rootOntology
-                .axioms(AxiomType.ANNOTATION_ASSERTION)
-                .filter(axiom -> axiom.getAnnotation().getProperty().equals(label))
-                .filter(axiom -> axiom.getValue().equals(nonRigid))
-                .map(axiom -> axiom.getSubject().asIRI().get())
-                .filter(iriIsOWLClass)
+                .signature()
+                .map(HasIRI::getIRI)
+                .filter(iriIsObjectLevel.and(iriIsRigid.negate()).and(iriIsOWLClass))
                 .map(dataFactory::getOWLClass);
     }
 
     public Stream<OWLObjectProperty> flexibleObjectProperties() {
         return rootOntology
-                .axioms(AxiomType.ANNOTATION_ASSERTION)
-                .filter(axiom -> axiom.getAnnotation().getProperty().equals(label))
-                .filter(axiom -> axiom.getValue().equals(nonRigid))
-                .map(axiom -> axiom.getSubject().asIRI().get())
-                .filter(iriIsOWLObjectProperty)
+                .signature()
+                .map(HasIRI::getIRI)
+                .filter(iriIsObjectLevel.and(iriIsRigid.negate()).and(iriIsOWLObjectProperty))
                 .map(dataFactory::getOWLObjectProperty);
     }
 
     /**
      * This method checks whether the context ontology contains rigid names.
      *
-     * @return
+     * @return true if the context ontology contains rigid names.
      */
     public Boolean containsRigidNames() {
-        return rootOntology
-                .axioms(AxiomType.ANNOTATION_ASSERTION)
-                .filter(axiom -> axiom.getAnnotation().getProperty().equals(label))
-                .filter(axiom -> axiom.getValue().equals(rigid))
-                .count() != 0;
+        return rigidClasses().count() + rigidObjectProperties().count() != 0;
     }
 
 
@@ -262,13 +276,12 @@ public class ContextOntology {
         try {
 
             //create the object ontology
-            objectOntology = ontologyManager.createOntology(
-                    Stream.concat(
-                            globalObjectOntology(),
-                            objectAxiomsMap.entrySet().stream()
-                                    .map(entry -> metaClasses.contains(entry.getKey()) ?
-                                            entry.getValue() :
-                                            entry.getValue().accept(new AxiomNegator(dataFactory)))));
+            objectOntology = ontologyManager.createOntology(Stream.concat(
+                    globalObjectOntology(),
+                    objectAxiomsMap.entrySet().stream()
+                            .map(entry -> metaClasses.contains(entry.getKey()) ?
+                                    entry.getValue() :
+                                    entry.getValue().accept(new AxiomNegator(dataFactory)))));
 
         } catch (OWLOntologyCreationException e) {
 
@@ -302,7 +315,7 @@ public class ContextOntology {
 
         // Obtain meta concepts that abbreviate object axioms.
         builder.append("Meta signature: ");
-        builder.append(this.metaClassesInSignature().collect(Collectors.toSet()));
+        builder.append(this.classesInMetaSignature().collect(Collectors.toSet()));
         builder.append("\n");
         builder.append("Meta concepts that identify object axioms:\n");
         builder.append(outerAbstractedMetaConcepts()
