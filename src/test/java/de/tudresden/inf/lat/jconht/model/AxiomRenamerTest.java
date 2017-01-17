@@ -109,6 +109,6 @@ public class AxiomRenamerTest {
     }
 
     //todo Angenommen in original onto ist C ⊑ D, beide non-rigid (und es gibt mehrere Meta-Welten).
-    // Dann muss es C ⊑ D, C ⊑ D, usw geben, aber nicht C ⊑ D. Kann man das irgendwie testen? Ist
+    // Dann muss es C1 ⊑ D1, C2 ⊑ D2, usw geben, aber nicht C1 ⊑ D2. Kann man das irgendwie testen? Ist
     // ja nur syntaktisch.
 }

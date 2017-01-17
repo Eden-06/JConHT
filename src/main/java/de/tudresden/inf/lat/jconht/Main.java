@@ -12,6 +12,8 @@ import java.io.File;
 
 public class Main {
 
+    // TODO refactor code of whole project, and tests accordingly
+
     public static void main(String[] args) {
 
         System.out.println("Welcome to JConHT!");
