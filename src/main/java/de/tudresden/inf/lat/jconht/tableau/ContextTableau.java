@@ -1,12 +1,12 @@
 package de.tudresden.inf.lat.jconht.tableau;
 
+import de.tudresden.inf.lat.jconht.model.ConceptConverterNormal;
 import de.tudresden.inf.lat.jconht.model.ContextOntology;
 import org.semanticweb.HermiT.Configuration;
 import org.semanticweb.HermiT.Prefixes;
 import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.HermiT.ReasonerFactory;
 import org.semanticweb.HermiT.model.AtomicConcept;
-import org.semanticweb.HermiT.model.AtomicNegationConcept;
 import org.semanticweb.HermiT.model.Concept;
 import org.semanticweb.HermiT.model.DLPredicate;
 import org.semanticweb.HermiT.tableau.DependencySet;
@@ -59,16 +59,17 @@ public class ContextTableau extends Tableau {
                 tableau.getParameters());
 
         this.contextOntology = contextOntology;
+        // TODO wozu brauchten wir die ReasonerFactory?
         this.reasonerFactory = new ReasonerFactory();
     }
 
     @Override
     protected boolean runCalculus() {
 
+        // First run Hypertableau algorithm on meta ontology
         if (super.runCalculus()) {
 
-            // Possibly a model is found.
-
+            // Possibly a model for meta level is found.
 
             //System.out.println(contextOntology);
 
@@ -173,7 +174,7 @@ public class ContextTableau extends Tableau {
 
         Set<OWLClass> result = binaryTupleTableEntries()
                 .filter(entry -> entry.getNode().equals(node))
-                .map(BinaryTupleTableEntry::getOWLClass)
+                .map(BinaryTupleTableEntry::getOWLClassIfAtomicConcept)
                 .collect(Collectors.toSet());
         System.out.println("result = " + result);
         return result;
@@ -257,24 +258,25 @@ public class ContextTableau extends Tableau {
             return dependencySet;
         }
 
+
         public OWLClassExpression getClassExpression() {
 
             OWLClassExpression classExpression = null;
             OWLDataFactory dataFactory = contextOntology.getDataFactory();
 
-            // The following code is necessary because of legacy HermiT code.
-            if (concept instanceof AtomicConcept) {
-                classExpression = dataFactory.getOWLClass(
-                        IRI.create(((AtomicConcept) concept).getIRI()));
-            } else if (concept instanceof AtomicNegationConcept) {
-                classExpression = dataFactory.getOWLObjectComplementOf(dataFactory.getOWLClass(
-                        IRI.create(((AtomicNegationConcept) concept).getNegatedAtomicConcept().getIRI())));
-            }
+            // return concept.accept(new HermitConceptConverter(dataFactory));
+
+            classExpression = ConceptConverterNormal.toOWLClassExpression(concept,dataFactory);
 
             return classExpression;
         }
 
-        public OWLClass getOWLClass() {
+        /**
+         *  This method retrieves the concept of an BinaryTupleTableEntry as an OWLClass if the concept is an
+         *  AtomicConcept, otherwise it returns <code>null</code>.
+         * @return
+         */
+        public OWLClass getOWLClassIfAtomicConcept() {
 
             OWLClass owlClass = null;
             OWLDataFactory dataFactory = contextOntology.getDataFactory();
