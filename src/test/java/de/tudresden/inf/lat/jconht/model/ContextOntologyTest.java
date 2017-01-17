@@ -318,14 +318,23 @@ public class ContextOntologyTest {
                 contextOntology.getObjectOntology(metaConcepts).axioms().collect(Collectors.toSet()));
     }
 
+
+
     @Test
     public void testGetObjectOntology2() throws Exception {
         //TODO das hier sollte klappen, tut es aber nicht, wie könnte man das testen? Bräuchte ich um ObjOntology richtig zu testen
+
+        OWLAxiom axiom1 = dataFactory.getOWLClassAssertionAxiom(clsC,dataFactory.getOWLAnonymousIndividual());
+        OWLAxiom axiom2 = dataFactory.getOWLClassAssertionAxiom(clsC,dataFactory.getOWLAnonymousIndividual());
+
+        axiom1.components().forEach(System.out::println);
+
+        System.out.println(axiom1.equalsIgnoreAnnotations(axiom2));
+
         assertEquals(
                 dataFactory.getOWLClassAssertionAxiom(clsC,dataFactory.getOWLAnonymousIndividual()),
                 dataFactory.getOWLClassAssertionAxiom(clsC,dataFactory.getOWLAnonymousIndividual())
         );
-
     }
 
 //        assertEquals("Test for getting the object ontology:",

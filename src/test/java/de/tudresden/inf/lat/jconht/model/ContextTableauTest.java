@@ -135,7 +135,7 @@ public class ContextTableauTest {
                         dataFactory.getOWLObjectIntersectionOf(A_notAa, A_Aa),
                         clsC),
                 dataFactory.getOWLClassAssertionAxiom(clsC,indC),
-                dataFactory.getOWLClassAssertionAxiom(dataFactory.getOWLObjectComplementOf(A_Aa),indC),
+                //dataFactory.getOWLClassAssertionAxiom(dataFactory.getOWLObjectComplementOf(A_Aa),indC),
                 dataFactory.getOWLClassAssertionAxiom(dataFactory.getOWLObjectSomeValuesFrom(rolR,clsC),indC),
                 //
                 // object level
