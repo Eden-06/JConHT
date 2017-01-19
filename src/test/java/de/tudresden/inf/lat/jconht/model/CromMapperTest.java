@@ -43,10 +43,18 @@ public class CromMapperTest {
 
     private OWLObjectProperty plays;
 
+    private long startTime;
+
+    private String neededTime() {
+        double time = (System.nanoTime() - startTime) / 1000000000.;
+        return String.format("%.3f", time);
+    }
+
 
     @Before
     public void setUp() throws Exception {
         System.out.println("Setting up.");
+        startTime = System.nanoTime();
         //Thread.sleep(5000); // Needed for VisualVM Profiler
         manager = OWLManager.createOWLOntologyManager();
         dataFactory = manager.getOWLDataFactory();
@@ -67,6 +75,8 @@ public class CromMapperTest {
         nothing = dataFactory.getOWLNothing();
 
         plays = dataFactory.getOWLObjectProperty("plays", rosiPrefix);
+
+        System.out.println(neededTime() + "s");
     }
 
     @After
@@ -74,33 +84,38 @@ public class CromMapperTest {
 
         dataFactory.purge();
         manager.clearOntologies();
+
+        System.out.println(neededTime() + "s");
     }
 
 
     /*
-         General tests that must pass for every generated ontology.
-         */
+     General tests that must pass for every generated ontology.
+     */
     @Test
     public void testRawOntologyIsConsistent() throws Exception {
-        System.out.println("Executing testRawOntologyIsConsistent:");
+        System.out.println("Executing testRawOntologyIsConsistent: ");
 
         assertFalse(isInconsistent());
     }
 
     @Test
     public void testNaturalIsObject() throws Exception {
+        System.out.println("Executing testNaturalIsObject: ");
 
         assertTrue(isInconsistent(getMetaTypeAssertion(naturalTypes, dataFactory.getOWLAnonymousIndividual())));
     }
 
     @Test
     public void testCompartmentIsMeta() throws Exception {
+        System.out.println("Executing testCompartmentIsMeta: ");
 
         assertTrue(isInconsistent(getGlobalObjectTypeAssertion(compartmentTypes, dataFactory.getOWLAnonymousIndividual())));
     }
 
     @Test
     public void testNaturalsAndRolesAreDisjoint() throws Exception {
+        System.out.println("Executing testNaturalsAndRolesAreDisjoint: ");
 
         OWLIndividual individual = dataFactory.getOWLAnonymousIndividual();
 
@@ -111,6 +126,7 @@ public class CromMapperTest {
 
     @Test
     public void testPlaysIsObject() throws Exception {
+        System.out.println("Executing testPlaysIsObject: ");
 
         assertTrue(isInconsistent(Stream.of(
                 dataFactory.getOWLObjectPropertyAssertionAxiom(
@@ -121,6 +137,7 @@ public class CromMapperTest {
 
     @Test
     public void testEveryRoleIsPlayed() throws Exception {
+        System.out.println("Executing testEveryRoleIsPlayed: ");
 
         OWLIndividual individual = dataFactory.getOWLAnonymousIndividual();
 
@@ -133,6 +150,7 @@ public class CromMapperTest {
 
     @Test
     public void testEveryRoleGroupIsPlayed() throws Exception {
+        System.out.println("Executing testEveryRoleGroupIsPlayed: ");
 
         OWLIndividual individual = dataFactory.getOWLAnonymousIndividual();
 
@@ -145,6 +163,7 @@ public class CromMapperTest {
 
     @Test
     public void testNoRolePlaysAnything() throws Exception {
+        System.out.println("Executing testNoRolePlaysAnything: ");
 
         OWLIndividual individual = dataFactory.getOWLAnonymousIndividual();
 
@@ -157,6 +176,7 @@ public class CromMapperTest {
 
     @Test
     public void testOnlyRolesOrRoleGroupsCanBePlayed() throws Exception {
+        System.out.println("Executing testOnlyRolesOrRoleGroupsCanBePlayed: ");
 
         OWLClassExpression roleTypesOrGroups = dataFactory.getOWLObjectUnionOf(roleTypes, roleGroups);
 
@@ -168,6 +188,8 @@ public class CromMapperTest {
 
     @Test
     public void testOccurrenceCounterIsNeitherNaturalNorRole() throws Exception {
+        System.out.println("Executing testOccurrenceCounterIsNeitherNaturalNorRole: ");
+
         OWLIndividual occurrenceCounter = dataFactory.getOWLNamedIndividual("occurrenceCounter", rosiPrefix);
         OWLClassExpression natTypeOrRoleTypeOrRoleGroup = dataFactory.getOWLObjectUnionOf(
                 dataFactory.getOWLClass("NaturalTypes", rosiPrefix),
@@ -193,6 +215,7 @@ public class CromMapperTest {
 
     @Test
     public void testCompartmentDisjointnessPre() throws Exception {
+        System.out.println("Executing testCompartmentDisjointnessPre: ");
 
         OWLClass ct1 = dataFactory.getOWLClass("CTDisjoint1", rosiPrefix);
         OWLClass ct2 = dataFactory.getOWLClass("CTDisjoint2", rosiPrefix);
@@ -207,6 +230,7 @@ public class CromMapperTest {
 
     @Test
     public void testCompartmentDisjointness() throws Exception {
+        System.out.println("Executing testCompartmentDisjointness: ");
 
         OWLClass ct1 = dataFactory.getOWLClass("CTDisjoint1", rosiPrefix);
         OWLClass ct2 = dataFactory.getOWLClass("CTDisjoint2", rosiPrefix);
@@ -220,6 +244,7 @@ public class CromMapperTest {
 
     @Test
     public void testCompartmentIsNotEmpty() throws Exception {
+        System.out.println("Executing testCompartmentIsNotEmpty: ");
 
         OWLClass ct1 = dataFactory.getOWLClass("EmptyCompartment", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -234,6 +259,7 @@ public class CromMapperTest {
 
     @Test
     public void testNTInheritance1To4CanBeInstantiated() throws Exception {
+        System.out.println("Executing testNTInheritance1To4CanBeInstantiated: ");
 
         OWLClass nt1 = dataFactory.getOWLClass("NTInheritance1", rosiPrefix);
         OWLClass nt2 = dataFactory.getOWLClass("NTInheritance2", rosiPrefix);
@@ -250,6 +276,7 @@ public class CromMapperTest {
 
     @Test
     public void testNTInheritanceNT2AndNotSubType() throws Exception {
+        System.out.println("Executing testNTInheritanceNT2AndNotSubType: ");
 
         OWLClass nt2 = dataFactory.getOWLClass("NTInheritance2", rosiPrefix);
         OWLClass nt3 = dataFactory.getOWLClass("NTInheritance3", rosiPrefix);
@@ -266,6 +293,7 @@ public class CromMapperTest {
 
     @Test
     public void testNTInheritanceNoNT5() throws Exception {
+        System.out.println("Executing testNTInheritanceNoNT5: ");
 
         OWLClass nt5 = dataFactory.getOWLClass("NTInheritance5", rosiPrefix);
 
@@ -276,6 +304,7 @@ public class CromMapperTest {
 
     @Test
     public void testNTInheritanceNatMustHaveSomeType() throws Exception {
+        System.out.println("Executing testNTInheritanceNatMustHaveSomeType: ");
 
         OWLClassExpression allTopLevelNT = dataFactory.getOWLObjectUnionOf(
                 dataFactory.getOWLClass("NTInheritance1", rosiPrefix),
@@ -299,6 +328,7 @@ public class CromMapperTest {
 
     @Test
     public void testFillsAllowed() throws Exception {
+        System.out.println("Executing testFillsAllowed: ");
 
         OWLIndividual natural1 = dataFactory.getOWLAnonymousIndividual();
         OWLIndividual natural2 = dataFactory.getOWLAnonymousIndividual();
@@ -323,6 +353,7 @@ public class CromMapperTest {
 
     @Test
     public void testFillsRelationCheckForbidden() throws Exception {
+        System.out.println("Executing testFillsRelationCheckForbidden: ");
 
         OWLIndividual natural1 = dataFactory.getOWLAnonymousIndividual();
         OWLIndividual compartment2 = dataFactory.getOWLAnonymousIndividual();
@@ -341,6 +372,7 @@ public class CromMapperTest {
 
     @Test
     public void testCantPlayRoleTypeTwicePre() throws Exception {
+        System.out.println("Executing testCantPlayRoleTypeTwicePre: ");
 
         OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -358,6 +390,7 @@ public class CromMapperTest {
 
     @Test
     public void testCantPlayRoleTypeTwice() throws Exception {
+        System.out.println("Executing testCantPlayRoleTypeTwice: ");
 
         OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -379,6 +412,7 @@ public class CromMapperTest {
 
     @Test
     public void testRoleTypesAreDisjointPre() throws Exception {
+        System.out.println("Executing testRoleTypesAreDisjointPre: ");
 
         OWLClass roleType1 = dataFactory.getOWLClass("RTDisjoint1", rosiPrefix);
         OWLClass roleType2 = dataFactory.getOWLClass("RTDisjoint2", rosiPrefix);
@@ -393,6 +427,7 @@ public class CromMapperTest {
 
     @Test
     public void testRoleTypesAreDisjoint() throws Exception {
+        System.out.println("Executing testRoleTypesAreDisjoint: ");
 
         OWLClass roleType1 = dataFactory.getOWLClass("RTDisjoint1", rosiPrefix);
         OWLClass roleType2 = dataFactory.getOWLClass("RTDisjoint2", rosiPrefix);
@@ -409,6 +444,7 @@ public class CromMapperTest {
 
     @Test
     public void testRelationshipTypeDomainPre() throws Exception {
+        System.out.println("Executing testRelationshipTypeDomainPre: ");
 
         OWLObjectProperty rst = dataFactory.getOWLObjectProperty("RSTDomRan", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -428,6 +464,7 @@ public class CromMapperTest {
 
     @Test
     public void testRelationshipTypeWrongDomain() throws Exception {
+        System.out.println("Executing testRelationshipTypeWrongDomain:");
 
         OWLObjectProperty rst = dataFactory.getOWLObjectProperty("RSTDomRan", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -445,6 +482,7 @@ public class CromMapperTest {
 
     @Test
     public void testRelationshipTypeDifferentDomainRangePre() throws Exception {
+        System.out.println("Executing testRelationshipTypeDifferentDomainRangePre:");
 
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
         OWLClass compartmentType = dataFactory.getOWLClass("RSTDomainRangeDifferent", rosiPrefix);
@@ -461,6 +499,7 @@ public class CromMapperTest {
 
     @Test
     public void testRelationshipTypeDifferentDomainRange() throws Exception {
+        System.out.println("Executing testRelationshipTypeDifferentDomainRange:");
 
         OWLClass compartmentType = dataFactory.getOWLClass("RSTDomainRangeDifferent", rosiPrefix);
         OWLClass roleType = dataFactory.getOWLClass("RTRSTDomRan", rosiPrefix);
@@ -481,6 +520,7 @@ public class CromMapperTest {
 
     @Test
     public void testOccurrenceMaxConstraints1Pre() throws Exception {
+        System.out.println("Executing testOccurrenceMaxConstraints1Pre:");
 
         OWLClass ct = dataFactory.getOWLClass("OccurrenceRTTest1", rosiPrefix);
         OWLClass rt = dataFactory.getOWLClass("RTOccurrence1", rosiPrefix);
@@ -495,6 +535,7 @@ public class CromMapperTest {
 
     @Test
     public void testOccurrenceMaxConstraints1() throws Exception {
+        System.out.println("Executing testOccurrenceMaxConstraints1:");
 
         OWLClass ct = dataFactory.getOWLClass("OccurrenceRTTest1", rosiPrefix);
         OWLClass rt = dataFactory.getOWLClass("RTOccurrence1", rosiPrefix);
@@ -512,6 +553,7 @@ public class CromMapperTest {
 
     @Test
     public void testOccurrenceMaxConstraints2Pre() throws Exception {
+        System.out.println("Executing testOccurrenceMaxConstraints2Pre:");
 
         OWLClass ct = dataFactory.getOWLClass("OccurrenceRTTest1", rosiPrefix);
         OWLClass rt = dataFactory.getOWLClass("RTOccurrence2", rosiPrefix);
@@ -531,6 +573,7 @@ public class CromMapperTest {
 
     @Test
     public void testOccurrenceMaxConstraints2() throws Exception {
+        System.out.println("Executing testOccurrenceMaxConstraints2:");
 
         OWLClass ct = dataFactory.getOWLClass("OccurrenceRTTest1", rosiPrefix);
         OWLClass rt = dataFactory.getOWLClass("RTOccurrence2", rosiPrefix);
@@ -552,6 +595,7 @@ public class CromMapperTest {
 
     @Test
     public void testOccurrenceMinConstraintsPre() throws Exception {
+        System.out.println("Executing testOccurrenceMinConstraintsPre:");
 
         OWLClass ct = dataFactory.getOWLClass("OccurrenceRTTest1", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -563,6 +607,7 @@ public class CromMapperTest {
 
     @Test
     public void testOccurrenceMinConstraints() throws Exception {
+        System.out.println("Executing testOccurrenceMinConstraints:");
 
         OWLClass ct = dataFactory.getOWLClass("OccurrenceRTTest1", rosiPrefix);
         OWLClass rtPlayer = dataFactory.getOWLClass("PlaysRTOccurrence2", rosiPrefix);
@@ -576,6 +621,7 @@ public class CromMapperTest {
 
     @Test
     public void testOccurrenceConstraintsNeedFiller1() throws Exception {
+        System.out.println("Executing testOccurrenceConstraintsNeedFiller1:");
 
         OWLClass compartmentType = dataFactory.getOWLClass("OccurrenceRTTest2", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -588,6 +634,7 @@ public class CromMapperTest {
 
     @Test
     public void testOccurrenceConstraintsNeedFiller2() throws Exception {
+        System.out.println("Executing testOccurrenceConstraintsNeedFiller2:");
 
         OWLClass compartmentType = dataFactory.getOWLClass("OccurrenceRTTest3", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -603,6 +650,7 @@ public class CromMapperTest {
 
     @Test
     public void testRelationshipTypeCardConstraints1MaxPre() throws Exception {
+        System.out.println("Executing testRelationshipTypeCardConstraints1MaxPre:");
 
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
         OWLClass ct = dataFactory.getOWLClass("CardinalConstraints", rosiPrefix);
@@ -629,6 +677,7 @@ public class CromMapperTest {
 
     @Test
     public void testRelationshipTypeCardinalConstraints1Max() throws Exception {
+        System.out.println("Executing testRelationshipTypeCardinalConstraints1Max:");
 
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
         OWLClass ct = dataFactory.getOWLClass("CardinalConstraints", rosiPrefix);
@@ -658,6 +707,7 @@ public class CromMapperTest {
 
     @Test
     public void testRelationshipTypeCardConstraints1MinPre() throws Exception {
+        System.out.println("Executing testRelationshipTypeCardConstraints1MinPre:");
 
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
         OWLClass ct = dataFactory.getOWLClass("CardinalConstraints", rosiPrefix);
@@ -673,6 +723,7 @@ public class CromMapperTest {
 
     @Test
     public void testRelationshipTypeCardinalConstraints1Min() throws Exception {
+        System.out.println("Executing testRelationshipTypeCardinalConstraints1Min:");
 
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
         OWLClass ct = dataFactory.getOWLClass("CardinalConstraints", rosiPrefix);
@@ -689,6 +740,7 @@ public class CromMapperTest {
 
     @Test
     public void testRelationshipTypeCardinalConstraints2Pre() throws Exception {
+        System.out.println("Executing testRelationshipTypeCardinalConstraints2Pre:");
 
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
         OWLClass ct = dataFactory.getOWLClass("CardinalConstraints", rosiPrefix);
@@ -706,6 +758,7 @@ public class CromMapperTest {
 
     @Test
     public void testRelationshipTypeCardinalConstraints2Max() throws Exception {
+        System.out.println("Executing testRelationshipTypeCardinalConstraints2Max:");
 
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
         OWLClass ct = dataFactory.getOWLClass("CardinalConstraints", rosiPrefix);
@@ -735,6 +788,7 @@ public class CromMapperTest {
 
     @Test
     public void testRelationshipTypeCardinalConstraints2Min() throws Exception {
+        System.out.println("Executing testRelationshipTypeCardinalConstraints2Min:");
 
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
         OWLClass ct = dataFactory.getOWLClass("CTCardConstraints", rosiPrefix);
@@ -751,6 +805,7 @@ public class CromMapperTest {
 
     @Test
     public void testRelationshipTypeCardinalConstraints3() throws Exception {
+        System.out.println("Executing testRelationshipTypeCardinalConstraints3:");
 
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
         OWLClass ct = dataFactory.getOWLClass("CardinalConstraints", rosiPrefix);
@@ -772,6 +827,7 @@ public class CromMapperTest {
 
     @Test
     public void testImplicationPre1() throws Exception {
+        System.out.println("Executing testImplicationPre1:");
 
         OWLClass ct = dataFactory.getOWLClass("RoleImplication", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -785,6 +841,7 @@ public class CromMapperTest {
 
     @Test
     public void testImplicationPre2() throws Exception {
+        System.out.println("Executing testImplicationPre2:");
 
         OWLClass ct = dataFactory.getOWLClass("RoleImplication", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -799,6 +856,7 @@ public class CromMapperTest {
 
     @Test
     public void testImplication() throws Exception {
+        System.out.println("Executing testImplication:");
 
         OWLClass ct = dataFactory.getOWLClass("RoleImplication", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -815,6 +873,7 @@ public class CromMapperTest {
 
     @Test
     public void testProhibitionPre1() throws Exception {
+        System.out.println("Executing testProhibitionPre1:");
 
         OWLClass ct = dataFactory.getOWLClass("RoleProhibition", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -829,6 +888,7 @@ public class CromMapperTest {
 
     @Test
     public void testProhibitionPre2() throws Exception {
+        System.out.println("Executing testProhibitionPre2:");
 
         OWLClass ct = dataFactory.getOWLClass("RoleProhibition", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -843,6 +903,7 @@ public class CromMapperTest {
 
     @Test
     public void testProhibition() throws Exception {
+        System.out.println("Executing testProhibition:");
 
         OWLClass ct = dataFactory.getOWLClass("RoleProhibition", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -859,6 +920,7 @@ public class CromMapperTest {
 
     @Test
     public void testEquivalencePre() throws Exception {
+        System.out.println("Executing testEquivalencePre:");
 
         OWLClass ct = dataFactory.getOWLClass("RoleEquivalence", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -873,6 +935,7 @@ public class CromMapperTest {
 
     @Test
     public void testEquivalence1() throws Exception {
+        System.out.println("Executing testEquivalence1:");
 
         OWLClass ct = dataFactory.getOWLClass("CTRoleEquivalence", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -889,6 +952,7 @@ public class CromMapperTest {
 
     @Test
     public void testEquivalence2() throws Exception {
+        System.out.println("Executing testEquivalence2:");
 
         OWLClass ct = dataFactory.getOWLClass("CTRoleEquivalence", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -905,6 +969,7 @@ public class CromMapperTest {
 
     @Test
     public void testRiehleConstraintsPre() throws Exception {
+        System.out.println("Executing testRiehleConstraintsPre:");
 
         OWLClass ct = dataFactory.getOWLClass("ComplexRiehle", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -922,6 +987,7 @@ public class CromMapperTest {
 
     @Test
     public void testRoleConstraints() throws Exception {
+        System.out.println("Executing testRoleConstraints:");
 
         OWLClass ct = dataFactory.getOWLClass("ComplexRiehle", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -936,6 +1002,7 @@ public class CromMapperTest {
 
     @Test
     public void testRoleGroupMinMaxPre() throws Exception {
+        System.out.println("Executing testRoleGroupMinMaxPre:");
 
         OWLClass ct = dataFactory.getOWLClass("RGsMinMaxTest", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -950,6 +1017,7 @@ public class CromMapperTest {
 
     @Test
     public void testRoleGroupMin() throws Exception {
+        System.out.println("Executing testRoleGroupMin:");
 
         OWLClass ct = dataFactory.getOWLClass("RGsMinMaxTest", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -968,6 +1036,7 @@ public class CromMapperTest {
 
     @Test
     public void testRoleGroupMax() throws Exception {
+        System.out.println("Executing testRoleGroupMax:");
 
         OWLClass ct = dataFactory.getOWLClass("RGsMinMaxTetst", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -989,6 +1058,7 @@ public class CromMapperTest {
 
     @Test
     public void testRGOccurrenceMaxConstraints1Pre() throws Exception {
+        System.out.println("Executing testRGOccurrenceMaxConstraints1Pre:");
 
         OWLClass ct = dataFactory.getOWLClass("OccurrenceRGTest", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -1006,6 +1076,7 @@ public class CromMapperTest {
 
     @Test
     public void testRGOccurrenceMaxConstraints1() throws Exception {
+        System.out.println("Executing testRGOccurrenceMaxConstraints1:");
 
         OWLClass ct = dataFactory.getOWLClass("OccurrenceRGTest", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -1025,6 +1096,7 @@ public class CromMapperTest {
 
     @Test
     public void testRGOccurrenceMinConstraintsPre() throws Exception {
+        System.out.println("Executing testRGOccurrenceMinConstraintsPre:");
 
         OWLClass ct = dataFactory.getOWLClass("OccurrenceRGTest", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -1036,6 +1108,7 @@ public class CromMapperTest {
 
     @Test
     public void testRGOccurrenceMinConstraints() throws Exception {
+        System.out.println("Executing testRGOccurrenceMinConstraints:");
 
         OWLClass ct = dataFactory.getOWLClass("OccurrenceRGTest", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -1052,6 +1125,7 @@ public class CromMapperTest {
 
     @Test
     public void testInconsistentCT1() throws Exception {
+        System.out.println("Executing testInconsistentCT1:");
 
         OWLClass ct = dataFactory.getOWLClass("Inconsistent1", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
@@ -1076,7 +1150,7 @@ public class CromMapperTest {
 
         boolean inconsistent = !reasoner.isConsistent();
 
-        contextOntology.clear();
+        //contextOntology.clear();
         //reasoner.dispose();
 
         return inconsistent;
