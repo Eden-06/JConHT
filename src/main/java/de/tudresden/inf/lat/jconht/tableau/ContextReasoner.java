@@ -41,4 +41,9 @@ public class ContextReasoner extends Reasoner {
         this(new Configuration(), rootOntology);
     }
 
+//    @Override
+//    public void dispose() {
+//        super.dispose();
+//        m_tableau.clear();
+//    }
 }
