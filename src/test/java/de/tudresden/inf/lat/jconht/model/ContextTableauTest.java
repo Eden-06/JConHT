@@ -154,9 +154,45 @@ public class ContextTableauTest {
 
     }
 
+    @Test
+    public void testObjectOntologyConsistencyRecursion() throws Exception {
 
+        OWLClass meta1 = dataFactory.getOWLClass("cls:meta1");
+        OWLClass meta2 = dataFactory.getOWLClass("cls:meta2");
+        OWLClass meta3 = dataFactory.getOWLClass("cls:meta3");
 
+        OWLClass thing = dataFactory.getOWLThing();
 
+        OWLOntology rootOntology = manager.createOntology(Stream.of(
+                dataFactory.getOWLClassAssertionAxiom(thing, indA, getIsDefinedBy(meta1)),
+                dataFactory.getOWLClassAssertionAxiom(thing, indA, getIsDefinedBy(meta2)),
+                dataFactory.getOWLClassAssertionAxiom(thing, indA, getIsDefinedBy(meta3))
+        ));
+
+        ContextOntology contextOntology = new ContextOntology(rootOntology);
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+
+        assertTrue(reasoner.isConsistent());
+
+        reasoner.dispose();
+
+    }
+
+    @Test
+    public void testPowerset() throws Exception {
+
+        OWLClass meta1 = dataFactory.getOWLClass("cls:meta1");
+        OWLClass meta2 = dataFactory.getOWLClass("cls:meta2");
+        OWLClass meta3 = dataFactory.getOWLClass("cls:meta3");
+        OWLClass meta4 = dataFactory.getOWLClass("cls:meta4");
+        OWLClass meta5 = dataFactory.getOWLClass("cls:meta5");
+
+        Stream<OWLClass> set = Stream.of(meta1, meta2, meta3, meta4, meta5);
+
+        PowersetElement.powerset(set)
+                //.map(Object::getClass)
+                .forEach(System.out::println);
+    }
 
     // Helper functions
 

@@ -315,7 +315,7 @@ public class ContextOntologyTest {
 
         assertEquals("Test 1 for getting the object ontology:",
                 objectOntology.axioms().collect(Collectors.toSet()),
-                contextOntology.getObjectOntology(metaConcepts).axioms().collect(Collectors.toSet()));
+                contextOntology.getObjectOntology(metaConcepts.stream(),Stream.of()).axioms().collect(Collectors.toSet()));
     }
 
 
