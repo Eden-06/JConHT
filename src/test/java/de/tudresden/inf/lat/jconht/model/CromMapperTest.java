@@ -15,7 +15,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * This is a test class for testing the correctness of the ontology generator in FRaMED.
@@ -45,7 +46,8 @@ public class CromMapperTest {
 
     @Before
     public void setUp() throws Exception {
-
+        System.out.println("Setting up.");
+        //Thread.sleep(5000); // Needed for VisualVM Profiler
         manager = OWLManager.createOWLOntologyManager();
         dataFactory = manager.getOWLDataFactory();
         rosiPrefix = new DefaultPrefixManager("http://www.rosi-project.org/ontologies#");
@@ -75,15 +77,12 @@ public class CromMapperTest {
     }
 
 
-
-
-
     /*
-     General tests that must pass for every generated ontology.
-     */
-
+         General tests that must pass for every generated ontology.
+         */
     @Test
     public void testRawOntologyIsConsistent() throws Exception {
+        System.out.println("Executing testRawOntologyIsConsistent:");
 
         assertFalse(isInconsistent());
     }
@@ -685,7 +684,7 @@ public class CromMapperTest {
                 getMetaTypeAssertion(ct, compartment),
                 getLocalObjectTypeAssertion(roleType1, role1, compartment),
                 getObjectIsBottom(rt2Player, compartment)
-                ));
+        ));
     }
 
     @Test
@@ -769,7 +768,6 @@ public class CromMapperTest {
 
 
     // Tests for  role groups
-
 
 
     @Test
@@ -1064,18 +1062,6 @@ public class CromMapperTest {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     // Auxiliary methods used in the tests
 
     private boolean isInconsistent(Stream<OWLAxiom>... axioms) throws OWLOntologyCreationException {
@@ -1184,7 +1170,7 @@ public class CromMapperTest {
 
         OWLClass bottomNT = dataFactory.getOWLClass("BottomNT", rosiPrefix);
 
-        return Stream.of(dataFactory.getOWLSubClassOfAxiom(bottomNT,nothing,getObjectGlobal()));
+        return Stream.of(dataFactory.getOWLSubClassOfAxiom(bottomNT, nothing, getObjectGlobal()));
     }
 
     private OWLClass getAnonymousMetaConcept() {
