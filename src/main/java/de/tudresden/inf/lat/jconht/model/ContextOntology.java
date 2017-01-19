@@ -8,7 +8,7 @@ import org.semanticweb.owlapi.util.SimpleRenderer;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -34,6 +34,7 @@ public class ContextOntology {
     private final Predicate<IRI> iriIsRigid;
     private final Predicate<OWLEntity> entityIsOWLClass;
     private final Predicate<OWLEntity> entityIsOWLObjectProperty;
+    private final Predicate<OWLClass> classIsAbstractedMetaConcept;
     private OWLOntology metaOntology;
     private Map<OWLClass, OWLAxiom> objectAxiomsMap;
     //private Set<OWLClass> rigidClasses; // todo müssen wir rigid names wirklich als set speichern? welche Alternativen? siehe 10 Zeilen weiter unten
@@ -92,6 +93,8 @@ public class ContextOntology {
                         .filter(axiom -> axiom.getValue().equals(rigid))
                         .map(axiom -> axiom.getSubject().asIRI().get())
                         .anyMatch(iri1 -> iri1.equals(iri));
+        classIsAbstractedMetaConcept =
+                owlClass -> objectAxiomsMap.keySet().stream().anyMatch(metaConcept -> metaConcept.equals(owlClass));
 
         // Obtain meta ontology
         try {
@@ -148,6 +151,8 @@ public class ContextOntology {
     public void clear() {
         ontologyManager.removeOntology(metaOntology);
         //TODO probably more to do here
+
+        System.out.println("ContextOntology cleared.");
     }
 
     public Stream<OWLEntity> metaSignature() {
@@ -166,10 +171,10 @@ public class ContextOntology {
         // TODO Wenn object names öfter in objectAxiomMap vorkommen, stehen sie auch öfters in objectSignature. Eigentlich doof, aber ist uns das egal?
         return Stream.concat(
                 objectAxiomsMap.entrySet().stream()
-                .map(Map.Entry::getValue)
-                .flatMap(HasSignature::signature),
+                        .map(Map.Entry::getValue)
+                        .flatMap(HasSignature::signature),
                 globalObjectOntology().flatMap(HasSignature::signature)
-                );
+        );
     }
 
     public Stream<OWLClass> classesInObjectSignature() {
@@ -234,7 +239,7 @@ public class ContextOntology {
      * @return Stream of OWL classes that identify object axioms.
      */
     public Stream<OWLClass> outerAbstractedMetaConcepts() {
-        return objectAxiomsMap.keySet().stream().map(OWLClassExpression::asOWLClass);
+        return objectAxiomsMap.keySet().stream();
     }
 
     /**
@@ -264,31 +269,34 @@ public class ContextOntology {
     }
 
     /**
-     * This method returns an object ontology associated to the given set of meta classes.
+     * This method returns an object ontology associated to the given sets of meta classes.
      *
-     * @param metaClasses A set of meta classes.
+     * @param positiveMetaClasses A set of meta classes whose axioms must hold in the object ontology.
+     * @param negativeMetaClasses A set of meta classes whose axioms must not hold in the object ontology.
      * @return The associated object ontology.
      */
-    public OWLOntology getObjectOntology(Set<OWLClass> metaClasses) {
-
-        OWLOntology objectOntology = null;
+    public OWLOntology getObjectOntology(Stream<OWLClass> positiveMetaClasses, Stream<OWLClass> negativeMetaClasses) {
 
         try {
 
             //create the object ontology
-            objectOntology = ontologyManager.createOntology(Stream.concat(
+            return ontologyManager.createOntology(Stream.of(
                     globalObjectOntology(),
-                    objectAxiomsMap.entrySet().stream()
-                            .map(entry -> metaClasses.contains(entry.getKey()) ?
-                                    entry.getValue() :
-                                    entry.getValue().accept(new AxiomNegator(dataFactory)))));
+                    positiveMetaClasses
+                            .filter(classIsAbstractedMetaConcept)
+                            .map(objectAxiomsMap::get),
+                    negativeMetaClasses
+                            .filter(classIsAbstractedMetaConcept)
+                            .map(objectAxiomsMap::get)
+                            .map(axiom -> axiom.accept(new AxiomNegator(dataFactory))))
+                    .flatMap(Function.identity()));
 
         } catch (OWLOntologyCreationException e) {
 
             e.printStackTrace();
         }
 
-        return objectOntology;
+        return null;
     }
 
 
@@ -314,45 +322,68 @@ public class ContextOntology {
         builder.append("\n\n");
 
         // Obtain meta concepts that abbreviate object axioms.
-        builder.append("Meta signature: ");
-        builder.append(this.classesInMetaSignature().collect(Collectors.toSet()));
-        builder.append("\n");
-        builder.append("Meta concepts that identify object axioms:\n");
-        builder.append(outerAbstractedMetaConcepts()
+        builder.append("Classes in meta signature: ");
+        builder.append(classesInMetaSignature().count() + "\n");
+        builder.append(classesInMetaSignature().limit(5)
                 .map(OWLClass::toString)
                 .collect(Collectors.joining("\n")));
-        builder.append("\n\n");
+        builder.append(classesInMetaSignature().count() > 5 ? "\n...\n\n" : "\n\n");
+        builder.append("Meta concepts that identify object axioms: ");
+        builder.append(outerAbstractedMetaConcepts().count() + "\n");
+        builder.append(outerAbstractedMetaConcepts().limit(5)
+                .map(OWLClass::toString)
+                .collect(Collectors.joining("\n")));
+        builder.append(outerAbstractedMetaConcepts().count() > 5 ? "\n...\n\n" : "\n\n");
 
         // Obtain meta ontology.
-        builder.append("Meta Ontology:\n");
-        builder.append(metaOntology.axioms()
+        builder.append("Meta Ontology: ");
+        builder.append(metaOntology.axioms().count() + " axioms.\n");
+        builder.append(metaOntology.axioms().limit(10)
                 .sorted()
                 .map(OWLAxiom::toString)
                 .collect(Collectors.joining("\n")));
-        builder.append("\n\n");
+        builder.append(metaOntology.axioms().count() > 10 ? "\n...\n\n" : "\n\n");
 
         // Obtain object-axioms map.
-        builder.append("Object-axioms map:\n");
+        builder.append("Object-axioms map: ");
+        builder.append(objectAxiomsMap.size() + " entries.\n");
         builder.append(objectAxiomsMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
+                .limit(10)
                 .flatMap(entry -> Stream.of(entry.getKey().toString(), " -> ", entry.getValue().toString(), "\n"))
                 .collect(Collectors.joining()));
-        builder.append("\n");
+        builder.append(objectAxiomsMap.size() > 10 ? "...\n\n" : "\n");
+
 
         // Obtain global object-axioms.
-        builder.append("Global object-axioms:\n");
+        builder.append("Global object-axioms: ");
+        builder.append(globalObjectOntology().count() + "\n");
         builder.append(globalObjectOntology()
                 .sorted()
+                .limit(10)
                 .map(OWLAxiom::toString)
                 .collect(Collectors.joining("\n")));
-        builder.append("\n");
+        builder.append(globalObjectOntology().count() > 10 ? "...\n\n" : "\n");
 
         // Are there rigid names?
         builder.append("Rigid Names: ");
         builder.append(containsRigidNames());
         builder.append("\nRigid Concept Names: ");
-        builder.append(rigidClasses().collect(Collectors.toSet()));
-        builder.append("\n\n");
+        builder.append(rigidClasses().count() + "\n");
+        builder.append(rigidClasses()
+                .sorted()
+                .limit(10)
+                .map(OWLClass::toString)
+                .collect(Collectors.joining("\n")));
+        builder.append(rigidClasses().count() > 10 ? "...\n\n" : "\n\n");
+        builder.append("Rigid Role Names: ");
+        builder.append(rigidObjectProperties().count() + "\n");
+        builder.append(rigidObjectProperties()
+                .sorted()
+                .limit(10)
+                .map(OWLObjectProperty::toString)
+                .collect(Collectors.joining("\n")));
+        builder.append(rigidObjectProperties().count() > 10 ? "...\n" : "\n");
 
         return builder.toString();
     }
