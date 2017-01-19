@@ -3,8 +3,11 @@ package de.tudresden.inf.lat.jconht.tableau;
 import de.tudresden.inf.lat.jconht.model.ConceptConverterNormal;
 import de.tudresden.inf.lat.jconht.model.ContextOntology;
 import org.semanticweb.HermiT.Configuration;
+import org.semanticweb.HermiT.Prefixes;
+import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.HermiT.ReasonerFactory;
 import org.semanticweb.HermiT.model.Concept;
+import org.semanticweb.HermiT.model.DLPredicate;
 import org.semanticweb.HermiT.tableau.DependencySet;
 import org.semanticweb.HermiT.tableau.ExtensionTable;
 import org.semanticweb.HermiT.tableau.Node;
@@ -13,9 +16,12 @@ import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -27,6 +33,8 @@ import java.util.stream.StreamSupport;
  * @author Marcel Lippmann
  */
 public class ContextTableau extends Tableau {
+
+    private static final boolean debugOutput = false;
 
     private final Predicate<OWLClass> classIsAbstractedMetaConcept;
     private ContextOntology contextOntology;
@@ -115,121 +123,6 @@ public class ContextTableau extends Tableau {
         }
     }
 
-//    // TODO hier wird in jeder Rekursion komplett alles neu gerechnet, auch die positive concepts, die von vornherein
-//    // immer da sind. Bei HermiT gibt es das Konzept, der permanent ontology und der additional ontology, vielleicht
-//    // sollte man das mit nutzen
-//    private boolean isObjectOntologyConsistent(Set<OWLClass> positiveMetaConcepts, Stack<OWLClass> residualConcepts) {
-//
-//        System.out.println("---");
-//        System.out.println("positiveMetaConcepts = " + positiveMetaConcepts);
-//        System.out.println("residualConcepts = " + residualConcepts);
-//
-//        if (residualConcepts.isEmpty()) {
-//            OWLReasoner reasoner = reasonerFactory.createReasoner(
-//                    contextOntology.getObjectOntology(positiveMetaConcepts));
-//            Boolean result = reasoner.isConsistent();
-//
-//            System.out.println("result = " + result);
-//
-//            // Debug output
-//
-//            String str;
-//            Prefixes prefix = new Prefixes();
-//            prefix.declarePrefix("rosi:", "http://www.rosi-project.org/ontologies#");
-//            prefix.declarePrefix("int:", "internal:");
-//            prefix.declarePrefix("intNom:", "internal:nom#http://www.rosi-project.org/ontologies#");
-//            prefix.declareSemanticWebPrefixes();
-//
-//            if (result) {
-//
-//                System.out.println(String.join("", Collections.nCopies(100, "-")));
-//                System.out.println("--- object ontology for node ??? is consistent, following object model is found:");
-//                ExtensionTable binTable = ((Reasoner) reasoner).getTableau().getExtensionManager().getBinaryExtensionTable();
-//                ExtensionTable terTable = ((Reasoner) reasoner).getTableau().getExtensionManager().getTernaryExtensionTable();
-//
-//                for (Node node1 = ((Reasoner) reasoner).getTableau().getFirstTableauNode(); node1 != null; node1 = node1.getNextTableauNode()) {
-//                    for (int i = 0; binTable.getTupleObject(i, 1) != null; i++) {
-//                        if (binTable.getTupleObject(i, 1) == node1) {
-//                            str = ((Concept) binTable.getTupleObject(i, 0)).toString(prefix);
-//                            System.out.println(node1 + "   " + str);
-//                        }
-//
-//                    }
-//                    System.out.println();
-//                }
-//                for (int i = 0; terTable.getTupleObject(i, 1) != null; i++) {
-//                    str = ((DLPredicate) terTable.getTupleObject(i, 0)).toString(prefix);
-//                    System.out.println(terTable.getTupleObject(i, 1) + "   " + str + "   " + terTable.getTupleObject(i, 2));
-//                }
-//                System.out.println(String.join("", Collections.nCopies(100, "-")));
-//            }
-//
-//            // End debug output
-//
-//            reasoner.dispose();
-//            return result;
-//        }
-//
-//        OWLClass x = residualConcepts.pop();
-//        if (isObjectOntologyConsistent(positiveMetaConcepts, residualConcepts)) {
-//            return true;
-//        }
-//
-//        positiveMetaConcepts.add(x);
-//        return isObjectOntologyConsistent(positiveMetaConcepts, residualConcepts);
-//    }
-
-//    private boolean isObjectOntologyConsistent(Set<OWLClass> metaConcepts) {
-//
-////        System.out.println("---");
-////        System.out.println("union = " + metaConcepts);
-//
-//        OWLReasoner reasoner = reasonerFactory.createReasoner(
-//                contextOntology.getObjectOntology(metaConcepts));
-//        Boolean result = reasoner.isConsistent();
-//
-////        System.out.println("result = " + result);
-//
-//        // Debug output
-//
-//        String str;
-//        Prefixes prefix = new Prefixes();
-//        prefix.declarePrefix("rosi:", "http://www.rosi-project.org/ontologies#");
-//        prefix.declarePrefix("int:", "internal:");
-//        prefix.declarePrefix("intNom:", "internal:nom#http://www.rosi-project.org/ontologies#");
-//        prefix.declareSemanticWebPrefixes();
-//
-//        if (result) {
-//
-//            System.out.println(String.join("", Collections.nCopies(100, "-")));
-//            System.out.println("--- object ontology for node ??? is consistent, following object model is found:");
-//            ExtensionTable binTable = ((Reasoner) reasoner).getTableau().getExtensionManager().getBinaryExtensionTable();
-//            ExtensionTable terTable = ((Reasoner) reasoner).getTableau().getExtensionManager().getTernaryExtensionTable();
-//
-//            for (Node node1 = ((Reasoner) reasoner).getTableau().getFirstTableauNode(); node1 != null; node1 = node1.getNextTableauNode()) {
-//                for (int i = 0; binTable.getTupleObject(i, 1) != null; i++) {
-//                    if (binTable.getTupleObject(i, 1) == node1) {
-//                        str = ((Concept) binTable.getTupleObject(i, 0)).toString(prefix);
-//                        System.out.println(node1 + "   " + str);
-//                    }
-//
-//                }
-//                System.out.println();
-//            }
-//            for (int i = 0; terTable.getTupleObject(i, 1) != null; i++) {
-//                str = ((DLPredicate) terTable.getTupleObject(i, 0)).toString(prefix);
-//                System.out.println(terTable.getTupleObject(i, 1) + "   " + str + "   " + terTable.getTupleObject(i, 2));
-//            }
-//            System.out.println(String.join("", Collections.nCopies(100, "-")));
-//        }
-//
-//        // End debug output
-//
-//        reasoner.dispose();
-//        return result;
-//
-//    }
-
     /**
      * This method is used to check whether a given tableau node is inner consistent, i.e. the associated object
      * ontology is consistent.
@@ -239,41 +132,45 @@ public class ContextTableau extends Tableau {
      */
     private boolean isNodeInnerInconsistent(Node node) {
 
-        // TODO to be beatified!!!
-
-        //Set<OWLClass> positiveMetaConcepts = getPositiveMetaConceptsOfNode(node);
-        //Set<OWLClass> remainingConcepts = contextOntology.outerAbstractedMetaConcepts().collect(Collectors.toSet());
-        //remainingConcepts.removeAll(positiveMetaConcepts);
-
-        //negativeMetaConceptsOfNode(node).forEach(remainingConcepts::remove);
-
-        //System.out.println("positiveMetaConcepts: " + positiveMetaConcepts.size());
-
         OWLReasoner reasoner = reasonerFactory.createReasoner(
                 contextOntology.getObjectOntology(
                         positiveMetaConceptsOfNode(node),
                         negativeMetaConceptsOfNode(node)));
         boolean result = !reasoner.isConsistent();
 
-        //System.out.println("remainingConcepts: " + remainingConcepts.size());
+        if (debugOutput) {
 
-        //Stream<Set<OWLClass>> powerset = PowersetElement.powerset(remainingConcepts.stream());
+            String str;
+            Prefixes prefix = new Prefixes();
+            prefix.declarePrefix("rosi:", "http://www.rosi-project.org/ontologies#");
+            prefix.declarePrefix("int:", "internal:");
+            prefix.declarePrefix("intNom:", "internal:nom#http://www.rosi-project.org/ontologies#");
+            prefix.declareSemanticWebPrefixes();
 
-        //PowersetElement.powersetStream(remainingConcepts).map(entry -> entry.getSubset());
+            if (result) {
 
-        //boolean result = !powerset.anyMatch(set -> {
-        //    Set<OWLClass> union = new HashSet<>(positiveMetaConcepts);
-        //    union.addAll(set);
-        //    return isObjectOntologyConsistent(union);
-//            OWLReasoner reasoner = reasonerFactory.createReasoner(
-//                    contextOntology.getObjectOntology(union));
-//            Boolean res = reasoner.isConsistent();
-//
-//            return res;
-        //});
+                System.out.println(String.join("", Collections.nCopies(100, "-")));
+                System.out.println("--- object ontology for node ??? is consistent, following object model is found:");
+                ExtensionTable binTable = ((Reasoner) reasoner).getTableau().getExtensionManager().getBinaryExtensionTable();
+                ExtensionTable terTable = ((Reasoner) reasoner).getTableau().getExtensionManager().getTernaryExtensionTable();
 
-//        System.out.println("---");
-//        System.out.println("result = " + result);
+                for (Node node1 = ((Reasoner) reasoner).getTableau().getFirstTableauNode(); node1 != null; node1 = node1.getNextTableauNode()) {
+                    for (int i = 0; binTable.getTupleObject(i, 1) != null; i++) {
+                        if (binTable.getTupleObject(i, 1) == node1) {
+                            str = ((Concept) binTable.getTupleObject(i, 0)).toString(prefix);
+                            System.out.println(node1 + "   " + str);
+                        }
+
+                    }
+                    System.out.println();
+                }
+                for (int i = 0; terTable.getTupleObject(i, 1) != null; i++) {
+                    str = ((DLPredicate) terTable.getTupleObject(i, 0)).toString(prefix);
+                    System.out.println(terTable.getTupleObject(i, 1) + "   " + str + "   " + terTable.getTupleObject(i, 2));
+                }
+                System.out.println(String.join("", Collections.nCopies(100, "-")));
+            }
+        }
 
         return result;
     }
@@ -292,7 +189,18 @@ public class ContextTableau extends Tableau {
                 .filter(AsOWLClass::isOWLClass)
                 .map(AsOWLClass::asOWLClass)
                 .filter(classIsAbstractedMetaConcept);
-        //.collect(Collectors.toSet());
+    }
+
+    @Deprecated
+    private Set<OWLClass> getPositiveMetaConceptsOfNode(Node node) {
+        // TODO oder lieber streams zurückgeben?
+        return binaryTupleTableEntries()
+                .filter(entry -> entry.getNode().equals(node))
+                .map(BinaryTupleTableEntry::getClassExpression)
+                .filter(AsOWLClass::isOWLClass)
+                .map(AsOWLClass::asOWLClass)
+                .filter(classIsAbstractedMetaConcept)
+                .collect(Collectors.toSet());
     }
 
     /**
@@ -306,8 +214,20 @@ public class ContextTableau extends Tableau {
         return binaryTupleTableEntries()
                 .filter(entry -> entry.getNode().equals(node))
                 .map(BinaryTupleTableEntry::getClassExpression)
-                .filter(owlClassExpression -> owlClassExpression.getClassExpressionType().equals(ClassExpressionType.OBJECT_COMPLEMENT_OF))
+                .filter(owlClassExpression ->
+                        owlClassExpression.getClassExpressionType().equals(ClassExpressionType.OBJECT_COMPLEMENT_OF))
                 .flatMap(HasClassesInSignature::classesInSignature);
+    }
+
+    @Deprecated
+    private Set<OWLClass> getNegativeMetaConceptsOfNode(Node node) {
+        return binaryTupleTableEntries()
+                .filter(entry -> entry.getNode().equals(node))
+                .map(BinaryTupleTableEntry::getClassExpression)
+                .filter(owlClassExpression ->
+                        owlClassExpression.getClassExpressionType().equals(ClassExpressionType.OBJECT_COMPLEMENT_OF))
+                .flatMap(HasClassesInSignature::classesInSignature)
+                .collect(Collectors.toSet());
     }
 
 
