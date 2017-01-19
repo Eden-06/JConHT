@@ -1,12 +1,9 @@
 package de.tudresden.inf.lat.jconht.model;
 
-import org.semanticweb.owlapi.model.OWLClass;
-
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -18,18 +15,27 @@ import java.util.stream.StreamSupport;
  */
 
 
-
-
 // wird eigentlich nicht mehr verwendet und kann weg
-public class PowersetElement implements Iterator<PowersetElement>, Iterable<PowersetElement> {
+public class Powerset<T> implements Iterator<Powerset>, Iterable<Powerset> {
 
-    private LinkedList<OWLClass> input;
-    private Set<OWLClass> subset;
-    int currentIndex;
+    private int currentIndex;
+    private LinkedList<T> input;
+    private Set<T> subset;
 
-    public PowersetElement(LinkedList<OWLClass> input, int index) {
+    private Powerset(LinkedList<T> input, int index) {
         this.input = input;
         update(index);
+    }
+
+    public static <T> Stream<Powerset> powersetStream(LinkedList<T> input) {
+
+        return StreamSupport.stream(
+                new Powerset<>(input, 0).spliterator(),
+                false);
+    }
+
+    public static <T> Stream<Set<T>> powerset(LinkedList<T> input) {
+        return powersetStream(input).map(Powerset::getSubset);
     }
 
     private void update(int currentIndex) {
@@ -40,7 +46,7 @@ public class PowersetElement implements Iterator<PowersetElement>, Iterable<Powe
         }
         subset = new HashSet<>();
         for (int j = 0; j < input.size(); j++) {
-            if (binaryWord.charAt(j) == '0') {
+            if (binaryWord.charAt(j) == '1') {
                 subset.add(input.get(j));
             }
         }
@@ -53,13 +59,13 @@ public class PowersetElement implements Iterator<PowersetElement>, Iterable<Powe
     }
 
     @Override
-    public PowersetElement next() {
+    public Powerset next() {
 
         update(currentIndex + 1);
-        return new PowersetElement(input,currentIndex - 1);
+        return new Powerset<>(input, currentIndex - 1);
     }
 
-    public Set<OWLClass> getSubset() {
+    private Set<T> getSubset() {
 
         return subset;
     }
@@ -67,25 +73,18 @@ public class PowersetElement implements Iterator<PowersetElement>, Iterable<Powe
     @Override
     public String toString() {
 
-        return Integer.toBinaryString(currentIndex) + ": " + subset;
+        String binaryWord = Integer.toBinaryString(currentIndex);
+        while (binaryWord.length() < input.size()) {
+            binaryWord = "0" + binaryWord;
+        }
+
+        return currentIndex + " -> " + binaryWord + ": " + subset;
     }
 
     @Override
-    public Iterator<PowersetElement> iterator() {
+    public Iterator<Powerset> iterator() {
 
         return this;
-    }
-
-
-    private static Stream<PowersetElement> powersetStream(Stream<OWLClass> input) {
-
-        return StreamSupport.stream(
-                new PowersetElement(input.collect(Collectors.toCollection(LinkedList::new)), 0).spliterator(),
-                false);
-    }
-
-    public static Stream<Set<OWLClass>> powerset(Stream<OWLClass> inputStream) {
-        return powersetStream(inputStream).map(PowersetElement::getSubset);
     }
 
 }

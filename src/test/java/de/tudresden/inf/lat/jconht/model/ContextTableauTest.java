@@ -9,8 +9,12 @@ import org.semanticweb.owlapi.model.*;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static de.tudresden.inf.lat.jconht.model.Powerset.powerset;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -70,7 +74,6 @@ public class ContextTableauTest {
         // TODO
 
 
-
     }
 
     // This tests example 7 from the technical report about ALC-ALC.
@@ -116,6 +119,9 @@ public class ContextTableauTest {
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
 
         System.out.println("contextOntology = " + contextOntology);
+        System.out.println("---------------------------------------------------------------------");
+        System.out.println("reasoner.getTableau().getPermanentDLOntology() = " + reasoner.getTableau().getPermanentDLOntology());
+        System.out.println("---------------------------------------------------------------------");
 
         assertFalse(reasoner.isConsistent());
 
@@ -124,7 +130,7 @@ public class ContextTableauTest {
 
     @Test
     public void testBranchingWithNegatedAxioms() throws Exception {
-        // [¬A(a)] ⊓ [A(a)] ⊑ C, C(s)
+        // [¬A(a)] ⊓ [A(a)] ⊑ C, C(c), (∃r.C)(c)
 
         OWLObjectProperty rolR = dataFactory.getOWLObjectProperty("rol:R");
 
@@ -134,9 +140,8 @@ public class ContextTableauTest {
                 dataFactory.getOWLSubClassOfAxiom(
                         dataFactory.getOWLObjectIntersectionOf(A_notAa, A_Aa),
                         clsC),
-                dataFactory.getOWLClassAssertionAxiom(clsC,indC),
-                //dataFactory.getOWLClassAssertionAxiom(dataFactory.getOWLObjectComplementOf(A_Aa),indC),
-                dataFactory.getOWLClassAssertionAxiom(dataFactory.getOWLObjectSomeValuesFrom(rolR,clsC),indC),
+                dataFactory.getOWLClassAssertionAxiom(clsC, indC),
+                dataFactory.getOWLClassAssertionAxiom(dataFactory.getOWLObjectSomeValuesFrom(rolR, clsC), indC),
                 //
                 // object level
                 axiom_Aa,
@@ -186,12 +191,19 @@ public class ContextTableauTest {
         OWLClass meta3 = dataFactory.getOWLClass("cls:meta3");
         OWLClass meta4 = dataFactory.getOWLClass("cls:meta4");
         OWLClass meta5 = dataFactory.getOWLClass("cls:meta5");
+        LinkedList<OWLClass> owlClassList = Stream.of(meta1, meta2, meta3, meta4, meta5)
+                .collect(Collectors.toCollection(LinkedList::new));
+        powerset(owlClassList).forEach(System.out::println);
 
-        Stream<OWLClass> set = Stream.of(meta1, meta2, meta3, meta4, meta5);
 
-        PowersetElement.powerset(set)
-                //.map(Object::getClass)
-                .forEach(System.out::println);
+        LinkedList<Integer> intList = IntStream.range(1, 4).boxed().collect(Collectors.toCollection(LinkedList::new));
+        Stream<Powerset> ps = Powerset.powersetStream(intList);
+        ps.forEach(System.out::println);
+        powerset(intList).forEach(System.out::println);
+
+
+        LinkedList<Integer> intList2 = IntStream.range(1, 26).boxed().collect(Collectors.toCollection(LinkedList::new));
+        System.out.println(powerset(intList2).count());
     }
 
     // Helper functions
