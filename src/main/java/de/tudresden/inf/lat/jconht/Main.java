@@ -14,6 +14,8 @@ public class Main {
 
     // TODO refactor code of whole project, and tests accordingly
 
+    // TODO ordentliche clear und dispose Methoden wo notwendig
+
     public static void main(String[] args) {
 
         System.out.println("Welcome to JConHT!");
