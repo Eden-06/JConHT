@@ -80,11 +80,11 @@ public class ContextTableau extends Tableau {
 
             // Possibly a model for meta level is found.
 
-            System.out.println(contextOntology);
-
-            // Debug output
-            System.out.println("meta ontology is consistent, following context model is found:");
-            binaryTupleTableEntries().forEach(System.out::println);
+            if (debugOutput) {
+                System.out.println(contextOntology);
+                System.out.println("meta ontology is consistent, following context model is found:");
+                binaryTupleTableEntries().forEach(System.out::println);
+            }
 
             // Iterate over all tableau nodes and check whether one of them is not inner consistent.
             Optional<Node> clashNode = getTableauNodes()
@@ -105,9 +105,12 @@ public class ContextTableau extends Tableau {
                 // Tell HermiT to backtrack to the dependency set associated with clashNode.
                 getExtensionManager().setClash(lastEntryOfClashNode.getDependencySet());
 
+                if (debugOutput) {
+                    System.out.println("Doing backtracking because of node " + clashNode.get() + " with " +
+                            lastEntryOfClashNode.getDependencySet());
+                }
+
                 // Perform actual backtracking.
-                System.out.println("Doing backtracking because of node " + clashNode.get() + " with " +
-                        lastEntryOfClashNode.getDependencySet());
                 return runCalculus();
 
             } else {
