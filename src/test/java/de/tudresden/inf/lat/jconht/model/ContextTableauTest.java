@@ -34,6 +34,7 @@ public class ContextTableauTest {
     private OWLClass A_Aa;
     private OWLClass A_notAa;
     private OWLClass A_ASubBottom;
+    private OWLClass thing;
     private OWLIndividual indA;
     private OWLIndividual indC;
 
@@ -54,6 +55,7 @@ public class ContextTableauTest {
         indA = dataFactory.getOWLNamedIndividual("ind:a");
         indC = dataFactory.getOWLNamedIndividual("ind:c");
         A_ASubBottom = dataFactory.getOWLClass("cls:A_ASubBottom");
+        thing = dataFactory.getOWLThing();
 
         axiom_Aa = dataFactory.getOWLClassAssertionAxiom(clsA, indA, getIsDefinedBy(A_Aa));
         axiom_notAa = dataFactory.getOWLClassAssertionAxiom(dataFactory.getOWLObjectComplementOf(clsA), indA, getIsDefinedBy(A_notAa));
@@ -99,11 +101,11 @@ public class ContextTableauTest {
 
 
     @Test
-    public void testNegatedOAxioms() throws Exception {
+    public void testNegatedObjAxioms1() throws Exception {
         // (¬[A(a)] ⊓ ¬[¬A(a)])(s)
 
 
-        OWLOntology ontology1 = manager.createOntology(Stream.of(
+        OWLOntology rootOntology = manager.createOntology(Stream.of(
                 // meta level
                 dataFactory.getOWLClassAssertionAxiom(
                         dataFactory.getOWLObjectIntersectionOf(
@@ -115,7 +117,7 @@ public class ContextTableauTest {
                 axiom_notAa
         ));
 
-        ContextOntology contextOntology = new ContextOntology(ontology1);
+        ContextOntology contextOntology = new ContextOntology(rootOntology);
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
 
         System.out.println("contextOntology = " + contextOntology);
@@ -127,6 +129,41 @@ public class ContextTableauTest {
 
     }
 
+    @Test
+    public void testNegatedObjAxioms2() throws Exception {
+        System.out.println("Executing testNegatedAxioms2:");
+
+        // ¬C(s),  ⊤ ⊑ C ⊔ ¬[A(a)],  ⊤ ⊑ C ⊔ ¬[¬A(a)]
+        OWLOntology rootOntology = manager.createOntology(Stream.of(
+                // meta level
+                dataFactory.getOWLClassAssertionAxiom(
+                        dataFactory.getOWLObjectComplementOf(clsC), indC),
+                dataFactory.getOWLSubClassOfAxiom(
+                        thing,
+                        dataFactory.getOWLObjectUnionOf(
+                                clsC,
+                                dataFactory.getOWLObjectComplementOf(A_Aa))),
+                dataFactory.getOWLSubClassOfAxiom(
+                        thing,
+                        dataFactory.getOWLObjectUnionOf(
+                                clsC,
+                                dataFactory.getOWLObjectComplementOf(A_notAa))),
+                // object level
+                axiom_Aa,
+                axiom_notAa
+        ));
+
+        ContextOntology contextOntology = new ContextOntology(rootOntology);
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+
+        System.out.println("contextOntology = " + contextOntology);
+        System.out.println("---------------------------------------------------------------------");
+        System.out.println("reasoner.getTableau().getPermanentDLOntology() = " + reasoner.getTableau().getPermanentDLOntology());
+        System.out.println("---------------------------------------------------------------------");
+
+        assertFalse(reasoner.isConsistent());
+
+    }
 
     @Test
     public void testBranchingWithNegatedAxioms() throws Exception {
@@ -165,8 +202,6 @@ public class ContextTableauTest {
         OWLClass meta1 = dataFactory.getOWLClass("cls:meta1");
         OWLClass meta2 = dataFactory.getOWLClass("cls:meta2");
         OWLClass meta3 = dataFactory.getOWLClass("cls:meta3");
-
-        OWLClass thing = dataFactory.getOWLThing();
 
         OWLOntology rootOntology = manager.createOntology(Stream.of(
                 dataFactory.getOWLClassAssertionAxiom(thing, indA, getIsDefinedBy(meta1)),
