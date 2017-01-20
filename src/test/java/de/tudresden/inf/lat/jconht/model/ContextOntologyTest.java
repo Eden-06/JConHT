@@ -8,7 +8,6 @@ import org.semanticweb.owlapi.model.*;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -102,6 +101,7 @@ public class ContextOntologyTest {
                 isRigid(clsC),
                 isRigid(rolT)
         ));
+        
         // C ⊑ [A ⊑ ⊥] ⊓ [A(a)]  ∧  C(c)  ∧  [(B ⊓ ∃r.B)(a)](c)  ∧  [∃t.⊤ ⊑ A] ⊑ ∀s.C  ∧  ⊤ ⊑ [A ⊑ B]
         // meta1 := [A ⊑ ⊥]
         // meta2 := [A(a)]
@@ -128,7 +128,7 @@ public class ContextOntologyTest {
                 (OWLEntity) indA,
                 rolR, rolT);
 
-          // Debug output für Problem, dass clsA mehrmals in objSignature steht
+        // Debug output für Problem, dass clsA mehrmals in objSignature steht
 //        contextOntology.objectSignature().forEach(System.out::println);
 //        System.out.println();
 //        rootOntology.signature().forEach(System.out::println);
@@ -296,9 +296,9 @@ public class ContextOntologyTest {
     }
 
     @Test
-    public void testGetObjectOntology1() throws Exception {
+    public void testGetObjectOntologyAllMetaConceptsPositive() throws Exception {
 
-        OWLOntology objectOntology = manager.createOntology(Arrays.asList(
+        Set<OWLAxiom> objectOntologyAxiomSet = Stream.of(
                 dataFactory.getOWLSubClassOfAxiom(clsA, clsB3),
                 dataFactory.getOWLSubClassOfAxiom(clsA, dataFactory.getOWLNothing()),
                 dataFactory.getOWLClassAssertionAxiom(clsA, indA),
@@ -308,32 +308,111 @@ public class ContextOntologyTest {
                                 dataFactory.getOWLObjectSomeValuesFrom(rolR, clsB)),
                         indA),
                 dataFactory.getOWLSubClassOfAxiom(
-                        dataFactory.getOWLObjectSomeValuesFrom(rolT, dataFactory.getOWLThing()), clsA)));
+                        dataFactory.getOWLObjectSomeValuesFrom(rolT, dataFactory.getOWLThing()), clsA))
+                .collect(Collectors.toSet());
 
-        // TODO macht man das so?
-        Set<OWLClass> metaConcepts = new HashSet<>(Arrays.asList(meta1, meta2, meta3, meta4));
+        Stream<OWLClass> posMetaConcepts = Stream.of(meta1, meta2, meta3, meta4);
 
         assertEquals("Test 1 for getting the object ontology:",
-                objectOntology.axioms().collect(Collectors.toSet()),
-                contextOntology.getObjectOntology(metaConcepts.stream(),Stream.of()).axioms().collect(Collectors.toSet()));
+                objectOntologyAxiomSet,
+                contextOntology.getObjectOntology(posMetaConcepts, Stream.empty())
+                        .axioms().collect(Collectors.toSet()));
+    }
+
+    @Test
+    public void testGetObjectOntologySomeMetaConceptsPositive() throws Exception {
+
+        Set<OWLAxiom> objectOntologyAxiomSet = Stream.of(
+                dataFactory.getOWLSubClassOfAxiom(clsA, clsB3),
+                dataFactory.getOWLSubClassOfAxiom(clsA, dataFactory.getOWLNothing()),
+                dataFactory.getOWLClassAssertionAxiom(clsA, indA))
+                .collect(Collectors.toSet());
+
+        Stream<OWLClass> posMetaConcepts = Stream.of(meta1, meta2);
+
+        assertEquals("Test 2 for getting the object ontology:",
+                objectOntologyAxiomSet,
+                contextOntology.getObjectOntology(posMetaConcepts, Stream.empty())
+                        .axioms().collect(Collectors.toSet()));
+    }
+
+    @Test
+    public void testGetObjectOntologyOnlyNegativeMetaConcepts() throws Exception {
+
+        Set<OWLAxiom> objectOntologyAxiomSet = Stream.of(
+                dataFactory.getOWLSubClassOfAxiom(clsA, clsB3),
+                replaceAnonymousIndividual(
+                        dataFactory.getOWLSubClassOfAxiom(clsA, dataFactory.getOWLNothing())
+                                .accept(new AxiomNegator(dataFactory))))
+                .collect(Collectors.toSet());
+
+        Stream<OWLClass> negMetaConcepts = Stream.of(meta1);
+
+        assertEquals("Test 3 for getting the object ontology:",
+                objectOntologyAxiomSet,
+                contextOntology.getObjectOntology(Stream.empty(), negMetaConcepts)
+                        .axioms()
+                        .map(this::replaceAnonymousIndividual)
+                        .collect(Collectors.toSet()));
+    }
+
+    @Test
+    public void testGetObjectOntologyBothPositiveAndNegativeMetaConcepts() throws Exception {
+
+        Set<OWLAxiom> objectOntologyAxiomSet = Stream.of(
+                // global object axiom
+                dataFactory.getOWLSubClassOfAxiom(clsA, clsB3),
+                // positive meta axiom meta1 := [A ⊑ ⊥]
+                dataFactory.getOWLSubClassOfAxiom(clsA, dataFactory.getOWLNothing()),
+                // positive meta axiom meta2 := [A(a)]
+                dataFactory.getOWLClassAssertionAxiom(clsA, indA),
+                // negative meta axiom meta3 := [(B ⊓ ∃r.B)(a)].negated
+                replaceAnonymousIndividual(
+                        dataFactory.getOWLClassAssertionAxiom(
+                                dataFactory.getOWLObjectIntersectionOf(
+                                        clsB,
+                                        dataFactory.getOWLObjectSomeValuesFrom(rolR, clsB)),
+                                indA)
+                                .accept(new AxiomNegator(dataFactory))),
+                // negative meta axiom meta4 := [∃t.⊤ ⊑ A].negated
+                replaceAnonymousIndividual(
+                        dataFactory.getOWLSubClassOfAxiom(
+                                dataFactory.getOWLObjectSomeValuesFrom(rolT, dataFactory.getOWLThing()), clsA)
+                                .accept(new AxiomNegator(dataFactory))))
+                .collect(Collectors.toSet());
+
+        Stream<OWLClass> posMetaConcepts = Stream.of(meta1, meta2);
+        Stream<OWLClass> negMetaConcepts = Stream.of(meta3, meta4);
+
+        assertEquals("Test 4 for getting the object ontology:",
+                objectOntologyAxiomSet,
+                contextOntology.getObjectOntology(posMetaConcepts, negMetaConcepts)
+                        .axioms()
+                        .map(this::replaceAnonymousIndividual)
+                        .collect(Collectors.toSet()));
     }
 
 
-
     @Test
-    public void testGetObjectOntology2() throws Exception {
+    public void testClassAssertionWithAnonymousIndividuals() throws Exception {
         //TODO das hier sollte klappen, tut es aber nicht, wie könnte man das testen? Bräuchte ich um ObjOntology richtig zu testen
 
-        OWLAxiom axiom1 = dataFactory.getOWLClassAssertionAxiom(clsC,dataFactory.getOWLAnonymousIndividual());
-        OWLAxiom axiom2 = dataFactory.getOWLClassAssertionAxiom(clsC,dataFactory.getOWLAnonymousIndividual());
+//        OWLIndividual anonymousIndividual = dataFactory.getOWLNamedIndividual("OWLAnonymousIndividual");
+//        Function<OWLAxiom, OWLAxiom> replaceAnonymousIndividual = owlAxiom ->
+//                owlAxiom.isOfType(AxiomType.CLASS_ASSERTION) &&
+//                        ((OWLClassAssertionAxiom) owlAxiom).getIndividual().isAnonymous() ?
+//                        dataFactory.getOWLClassAssertionAxiom(
+//                                ((OWLClassAssertionAxiom) owlAxiom).getClassExpression(),
+//                                anonymousIndividual) :
+//                        owlAxiom;
 
-        axiom1.components().forEach(System.out::println);
-
-        System.out.println(axiom1.equalsIgnoreAnnotations(axiom2));
+        OWLAxiom axiom1 = dataFactory.getOWLClassAssertionAxiom(clsC, dataFactory.getOWLAnonymousIndividual());
+        OWLAxiom axiom2 = dataFactory.getOWLClassAssertionAxiom(clsC, dataFactory.getOWLAnonymousIndividual());
+        //OWLAxiom axiom3 = dataFactory.getOWLClassAssertionAxiom(clsC, indA);
 
         assertEquals(
-                dataFactory.getOWLClassAssertionAxiom(clsC,dataFactory.getOWLAnonymousIndividual()),
-                dataFactory.getOWLClassAssertionAxiom(clsC,dataFactory.getOWLAnonymousIndividual())
+                replaceAnonymousIndividual(axiom1),
+                replaceAnonymousIndividual(axiom2)
         );
     }
 
@@ -371,5 +450,15 @@ public class ContextOntologyTest {
     private Collection<OWLAnnotation> getObjectGlobal() {
 
         return Arrays.asList(dataFactory.getRDFSLabel("objectGlobal"));
+    }
+
+    private OWLAxiom replaceAnonymousIndividual(OWLAxiom owlAxiom) {
+
+        return owlAxiom.isOfType(AxiomType.CLASS_ASSERTION) &&
+                ((OWLClassAssertionAxiom) owlAxiom).getIndividual().isAnonymous() ?
+                dataFactory.getOWLClassAssertionAxiom(
+                        ((OWLClassAssertionAxiom) owlAxiom).getClassExpression(),
+                        dataFactory.getOWLNamedIndividual("testing:OWLAnonymousIndividual")) :
+                owlAxiom;
     }
 }

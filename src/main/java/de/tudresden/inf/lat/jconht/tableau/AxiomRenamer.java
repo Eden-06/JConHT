@@ -3,8 +3,9 @@ package de.tudresden.inf.lat.jconht.tableau;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.OWLEntityRenamer;
 
+import java.util.Collections;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -17,36 +18,48 @@ import java.util.stream.Stream;
 public class AxiomRenamer {
     private OWLOntologyManager manager;
     private OWLOntology ontologyToChange;
+    private Function<OWLEntity, Stream<OWLAxiom>> axiomsContainingThatEntity;
 
     public AxiomRenamer(OWLOntology ontologyToChange) {
         this.ontologyToChange = ontologyToChange;
         this.manager = ontologyToChange.getOWLOntologyManager();
+        axiomsContainingThatEntity = name -> ontologyToChange.axioms().filter(axiom -> axiom.containsEntityInSignature(name));
     }
 
 
-
-    //todo hier direkt Streams zu nehmen geht nicht, oder? Wäre es sinnvoller?
+    //todo hier direkt Streams zu nehmen geht nicht, oder? Wäre es sinnvoller? Schwierig, da ich flexible names mehrmals brauche
     public void rename(Set<OWLEntity> flexibleNames, int numberOfNewNames) {
 
         IntStream.rangeClosed(1, numberOfNewNames).parallel().forEach(i -> {
             try {
-                OWLOntology ontology = manager.createOntology(flexibleNames.stream().flatMap(name -> ontologyToChange.axioms().filter(axiom -> axiom.containsEntityInSignature(name))));
-                OWLEntityRenamer renamer = new OWLEntityRenamer(
-                        ontology.getOWLOntologyManager(),
-                        //todo hier brauch man eine Menge von Ontologien, kann man das einfacher erzeugen?
-                        Stream.of(ontology).collect(Collectors.toSet()));
-                flexibleNames.forEach(name -> manager.applyChanges(renamer.changeIRI(name, IRI.create(name.getIRI().getIRIString() + "_" + i))));
+                // This ontology is a subset of ontologyToChange that contains all axioms with any flexible name
+                OWLOntology ontology = manager.createOntology(flexibleNames.stream()
+                        .flatMap(axiomsContainingThatEntity));
+
+                OWLEntityRenamer renamer = new OWLEntityRenamer(manager, Collections.singleton(ontology));
+
+                flexibleNames.forEach(name ->
+                        manager.applyChanges(renamer.changeIRI(name, IRI.create(name.getIRI().getIRIString() + "_" + i))));
+
                 manager.addAxioms(ontologyToChange, ontology.axioms());
+
             } catch (OWLOntologyCreationException e) {
                 e.printStackTrace();
             }
         });
 
-        flexibleNames.forEach(name -> manager.removeAxioms(ontologyToChange, ontologyToChange.axioms().filter(axiom -> axiom.containsEntityInSignature(name))));
+        // Remove the original axioms containing flexible names from the ontology
+        flexibleNames.forEach(name ->
+                manager.removeAxioms(
+                        ontologyToChange,
+                        axiomsContainingThatEntity.apply(name)));
 
 
     }
 }
+
+//todo Im Constructor von OWLEntityRenamer braucht man eine Menge von Ontologien, kann man das einfacher/besser erzeugen?
+
 
 
 
