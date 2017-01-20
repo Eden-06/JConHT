@@ -15,3 +15,7 @@ How to change things in HermiT:
 Things changed in HermiT so far:
 
   1. Removed final modifier of class org.semanticweb.HermiT.tableau.Tableau
+
+Things that should be changed:
+
+  1. Add Visitor for Hermit concepts and roles.
