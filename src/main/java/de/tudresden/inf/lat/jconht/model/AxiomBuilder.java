@@ -5,6 +5,7 @@ import org.semanticweb.owlapi.model.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * This class ...
@@ -14,7 +15,9 @@ import java.util.Optional;
  */
 public class AxiomBuilder {
 
-    private final static String regexIRICompliant = "((^[A-Za-z0-9]+)|(^[⊥⊤]))";
+    private final static String regexConceptIRICompliant = "((^[A-Za-z0-9_]+)|(^[⊥⊤]))";
+    private final static String regexRoleIRICompliant = "((^[A-Za-z0-9]+)|(^[⊥⊤]))(\\^-1)?";
+    private final static String regexIndividualIRICompliant = "[A-Za-z0-9]+";
     private OWLDataFactory dataFactory;
     private String rolePrefix;
     private String individualPrefix;
@@ -46,33 +49,21 @@ public class AxiomBuilder {
         // Then it must be some assertion axiom
         if (string.matches(".*\\(.*\\)")) {
             int indexClose = string.lastIndexOf(')');
-            int indexOpen = indexOfOpeningParenthesis(string).orElseThrow(
-                    () -> new AxiomBuilderException("\nAssertion Axiom must have openening '(': "
+            int indexOpen = indexOfMatchingParenthesis(string, ')', '(', false).orElseThrow(
+                    () -> new AxiomBuilderException("\nAssertion Axiom must have matching openening '(': "
                             + string));
             String[] indString = string.substring(indexOpen + 1, indexClose).trim().split(",");
             if (indString.length == 1) {
                 // Concept assertion
-                if (!indString[0].trim().matches(regexIRICompliant)) {
-                    throw new AxiomBuilderException(
-                            "\nThis string is not allowed as IRI for the individual: " + indString[0]);
-                }
                 return dataFactory.getOWLClassAssertionAxiom(
                         stringToConcept(string.substring(0, indexOpen)),
-                        dataFactory.getOWLNamedIndividual(individualPrefix + indString[0].trim()));
+                        stringToIndividual(indString[0]));
             } else if (indString.length == 2) {
                 // Role assertion
-                if (!indString[0].trim().matches(regexIRICompliant)) {
-                    throw new AxiomBuilderException(
-                            "\nThis string is not allowed as IRI for the individual: " + indString[0]);
-                }
-                if (!indString[1].trim().matches(regexIRICompliant)) {
-                    throw new AxiomBuilderException(
-                            "\nThis string is not allowed as IRI for the individual: " + indString[1]);
-                }
                 return dataFactory.getOWLObjectPropertyAssertionAxiom(
                         stringToRole(string.substring(0, indexOpen)),
-                        dataFactory.getOWLNamedIndividual(individualPrefix + indString[0].trim()),
-                        dataFactory.getOWLNamedIndividual(individualPrefix + indString[1].trim()));
+                        stringToIndividual(indString[0]),
+                        stringToIndividual(indString[1]));
             } else {
                 throw new AxiomBuilderException(
                         "\nAn assertion axiom must have one or two individuals: " +
@@ -89,6 +80,16 @@ public class AxiomBuilder {
         return new OWLStringExpression(string).getClassExpression();
     }
 
+    public OWLIndividual stringToIndividual(String string) {
+
+        if (string.trim().matches(regexIndividualIRICompliant)) {
+            return dataFactory.getOWLNamedIndividual(individualPrefix, string.trim());
+        } else {
+            throw new AxiomBuilderException(
+                    "\nThis string is not allowed as IRI for an individual: " + string);
+        }
+    }
+
     public OWLObjectPropertyExpression stringToRole(String string) {
 
         string = string.trim();
@@ -97,10 +98,10 @@ public class AxiomBuilder {
             return stringToRole(string.substring(1, string.length() - 1));
         }
 
-        if (!string.matches(regexIRICompliant + "(\\^-1)?"))
-            throw new AxiomBuilderException("\nIllegal character in role construction.\n" +
-                    "A role name can consist of [a-zA-Z0-9]. Inverse roles are denoted by ^-1 at the end: " +
-                    string);
+        if (!string.matches(regexRoleIRICompliant))
+            throw new AxiomBuilderException(
+                    "\nThis string is not allowed as IRI for a role: " + string +
+                            "\nAllowed are [a-zA-Z0-9]. Inverse roles are denoted by ^-1 at the end\n");
 
         switch (string) {
             case "⊤":
@@ -130,54 +131,37 @@ public class AxiomBuilder {
     }
 
     /**
-     * Given a string that contains '(', this method returns the index of the corresponding ')'.
-     * If several '(' exist, it takes the first. If none exists, it returns Optional.empty().
+     * Given a string that contains parentheses, this method returns the index of the corresponding other parenthesis.
+     * If several  exist, it takes the first. If none exists, it returns Optional.empty().
      *
-     * @param str input string.
-     * @return index of closing parenthesis.
+     * @param str               input string.
+     * @param firstParenthesis  the opening parenthesis, could also be ')' if {@code forward} is false.
+     * @param secondParenthesis the corresponding closing parenthesis.
+     * @param forward           true, if search should go from start of string to the end.
+     * @return index of corresponding parenthesis.
      */
-    private Optional<Integer> indexOfClosingParenthesis(String str) {
+    private Optional<Integer> indexOfMatchingParenthesis(String str,
+                                                         char firstParenthesis,
+                                                         char secondParenthesis,
+                                                         boolean forward) {
 
-        int startIndex = str.indexOf("(");
+        int startIndex = forward ?
+                str.indexOf(firstParenthesis) :
+                str.lastIndexOf(firstParenthesis);
 
         if (startIndex == -1) {
             return Optional.empty();
         }
 
-        int openOnes = 0;
-        for (int i = startIndex; i < str.length(); i++) {
-            if (str.charAt(i) == '(') {
-                openOnes++;
-            } else if (str.charAt(i) == ')') {
-                openOnes--;
-            }
-            if (openOnes == 0) {
-                return Optional.of(i);
-            }
-        }
-        return Optional.empty();
-    }
-
-    /**
-     * Given a string that contains ')', this method returns the index of the corresponding '('.
-     * If several ')' exist, it takes the last. If none exists, it returns Optional.empty().
-     *
-     * @param str input string.
-     * @return index of opening parenthesis.
-     */
-    private Optional<Integer> indexOfOpeningParenthesis(String str) {
-
-        int startIndex = str.lastIndexOf(")");
-
-        if (startIndex == -1) {
-            return Optional.empty();
-        }
+        Predicate<Integer> finished = forward ?
+                i -> i < str.length() :
+                i -> i >= 0;
 
         int openOnes = 0;
-        for (int i = startIndex; i >= 0; i--) {
-            if (str.charAt(i) == ')') {
+        for (int i = startIndex; finished.test(i); i = i + (forward ? 1 : -1)) {
+            if (str.charAt(i) == firstParenthesis) {
                 openOnes++;
-            } else if (str.charAt(i) == '(') {
+            } else if (str.charAt(i) == secondParenthesis) {
                 openOnes--;
             }
             if (openOnes == 0) {
@@ -195,6 +179,7 @@ public class AxiomBuilder {
         PARENTHESIS("PARENTHESIS"),
         EXISTENTIAL("EXISTENTIAL RESTRICTION"),
         VALUE("VALUE RESTRICTION"),
+        NOMINAL("NOMINAL"),
         UNKNOWN("UNKNOWN");
 
         private String name;
@@ -218,24 +203,34 @@ public class AxiomBuilder {
 
 
         public OWLStringExpression(String input) {
-            this.string = input.trim();
-            this.left = Optional.empty();
-            this.right = Optional.empty();
-            this.type = OWLStringExpressionType.UNKNOWN;
+            string = input.trim();
+            left = Optional.empty();
+            right = Optional.empty();
 
             if (countMatches(string, "(") != countMatches(string, ")")) {
-                throw new AxiomBuilderException("Unbalanced parenthesis in: " + string);
+                throw new AxiomBuilderException("\nUnbalanced parenthesis (...) in: " + string);
             }
 
-            if (string.startsWith("(") && (indexOfClosingParenthesis(string).orElse(-1) == string.length() - 1)) {
+            if (countMatches(string, "{") != countMatches(string, "}")) {
+                throw new AxiomBuilderException("\nUnbalanced parenthesis {...} in: " + string);
+            }
+
+            if (string.startsWith("(") &&
+                    (indexOfMatchingParenthesis(string, '(', ')', true).orElse(-1) == string.length() - 1)) {
                 type = OWLStringExpressionType.PARENTHESIS;
+                return;
+            }
+
+            if (string.startsWith("{") &&
+                    (indexOfMatchingParenthesis(string, '{', '}', true).orElse(-1) == string.length() - 1)) {
+                type = OWLStringExpressionType.NOMINAL;
                 return;
             }
 
             String matcher = string;
             int indexOpen = matcher.indexOf("(");
             while (indexOpen != -1) {
-                int indexClose = indexOfClosingParenthesis(matcher).orElse(-1);
+                int indexClose = indexOfMatchingParenthesis(matcher, '(', ')', true).orElse(-1);
                 String replacer = matcher.substring(indexOpen, indexClose + 1);
                 matcher = matcher.replace(replacer, String.join("", Collections.nCopies(replacer.length(), "-")));
                 indexOpen = matcher.indexOf("(");
@@ -273,10 +268,8 @@ public class AxiomBuilder {
                 return;
             }
 
-            if (string.matches(regexIRICompliant)) {
-                type = OWLStringExpressionType.ATOMIC;
-                return;
-            }
+
+            type = OWLStringExpressionType.ATOMIC;
 
 
         }
@@ -284,8 +277,9 @@ public class AxiomBuilder {
         public OWLClassExpression getClassExpression() {
 
             if (type == OWLStringExpressionType.ATOMIC) {
-                if (!string.matches(regexIRICompliant)) {
-                    throw new AxiomBuilderException("Unhandled atomic concept string:" + string);
+                if (!string.matches(regexConceptIRICompliant)) {
+                    throw new AxiomBuilderException(
+                            "\nThis string is not allowed as IRI for an atomic concept: " + string);
                 }
                 if (string.equals("⊤")) {
                     return dataFactory.getOWLThing();
@@ -335,8 +329,13 @@ public class AxiomBuilder {
                 return stringToConcept(string.substring(1, string.length() - 1));
             }
 
-            throw new AxiomBuilderException("Unhandled OWLStringExpressionType\n"
-                    + "in getClassExpression(): " + type + " in " + string);
+            if (type == OWLStringExpressionType.NOMINAL) {
+                return dataFactory.getOWLObjectOneOf(stringToIndividual(
+                        string.substring(1, string.length() - 1)));
+            }
+
+            throw new AxiomBuilderException(
+                    "\nUnhandled OWLStringExpressionType in getClassExpression(): " + type + " in " + string);
         }
 
         @Override

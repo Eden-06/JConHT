@@ -28,6 +28,7 @@ public class ContextTableauTest {
 
     private OWLOntologyManager manager;
     private OWLDataFactory dataFactory;
+    private AxiomBuilder builder;
 
     private OWLClass clsC;
     private OWLClass clsA;
@@ -47,6 +48,7 @@ public class ContextTableauTest {
 
         manager = OWLManager.createOWLOntologyManager();
         dataFactory = manager.getOWLDataFactory();
+        builder = new AxiomBuilder(dataFactory);
 
         clsC = dataFactory.getOWLClass("cls:C");
         clsA = dataFactory.getOWLClass("cls:A");
@@ -151,6 +153,34 @@ public class ContextTableauTest {
                 // object level
                 axiom_Aa,
                 axiom_notAa
+        ));
+
+        ContextOntology contextOntology = new ContextOntology(rootOntology);
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+
+        System.out.println("contextOntology = " + contextOntology);
+        System.out.println("---------------------------------------------------------------------");
+        System.out.println("reasoner.getTableau().getPermanentDLOntology() = " + reasoner.getTableau().getPermanentDLOntology());
+        System.out.println("---------------------------------------------------------------------");
+
+        assertFalse(reasoner.isConsistent());
+
+    }
+
+    @Test
+    public void testNegatedObjAxiomsWithDuals() throws Exception {
+        System.out.println("Executing testNegatedObjAxiomsWithDuals:");
+
+        // ¬C(s), [A(a)] ⊑ C, ¬[¬A(a)] ⊑ C
+        OWLOntology rootOntology = manager.createOntology(Stream.of(
+                // meta level
+                builder.stringToOWLAxiom("¬C(c)"),
+                builder.stringToOWLAxiom("A_Aa ⊑ C"),
+                builder.stringToOWLAxiom("¬A_notAa ⊑ C"),
+                // object level
+                axiom_Aa,
+                axiom_notAa,
+                axiom_ASubBottom
         ));
 
         ContextOntology contextOntology = new ContextOntology(rootOntology);

@@ -35,6 +35,7 @@ public class AxiomBuilderTest {
     }
 
 
+
     @Test
     public void testValidSyntaxRoles() throws Exception {
         System.out.println("Executing testValidSyntaxRoles:");
@@ -90,12 +91,17 @@ public class AxiomBuilderTest {
         assertTrue("C",validConceptSyntax("C"));
         assertTrue("langerString",validConceptSyntax("langerString"));
         assertTrue("⊤",validConceptSyntax("⊤"));
+        assertTrue("C ⊓ ⊤",validConceptSyntax("C ⊓ ⊤"));
+
         assertFalse("⊥S",validConceptSyntax("⊥S"));
         assertFalse("S⊥",validConceptSyntax("S⊥"));
         assertFalse("langer:String",validConceptSyntax("langer:String"));
         assertFalse("⊥⊥",validConceptSyntax("⊥⊥"));
+        assertFalse("C ⊓ () ⊓ ⊤",validConceptSyntax("C ⊓ () ⊓ ⊤"));
         assertFalse("(S)^-1",validConceptSyntax("(S)^-1"));
         assertFalse("((S)",validConceptSyntax("((S)"));
+
+        assertTrue("{a}",validConceptSyntax("{a}"));
 
     }
 
@@ -179,6 +185,35 @@ public class AxiomBuilderTest {
                                         dataFactory.getOWLObjectIntersectionOf(
                                                 dataFactory.getOWLClass("cls:C"),
                                                 dataFactory.getOWLClass("cls:D"))))));
+
+        assertEquals("∃ plays^-1.{counter}",
+                builder.stringToConcept("∃ plays^-1.{counter}"),
+                dataFactory.getOWLObjectSomeValuesFrom(
+                        dataFactory.getOWLObjectInverseOf(
+                                dataFactory.getOWLObjectProperty("rol:plays")),
+                        dataFactory.getOWLObjectOneOf(
+                                dataFactory.getOWLNamedIndividual("ind:counter"))));
+    }
+
+    @Test
+    public void testValidSyntaxAxioms() throws Exception {
+        System.out.println("Executing testValidSyntaxRoles:");
+
+        assertTrue("C(a)",validAxiomSyntax("C(a)"));
+        assertFalse("C()",validAxiomSyntax("C()"));
+        assertFalse("C(⊥)",validAxiomSyntax("C(⊥)"));
+        assertFalse("((C   )(a)", validAxiomSyntax("((C   )(a)"));
+
+        assertTrue("r(a,b)", validAxiomSyntax("r(a,b)"));
+        assertFalse("r(a,b,c)", validAxiomSyntax("r(a,b,c)"));
+
+        assertTrue("⊥(a)",validAxiomSyntax("⊥(a)"));
+        assertTrue("⊥(a,b)",validAxiomSyntax("⊥(a,b)"));
+
+        assertTrue("C ⊑ D", validAxiomSyntax("C ⊑ D"));
+        assertFalse("C ⊑ D ⊑ E", validAxiomSyntax("C ⊑ D ⊑ E"));
+        assertFalse("C ⊑ A(a)", validAxiomSyntax("C ⊑ A(a)"));
+
     }
 
 
@@ -227,6 +262,7 @@ public class AxiomBuilderTest {
         try {
             builder.stringToRole(string);
         } catch (AxiomBuilderException e) {
+            System.out.println(e);
             return false;
         }
         return true;
@@ -236,10 +272,22 @@ public class AxiomBuilderTest {
         try {
             builder.stringToConcept(string);
         } catch (AxiomBuilderException e) {
+            System.out.println(e);
             return false;
         }
         return true;
     }
+
+    private boolean validAxiomSyntax(String string) {
+        try {
+            builder.stringToOWLAxiom(string);
+        } catch (AxiomBuilderException e) {
+            System.out.println(e);
+            return false;
+        }
+        return true;
+    }
+
 
 
 
