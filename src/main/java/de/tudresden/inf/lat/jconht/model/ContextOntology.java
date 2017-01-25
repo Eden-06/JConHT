@@ -6,8 +6,8 @@ import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.QNameShortFormProvider;
 import org.semanticweb.owlapi.util.SimpleRenderer;
 
+import java.util.LinkedList;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -144,26 +144,18 @@ public class ContextOntology {
         try {
             //TODO hier auch wieder die Frage: metaOntology 1x im Constructor erzeugen und speichern oder Methode die Stream zurück gibt?
             metaOntology = ontologyManager.createOntology(rootOntology.axioms()
-                    .filter(owlAxiom -> owlAxiom.isOfType(AxiomType.LOGICAL_AXIOM_TYPES))
-                    .filter(owlAxiom -> owlAxiom.annotations(isDefinedBy).count() == 0)
-                    .filter(owlAxiom -> owlAxiom.annotations(label)
-                            .filter(owlAnnotation -> owlAnnotation.getValue().equals(objectGlobal))
-                            .count() == 0)
-                    .collect(Collectors.toSet()));
-
-            // Create IRI for meta ontology
-            IRI metaIRI = IRI.create(rootOntology.getOntologyID().getOntologyIRI().orElse(IRI.create("")) + "_meta");
-            OWLOntologyID metaOntologyID = new OWLOntologyID(Optional.of(metaIRI), Optional.empty());
-
-            // Create the change that will set our version IRI
-            SetOntologyID setOntologyID = new SetOntologyID(metaOntology, metaOntologyID);
-
-            // Apply the change
-            ontologyManager.applyChange(setOntologyID);
+                            .filter(owlAxiom -> owlAxiom.isOfType(AxiomType.LOGICAL_AXIOM_TYPES))
+                            .filter(owlAxiom -> owlAxiom.annotations(isDefinedBy).count() == 0)
+                            .filter(owlAxiom -> owlAxiom.annotations(label)
+                                    .filter(owlAnnotation -> owlAnnotation.getValue().equals(objectGlobal))
+                                    .count() == 0)
+                            .collect(Collectors.toSet()),
+                    IRI.create(rootOntology.getOntologyID().getOntologyIRI().orElse(IRI.create("")) + "_meta"));
 
         } catch (OWLOntologyCreationException e) {
-
             e.printStackTrace();
+            throw new ContextOntologyException(
+                    "\nCould not construct meta ontology.");
         }
     }
 
