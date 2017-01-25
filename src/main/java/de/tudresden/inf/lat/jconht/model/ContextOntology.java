@@ -169,17 +169,44 @@ public class ContextOntology {
         objectAxiomsMap.putAll(objectAxiomsMap.entrySet().stream()
                 .map(owlClassOWLAxiomEntry -> owlClassOWLAxiomEntry)
                 .collect(Collectors.toMap(
-                        entry -> dataFactory.getOWLClass(
-                                entry.getKey().getIRI().getNamespace(),
-                                "DUAL." + entry.getKey().getIRI().getRemainder().orElse("")),
+                        entry -> getDualClass(entry.getKey()),
                         entry -> entry.getValue().accept(new AxiomNegator(dataFactory)))));
 
         // Step 2: Add dual axioms to meta ontology
         metaOntology.axioms()
-                .filter(owlAxiom -> owlAxiom.classesInSignature().anyMatch(classIsAbstractedMetaConcept));
+                // TODO hier fehlen Kommentare, das kann niemand lesen, und stimmt das überhaupt???
+                .filter(owlAxiom -> owlAxiom.classesInSignature().anyMatch(classIsAbstractedMetaConcept))
+                .flatMap(owlAxiom ->
+                        Powerset.powerset(owlAxiom
+                                .classesInSignature()
+                                .filter(classIsAbstractedMetaConcept).collect(Collectors.toCollection(LinkedList::new)))
+                                .map(conceptsToChange -> owlAxiom.accept(new AxiomToDual(dataFactory, conceptsToChange))));
 
     }
 
+    private OWLOntology asOntology(OWLAxiom owlAxiom) {
+
+        try {
+            return ontologyManager.createOntology(Stream.of(owlAxiom));
+        } catch (OWLOntologyCreationException e) {
+            e.printStackTrace();
+            throw new ContextOntologyException(
+                    "\nCould not construct ontology out of axiom.");
+        }
+    }
+
+    /**
+     * For an OWL class, create its "dual" class which is a new generated OWL class where the IRI has the
+     * same namespace, but the remainder is prefixed with "DUAL.".
+     *
+     * @param owlClass input OWL class
+     * @return the dual OWL class
+     */
+    private OWLClass getDualClass(OWLClass owlClass) {
+        return dataFactory.getOWLClass(
+                owlClass.getIRI().getNamespace(),
+                "DUAL." + owlClass.getIRI().getRemainder().orElse(""));
+    }
 
     public Stream<OWLEntity> metaSignature() {
         return this.getMetaOntology().signature();
