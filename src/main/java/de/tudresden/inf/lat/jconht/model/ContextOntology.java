@@ -97,30 +97,7 @@ public class ContextOntology {
                 owlClass -> objectAxiomsMap.keySet().stream().anyMatch(metaConcept -> metaConcept.equals(owlClass));
 
         // Obtain meta ontology
-        try {
-            //TODO hier auch wieder die Frage: metaOntology 1x im Constructor erzeugen und speichern oder Methode die Stream zurück gibt?
-            metaOntology = ontologyManager.createOntology(rootOntology.axioms()
-                    .filter(owlAxiom -> owlAxiom.isOfType(AxiomType.LOGICAL_AXIOM_TYPES))
-                    .filter(owlAxiom -> owlAxiom.annotations(isDefinedBy).count() == 0)
-                    .filter(owlAxiom -> owlAxiom.annotations(label)
-                            .filter(owlAnnotation -> owlAnnotation.getValue().equals(objectGlobal))
-                            .count() == 0)
-                    .collect(Collectors.toSet()));
-
-            // Create IRI for meta ontology
-            IRI metaIRI = IRI.create(rootOntology.getOntologyID().getOntologyIRI().orElse(IRI.create("")) + "_meta");
-            OWLOntologyID metaOntologyID = new OWLOntologyID(Optional.of(metaIRI), Optional.empty());
-
-            // Create the change that will set our version IRI
-            SetOntologyID setOntologyID = new SetOntologyID(metaOntology, metaOntologyID);
-
-            // Apply the change
-            ontologyManager.applyChange(setOntologyID);
-
-        } catch (OWLOntologyCreationException e) {
-
-            e.printStackTrace();
-        }
+        generateMetaOntology();
 
 
         // Set renderer s.t. IRIs are shortened.
@@ -146,6 +123,10 @@ public class ContextOntology {
                                         // This get() does not fail, because values are always IRIs ;-).
                                         .get()),
                         owlAxiom -> owlAxiom.getAxiomWithoutAnnotations()));
+
+        // Add dual axioms to meta Ontology
+        addDualAxiomsToMetaOntology();
+
     }
 
     public void clear() {
@@ -154,6 +135,59 @@ public class ContextOntology {
 
         System.out.println("ContextOntology cleared.");
     }
+
+    /**
+     * This method generates the meta ontology.
+     */
+    private void generateMetaOntology() {
+
+        try {
+            //TODO hier auch wieder die Frage: metaOntology 1x im Constructor erzeugen und speichern oder Methode die Stream zurück gibt?
+            metaOntology = ontologyManager.createOntology(rootOntology.axioms()
+                    .filter(owlAxiom -> owlAxiom.isOfType(AxiomType.LOGICAL_AXIOM_TYPES))
+                    .filter(owlAxiom -> owlAxiom.annotations(isDefinedBy).count() == 0)
+                    .filter(owlAxiom -> owlAxiom.annotations(label)
+                            .filter(owlAnnotation -> owlAnnotation.getValue().equals(objectGlobal))
+                            .count() == 0)
+                    .collect(Collectors.toSet()));
+
+            // Create IRI for meta ontology
+            IRI metaIRI = IRI.create(rootOntology.getOntologyID().getOntologyIRI().orElse(IRI.create("")) + "_meta");
+            OWLOntologyID metaOntologyID = new OWLOntologyID(Optional.of(metaIRI), Optional.empty());
+
+            // Create the change that will set our version IRI
+            SetOntologyID setOntologyID = new SetOntologyID(metaOntology, metaOntologyID);
+
+            // Apply the change
+            ontologyManager.applyChange(setOntologyID);
+
+        } catch (OWLOntologyCreationException e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * This method adds dual axioms (e.g. ¬A_¬α ⊑ C for A_α ⊑ C) to the meta ontology. It is important that this
+     * method is called after the initialisation of the objectAxiomMap since it uses outerAbstractedMetaConcepts()
+     */
+    private void addDualAxiomsToMetaOntology() {
+
+        // Step 1: Add negated Axioms to objectAxiomMap
+        objectAxiomsMap.putAll(objectAxiomsMap.entrySet().stream()
+                .map(owlClassOWLAxiomEntry -> owlClassOWLAxiomEntry)
+                .collect(Collectors.toMap(
+                        entry -> dataFactory.getOWLClass(
+                                entry.getKey().getIRI().getNamespace(),
+                                "DUAL." + entry.getKey().getIRI().getRemainder().orElse("")),
+                        entry -> entry.getValue().accept(new AxiomNegator(dataFactory)))));
+
+        // Step 2: Add dual axioms to meta ontology
+        metaOntology.axioms()
+                .filter(owlAxiom -> owlAxiom.classesInSignature().anyMatch(classIsAbstractedMetaConcept));
+
+    }
+
 
     public Stream<OWLEntity> metaSignature() {
         return this.getMetaOntology().signature();
@@ -239,6 +273,9 @@ public class ContextOntology {
      * @return Stream of OWL classes that identify object axioms.
      */
     public Stream<OWLClass> outerAbstractedMetaConcepts() {
+        if (objectAxiomsMap == null)
+            throw new ContextOntologyException(
+                    "\nouterAbstractedMetaConcepts() cannot be called until objectAxiomMap is initialized.");
         return objectAxiomsMap.keySet().stream();
     }
 
