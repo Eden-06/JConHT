@@ -18,11 +18,11 @@ import java.util.stream.StreamSupport;
 // wird eigentlich nicht mehr verwendet und kann weg
 public class Powerset<T> implements Iterator<Powerset>, Iterable<Powerset> {
 
-    private int currentIndex;
+    private long currentIndex;
     private LinkedList<T> input;
     private Set<T> subset;
 
-    private Powerset(LinkedList<T> input, int index) {
+    private Powerset(LinkedList<T> input, long index) {
         this.input = input;
         update(index);
     }
@@ -38,15 +38,11 @@ public class Powerset<T> implements Iterator<Powerset>, Iterable<Powerset> {
         return powersetStream(input).map(Powerset::getSubset);
     }
 
-    private void update(int currentIndex) {
+    private void update(long currentIndex) {
         this.currentIndex = currentIndex;
-        String binaryWord = Integer.toBinaryString(currentIndex);
-        while (binaryWord.length() < input.size()) {
-            binaryWord = "0" + binaryWord;
-        }
         subset = new HashSet<>();
         for (int j = 0; j < input.size(); j++) {
-            if (binaryWord.charAt(j) == '1') {
+            if ((currentIndex & (1L << j)) != 0) {
                 subset.add(input.get(j));
             }
         }
@@ -54,8 +50,8 @@ public class Powerset<T> implements Iterator<Powerset>, Iterable<Powerset> {
 
     @Override
     public boolean hasNext() {
-
-        return currentIndex < Math.pow(2, input.size());
+        
+        return ((currentIndex & (1L << input.size())) == 0);
     }
 
     @Override
@@ -73,7 +69,7 @@ public class Powerset<T> implements Iterator<Powerset>, Iterable<Powerset> {
     @Override
     public String toString() {
 
-        String binaryWord = Integer.toBinaryString(currentIndex);
+        String binaryWord = Long.toBinaryString(currentIndex);
         while (binaryWord.length() < input.size()) {
             binaryWord = "0" + binaryWord;
         }
