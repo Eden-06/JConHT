@@ -372,6 +372,45 @@ public class ContextOntology {
     }
 
 
+    public String getStatistics() {
+
+        StringBuilder builder = new StringBuilder();
+
+        // Meta Ontology
+        builder.append("Meta Ontology IRI: ");
+        builder.append(metaOntology.getOntologyID().getOntologyIRI()
+                .map(IRI::toString)
+                .orElse("no IRI specified"));
+        builder.append("\n");
+        builder.append("Meta axioms: ");
+        builder.append(metaOntology.axioms().count());
+        builder.append("\n");
+        builder.append("Meta concepts / roles / individuals: ");
+        builder.append(metaOntology.classesInSignature().count());
+        builder.append(" / ");
+        builder.append(metaOntology.objectPropertiesInSignature().count());
+        builder.append(" / ");
+        builder.append(metaOntology.individualsInSignature().count());
+        builder.append("\n");
+        builder.append("Outer abstracted meta concepts: ");
+        builder.append(objectAxiomsMap.keySet().size());
+        builder.append("\n\n");
+
+        // Global Object Ontology
+        builder.append("Object concepts / roles / individuals in Global object ontology: ");
+        builder.append(globalObjectOntology().flatMap(HasClassesInSignature::classesInSignature)
+                .collect(Collectors.toSet()).size());
+        builder.append(" / ");
+        builder.append(globalObjectOntology().flatMap(HasObjectPropertiesInSignature::objectPropertiesInSignature)
+                .collect(Collectors.toSet()).size());
+        builder.append(" / ");
+        builder.append(globalObjectOntology().flatMap(HasIndividualsInSignature::individualsInSignature)
+                .collect(Collectors.toSet()).size());
+
+
+        return builder.toString();
+    }
+
     @Override
     public String toString() {
 

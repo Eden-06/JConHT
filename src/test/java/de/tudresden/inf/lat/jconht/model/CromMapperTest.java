@@ -96,7 +96,12 @@ public class CromMapperTest {
     public void testRawOntologyIsConsistent() throws Exception {
         System.out.println("Executing testRawOntologyIsConsistent: ");
 
-        assertFalse(isInconsistent());
+        ContextOntology contextOntology = new ContextOntology(rawOntology);
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+
+        System.out.println(contextOntology.getStatistics());
+
+        assertTrue(reasoner.isConsistent());
     }
 
     @Test
