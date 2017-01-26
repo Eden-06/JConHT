@@ -173,14 +173,21 @@ public class ContextOntology {
                         entry -> entry.getValue().accept(new AxiomNegator(dataFactory)))));
 
         // Step 2: Add dual axioms to meta ontology
-        metaOntology.axioms()
-                // TODO hier fehlen Kommentare, das kann niemand lesen, und stimmt das überhaupt???
+        ontologyManager.addAxioms(metaOntology, metaOntology.axioms()
+                // TODO Does it do what I think it does???
+                // only consider axioms that contain abstracted meta concepts
                 .filter(owlAxiom -> owlAxiom.classesInSignature().anyMatch(classIsAbstractedMetaConcept))
+                // map each axiom to a set of axioms, each constructed by replacing a subset of the abstracted concepts
+                // with its dual concept.
                 .flatMap(owlAxiom ->
                         Powerset.powerset(owlAxiom
                                 .classesInSignature()
-                                .filter(classIsAbstractedMetaConcept).collect(Collectors.toCollection(LinkedList::new)))
-                                .map(conceptsToChange -> owlAxiom.accept(new AxiomToDual(dataFactory, conceptsToChange))));
+                                .filter(classIsAbstractedMetaConcept)
+                                .collect(Collectors.toCollection(LinkedList::new)))
+                                // filter out the empty set, since that doesn't change the axiom; and the original
+                                // axiom is already in the meta ontology
+                                .filter(set -> !set.isEmpty())
+                                .map(conceptsToChange -> owlAxiom.accept(new AxiomToDual(dataFactory, conceptsToChange)))));
 
     }
 

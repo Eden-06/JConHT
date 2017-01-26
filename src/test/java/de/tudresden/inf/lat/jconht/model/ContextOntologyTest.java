@@ -8,6 +8,7 @@ import org.semanticweb.owlapi.model.*;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,6 +33,7 @@ public class ContextOntologyTest {
 
     private OWLOntology rootOntology;
     private ContextOntology contextOntology;
+    private AxiomBuilder builder;
 
     private OWLClass clsC;
     private OWLClass clsA;
@@ -39,9 +41,11 @@ public class ContextOntologyTest {
     private OWLClass meta2;
     private OWLClass meta3;
     private OWLClass meta4;
+    private OWLClass meta5;
     private OWLClass clsB;
     private OWLClass clsB2;
     private OWLClass clsB3;
+    private OWLClass thing;
     private OWLIndividual indA;
     private OWLIndividual indB;
     private OWLIndividual indC;
@@ -49,12 +53,15 @@ public class ContextOntologyTest {
     private OWLObjectProperty rolS;
     private OWLObjectProperty rolT;
 
+    private Set<OWLClass> abstractedMetaConcepts;
+
 
     @Before
     public void setUp() throws Exception {
 
         manager = OWLManager.createOWLOntologyManager();
         dataFactory = manager.getOWLDataFactory();
+        builder = new AxiomBuilder(dataFactory);
 
         clsC = dataFactory.getOWLClass("cls:C");
         clsA = dataFactory.getOWLClass("cls:A");
@@ -62,9 +69,11 @@ public class ContextOntologyTest {
         meta2 = dataFactory.getOWLClass("cls:meta2");
         meta3 = dataFactory.getOWLClass("cls:meta3");
         meta4 = dataFactory.getOWLClass("cls:meta4");
+        meta5 = dataFactory.getOWLClass("cls:meta5");
         clsB = dataFactory.getOWLClass("cls:B");
         clsB2 = dataFactory.getOWLClass("cls:B2");
         clsB3 = dataFactory.getOWLClass("cls:B3");
+        thing = dataFactory.getOWLThing();
         indA = dataFactory.getOWLNamedIndividual("ind:a");
         indB = dataFactory.getOWLNamedIndividual("ind:b");
         indC = dataFactory.getOWLNamedIndividual("ind:c");
@@ -72,11 +81,14 @@ public class ContextOntologyTest {
         rolS = dataFactory.getOWLObjectProperty("rol:S");
         rolT = dataFactory.getOWLObjectProperty("rol:T");
 
+        abstractedMetaConcepts = new HashSet<>(Arrays.asList(meta1, meta2, meta3, meta4, meta5));
+
         rootOntology = manager.createOntology(Arrays.asList(
-                dataFactory.getOWLSubClassOfAxiom(clsC, dataFactory.getOWLObjectIntersectionOf(meta1, meta2)),
-                dataFactory.getOWLClassAssertionAxiom(clsC, indC),
-                dataFactory.getOWLClassAssertionAxiom(meta3, indC),
-                dataFactory.getOWLSubClassOfAxiom(meta4, dataFactory.getOWLObjectAllValuesFrom(rolS, clsC)),
+                builder.stringToOWLAxiom("C ⊑ meta1 ⊓ meta2"),
+                builder.stringToOWLAxiom("C(c)"),
+                builder.stringToOWLAxiom("(meta3)(c)"),
+                builder.stringToOWLAxiom("meta4 ⊑ ∀S.C"),
+                builder.stringToOWLAxiom("⊤ ⊑ meta5"),
                 //
                 // global object ontology
                 dataFactory.getOWLSubClassOfAxiom(clsA, clsB3, getObjectGlobal()),
@@ -94,6 +106,7 @@ public class ContextOntologyTest {
                         dataFactory.getOWLObjectSomeValuesFrom(rolT, dataFactory.getOWLThing()),
                         clsA,
                         getIsDefinedBy(meta4)),
+                dataFactory.getOWLSubClassOfAxiom(clsA, clsB, getIsDefinedBy(meta5)),
                 //
                 // rigid names
                 isRigid(clsB),
@@ -101,12 +114,13 @@ public class ContextOntologyTest {
                 isRigid(clsC),
                 isRigid(rolT)
         ));
-        
-        // C ⊑ [A ⊑ ⊥] ⊓ [A(a)]  ∧  C(c)  ∧  [(B ⊓ ∃r.B)(a)](c)  ∧  [∃t.⊤ ⊑ A] ⊑ ∀s.C  ∧  ⊤ ⊑ [A ⊑ B]
+
+        // C ⊑ [A ⊑ ⊥] ⊓ [A(a)],  C(c),  [(B ⊓ ∃r.B)(a)](c),  [∃t.⊤ ⊑ A] ⊑ ∀s.C,  ⊤ ⊑ [A ⊑ B]
         // meta1 := [A ⊑ ⊥]
         // meta2 := [A(a)]
         // meta3 := [(B ⊓ ∃r.B)(a)]
         // meta4 := [∃t.⊤ ⊑ A]
+        // meta5 := [A ⊑ B]
         contextOntology = new ContextOntology(rootOntology);
     }
 
@@ -167,24 +181,25 @@ public class ContextOntologyTest {
     @Test
     public void testMetaSignature() throws Exception {
 
-        Stream<OWLEntity> streamOfMetaSignature = Stream.of(
-                clsC, meta1, meta2, meta3, meta4,
-                (OWLEntity) indC,
-                rolS);
+        Set<OWLClass> classSet = new HashSet<>(Arrays.asList(clsC, thing, meta1, meta2, meta3, meta4, meta5));
+        addDualSetTo(classSet, abstractedMetaConcepts);
+        Set<OWLEntity> metaSignatureSet = new HashSet<>(Arrays.asList((OWLEntity) indC, rolS));
+        metaSignatureSet.addAll(classSet);
+
 
         assertEquals("Test for meta signature",
-                streamOfMetaSignature.collect(Collectors.toSet()),
+                metaSignatureSet,
                 contextOntology.metaSignature().collect(Collectors.toSet()));
     }
 
     @Test
     public void testMetaClassesInSignature() throws Exception {
 
-        Stream<OWLEntity> streamOfMetaClassesInSignature = Stream.of(
-                clsC, meta1, meta2, meta3, meta4);
+        Set<OWLClass> conceptSet = new HashSet<>(Arrays.asList(clsC, thing, meta1, meta2, meta3, meta4, meta5));
+        addDualSetTo(conceptSet, abstractedMetaConcepts);
 
         assertEquals("Test for classes in meta signature",
-                streamOfMetaClassesInSignature.collect(Collectors.toSet()),
+                conceptSet,
                 contextOntology.classesInMetaSignature().collect(Collectors.toSet()));
     }
 
@@ -256,11 +271,11 @@ public class ContextOntologyTest {
     @Test
     public void testOuterAbstractedMetaConcepts() throws Exception {
 
-        Stream<OWLEntity> streamOfAbstractedMetaConcept = Stream.of(
-                meta1, meta2, meta3, meta4);
+        Set<OWLClass> conceptSet = Stream.of(meta1, meta2, meta3, meta4, meta5).collect(Collectors.toSet());
+        addDualSetTo(conceptSet, abstractedMetaConcepts);
 
         assertEquals("Test for outer abstracted meta concepts",
-                streamOfAbstractedMetaConcept.collect(Collectors.toSet()),
+                conceptSet,
                 contextOntology.outerAbstractedMetaConcepts().collect(Collectors.toSet()));
     }
 
@@ -282,13 +297,25 @@ public class ContextOntologyTest {
 
     @Test
     public void testMetaOntology() throws Exception {
-        // TODO
 
         OWLOntology metaOntology = manager.createOntology(Arrays.asList(
-                dataFactory.getOWLSubClassOfAxiom(clsC, dataFactory.getOWLObjectIntersectionOf(meta1, meta2)),
-                dataFactory.getOWLClassAssertionAxiom(clsC, indC),
-                dataFactory.getOWLClassAssertionAxiom(meta3, indC),
-                dataFactory.getOWLSubClassOfAxiom(meta4, dataFactory.getOWLObjectAllValuesFrom(rolS, clsC))));
+                builder.stringToOWLAxiom("C ⊑ meta1 ⊓ meta2"),
+                builder.stringToOWLAxiom("C ⊑ meta1 ⊓ meta2")
+                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Arrays.asList(meta1)))),
+                builder.stringToOWLAxiom("C ⊑ meta1 ⊓ meta2")
+                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Arrays.asList(meta2)))),
+                builder.stringToOWLAxiom("C ⊑ meta1 ⊓ meta2")
+                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Arrays.asList(meta1, meta2)))),
+                builder.stringToOWLAxiom("C(c)"),
+                builder.stringToOWLAxiom("(meta3)(c)"),
+                builder.stringToOWLAxiom("(meta3)(c)")
+                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Arrays.asList(meta3)))),
+                builder.stringToOWLAxiom("meta4 ⊑ ∀S.C"),
+                builder.stringToOWLAxiom("meta4 ⊑ ∀S.C")
+                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Arrays.asList(meta4)))),
+                builder.stringToOWLAxiom("⊤ ⊑ meta5"),
+                builder.stringToOWLAxiom("⊤ ⊑ meta5")
+                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Arrays.asList(meta5))))));
 
         assertEquals("Test for getting the meta ontology:",
                 metaOntology.axioms().collect(Collectors.toSet()),
@@ -460,5 +487,17 @@ public class ContextOntologyTest {
                         ((OWLClassAssertionAxiom) owlAxiom).getClassExpression(),
                         dataFactory.getOWLNamedIndividual("testing:OWLAnonymousIndividual")) :
                 owlAxiom;
+    }
+
+    private void addDualSetTo(Set<OWLClass> setToModify, Set<OWLClass> abstractedMetaConcepts) {
+
+        Set<OWLClass> dualSet = setToModify.stream()
+                .map(concept -> concept.accept(new ConceptToDual(dataFactory, abstractedMetaConcepts)))
+                .map(elem -> (elem instanceof OWLObjectComplementOf) ?
+                        ((OWLObjectComplementOf) elem).getOperand().asOWLClass() :
+                        (OWLClass) elem)
+                .collect(Collectors.toSet());
+        setToModify.addAll(dualSet);
+
     }
 }

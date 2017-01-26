@@ -118,10 +118,10 @@ public class ContextTableauTest {
         ContextOntology contextOntology = new ContextOntology(rootOntology);
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
 
-        System.out.println("contextOntology = " + contextOntology);
-        System.out.println("---------------------------------------------------------------------");
-        System.out.println("reasoner.getTableau().getPermanentDLOntology() = " + reasoner.getTableau().getPermanentDLOntology());
-        System.out.println("---------------------------------------------------------------------");
+//        System.out.println("contextOntology = " + contextOntology);
+//        System.out.println("---------------------------------------------------------------------");
+//        System.out.println("reasoner.getTableau().getPermanentDLOntology() = " + reasoner.getTableau().getPermanentDLOntology());
+//        System.out.println("---------------------------------------------------------------------");
 
         assertFalse(reasoner.isConsistent());
 
@@ -154,10 +154,10 @@ public class ContextTableauTest {
         ContextOntology contextOntology = new ContextOntology(rootOntology);
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
 
-        System.out.println("contextOntology = " + contextOntology);
-        System.out.println("---------------------------------------------------------------------");
-        System.out.println("reasoner.getTableau().getPermanentDLOntology() = " + reasoner.getTableau().getPermanentDLOntology());
-        System.out.println("---------------------------------------------------------------------");
+//        System.out.println("contextOntology = " + contextOntology);
+//        System.out.println("---------------------------------------------------------------------");
+//        System.out.println("reasoner.getTableau().getPermanentDLOntology() = " + reasoner.getTableau().getPermanentDLOntology());
+//        System.out.println("---------------------------------------------------------------------");
 
         assertFalse(reasoner.isConsistent());
 
@@ -167,12 +167,12 @@ public class ContextTableauTest {
     public void testNegatedObjAxiomsWithDuals() throws Exception {
         System.out.println("Executing testNegatedObjAxiomsWithDuals:");
 
-        // ¬C(s), [A(a)] ⊑ C, ¬[¬A(a)] ⊑ C
+        // ¬C(s), [¬A(a)] ⊑ C, ¬C ⊑ [A ⊑ ⊥]
         OWLOntology rootOntology = manager.createOntology(Stream.of(
                 // meta level
                 builder.stringToOWLAxiom("¬C(c)"),
-                builder.stringToOWLAxiom("A_Aa ⊑ C"),
-                builder.stringToOWLAxiom("¬A_notAa ⊑ C"),
+                builder.stringToOWLAxiom("A_notAa ⊑ C"),
+                builder.stringToOWLAxiom("¬C ⊑ A_ASubBottom"),
                 // object level
                 axiom_Aa,
                 axiom_notAa,
@@ -182,10 +182,10 @@ public class ContextTableauTest {
         ContextOntology contextOntology = new ContextOntology(rootOntology);
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
 
-        System.out.println("contextOntology = " + contextOntology);
-        System.out.println("---------------------------------------------------------------------");
-        System.out.println("reasoner.getTableau().getPermanentDLOntology() = " + reasoner.getTableau().getPermanentDLOntology());
-        System.out.println("---------------------------------------------------------------------");
+//        System.out.println("contextOntology = " + contextOntology);
+//        System.out.println("---------------------------------------------------------------------");
+//        System.out.println("reasoner.getTableau().getPermanentDLOntology() = " + reasoner.getTableau().getPermanentDLOntology());
+//        System.out.println("---------------------------------------------------------------------");
 
         assertFalse(reasoner.isConsistent());
 
