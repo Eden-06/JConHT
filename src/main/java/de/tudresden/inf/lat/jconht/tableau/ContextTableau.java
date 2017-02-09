@@ -8,6 +8,8 @@ import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.HermiT.ReasonerFactory;
 import org.semanticweb.HermiT.model.Concept;
 import org.semanticweb.HermiT.model.DLPredicate;
+import org.semanticweb.HermiT.model.Inequality;
+import org.semanticweb.HermiT.model.Role;
 import org.semanticweb.HermiT.tableau.DependencySet;
 import org.semanticweb.HermiT.tableau.ExtensionTable;
 import org.semanticweb.HermiT.tableau.Node;
@@ -34,7 +36,7 @@ import java.util.stream.StreamSupport;
  */
 public class ContextTableau extends Tableau {
 
-    private static final boolean debugOutput = false;
+    private static final boolean debugOutput = true;
 
     private final Predicate<OWLClass> classIsAbstractedMetaConcept;
     private ContextOntology contextOntology;
@@ -84,6 +86,7 @@ public class ContextTableau extends Tableau {
                 System.out.println(contextOntology);
                 System.out.println("meta ontology is consistent, following context model is found:");
                 binaryTupleTableEntries().forEach(System.out::println);
+                ternaryTupleTableEntries().forEach(System.out::println);
             }
 
             // Iterate over all tableau nodes and check whether one of them is not inner consistent.
@@ -242,6 +245,15 @@ public class ContextTableau extends Tableau {
         return StreamSupport.stream(new BinaryTupleTableEntry(0).spliterator(), false);
     }
 
+
+    /**
+     * @return A stream of HermiT’s extension manager’s ternary tuple table.
+     */
+    private Stream<TernaryTupleTableEntry> ternaryTupleTableEntries() {
+
+        return StreamSupport.stream(new TernaryTupleTableEntry(0).spliterator(), false);
+    }
+
     /**
      * @return A stream of HermiT's tableau nodes.
      */
@@ -352,6 +364,148 @@ public class ContextTableau extends Tableau {
             return new BinaryTupleTableEntry(tupleIndex - 1);
         }
     }
+
+    /**
+     * This class encapsulates an entry in HermiT’s extension manager’s ternary tuple table.
+     */
+    private class TernaryTupleTableEntry implements Iterator<TernaryTupleTableEntry>, Iterable<TernaryTupleTableEntry> {
+
+        private int tupleIndex;
+        private Optional<Role> role;
+        private Optional<Inequality> inequality;
+        private Node nodeFrom;
+        private Node nodeTo;
+        private DependencySet dependencySet;
+
+        /**
+         * This is the standard constructor.
+         *
+         * @param tupleIndex The tuple index of the entry.
+         */
+        public TernaryTupleTableEntry(int tupleIndex) {
+
+            update(tupleIndex);
+        }
+
+        /**
+         * This function sets the entry to the one of a given index.
+         *
+         * @param tupleIndex A tuple index.
+         */
+        private void update(int tupleIndex) {
+
+            this.tupleIndex = tupleIndex;
+
+            ExtensionTable extensionTable = getExtensionManager().getTernaryExtensionTable();
+
+            // The following code is necessary because of legacy HermiT code.
+            if (extensionTable.getTupleObject(tupleIndex, 0) instanceof Role) {
+                role = Optional.of((Role) extensionTable.getTupleObject(tupleIndex, 0));
+                inequality = Optional.empty();
+            } else if (extensionTable.getTupleObject(tupleIndex, 0) instanceof Inequality) {
+                role = Optional.empty();
+                inequality = Optional.of((Inequality) extensionTable.getTupleObject(tupleIndex, 0));
+            } else {
+                role = null;
+                inequality = null;
+            }
+            nodeFrom = (Node) extensionTable.getTupleObject(tupleIndex, 1);
+            nodeTo = (Node) extensionTable.getTupleObject(tupleIndex, 2);
+            dependencySet = extensionTable.getDependencySet(tupleIndex);
+        }
+
+        /**
+         * @return The tuple index of the entry.
+         */
+        public int getTupleIndex() {
+
+            return tupleIndex;
+        }
+
+        /**
+         * @return The role of the entry.
+         */
+        public Optional<Role> getRole() {
+
+            return role;
+        }
+
+        /**
+         * @return The inequality of the entry.
+         */
+        public Optional<Inequality> getInequality() {
+
+            return inequality;
+        }
+
+        /**
+         * @return The first node of the entry.
+         */
+        public Node getNodeTo() {
+
+            return nodeTo;
+        }
+
+        /**
+         * @return The second node of the entry.
+         */
+        public Node getNodeFrom() {
+
+            return nodeFrom;
+        }
+
+        /**
+         * @return The dependency set of the entry.
+         */
+        public DependencySet getDependencySet() {
+
+            return dependencySet;
+        }
+
+
+        @Override
+        public boolean hasNext() {
+
+            return role != null;
+        }
+
+        @Override
+        public Iterator<TernaryTupleTableEntry> iterator() {
+
+            return this;
+        }
+
+        @Override
+        public String toString() {
+
+            StringBuilder builder = new StringBuilder();
+
+            builder.append(getNodeFrom());
+            builder.append('\t');
+            if (getRole().isPresent()) {
+                builder.append(getRole().get());
+                builder.append('\t');
+            } else if (getInequality().isPresent()) {
+                builder.append("!=");
+                builder.append('\t');
+            }
+            builder.append(getNodeTo());
+            builder.append('\t');
+            builder.append(getDependencySet());
+
+            return builder.toString();
+        }
+
+        @Override
+        public TernaryTupleTableEntry next() {
+
+            update(tupleIndex + 1);
+            return new TernaryTupleTableEntry(tupleIndex - 1);
+        }
+    }
+
+
+
 
     /**
      * This class realises an iterator for HermiT’s tableau nodes.
