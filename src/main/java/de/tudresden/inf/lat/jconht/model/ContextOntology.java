@@ -8,6 +8,7 @@ import org.semanticweb.owlapi.util.SimpleRenderer;
 
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -360,6 +361,37 @@ public class ContextOntology {
         }
 
         return null;
+    }
+
+    public OWLOntology getObjectOntology(Set<Type> types) {
+
+        if (containsRigidNames()) {
+            throw new RuntimeException("rigid names not implemented yet!");
+        } else {
+            if (types.size() != 1) {
+                throw new ContextOntologyException("If no rigid names are present, getObjectOntology() can only " +
+                        "be called for a single type!");
+            }
+            Type type = types.stream().findAny().get();
+            try {
+                return ontologyManager.createOntology(Stream.of(
+                        globalObjectOntology(),
+                        type.positiveConcepts()
+                                .filter(classIsAbstractedMetaConcept)
+                                .map(objectAxiomsMap::get),
+                        type.negativeConcepts()
+                                .filter(classIsAbstractedMetaConcept)
+                                .map(objectAxiomsMap::get)
+                                .map(axiom -> axiom.accept(new AxiomNegator(dataFactory))))
+                        .flatMap(Function.identity()));
+
+            } catch (OWLOntologyCreationException e) {
+
+                e.printStackTrace();
+            }
+
+            return null;
+        }
     }
 
 

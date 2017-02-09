@@ -28,12 +28,14 @@ public class ContextTableauTest {
 
     private OWLClass clsC;
     private OWLClass clsA;
+    private OWLClass clsB;
     private OWLClass A_Aa;
     private OWLClass A_notAa;
     private OWLClass A_ASubBottom;
     private OWLClass thing;
     private OWLIndividual indA;
     private OWLIndividual indC;
+    private OWLObjectProperty rolR;
 
     private OWLAxiom axiom_Aa;
     private OWLAxiom axiom_notAa;
@@ -48,11 +50,13 @@ public class ContextTableauTest {
 
         clsC = dataFactory.getOWLClass("cls:C");
         clsA = dataFactory.getOWLClass("cls:A");
+        clsB = dataFactory.getOWLClass("cls:B");
         A_Aa = dataFactory.getOWLClass("cls:A_Aa");
         A_notAa = dataFactory.getOWLClass("cls:A_notAa");
         indA = dataFactory.getOWLNamedIndividual("ind:a");
         indC = dataFactory.getOWLNamedIndividual("ind:c");
         A_ASubBottom = dataFactory.getOWLClass("cls:A_ASubBottom");
+        rolR = dataFactory.getOWLObjectProperty("rol:R");
         thing = dataFactory.getOWLThing();
 
         axiom_Aa = dataFactory.getOWLClassAssertionAxiom(clsA, indA, getIsDefinedBy(A_Aa));
@@ -243,6 +247,26 @@ public class ContextTableauTest {
         reasoner.dispose();
 
     }
+
+    @Test
+    public void testModelWithSeveralNodes() throws Exception {
+        System.out.println("Executing testModelWithSeveralNodes:");
+
+        OWLOntology rootOntology = manager.createOntology(Stream.of(
+                dataFactory.getOWLSubClassOfAxiom(clsA,
+                        dataFactory.getOWLObjectMinCardinality(2, rolR, clsB)),
+                dataFactory.getOWLSubClassOfAxiom(clsB,
+                        dataFactory.getOWLObjectMinCardinality(2, rolR, clsC)),
+                dataFactory.getOWLClassAssertionAxiom(clsA,indA)
+        ));
+
+        ContextOntology contextOntology = new ContextOntology(rootOntology);
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+
+        assertTrue(reasoner.isConsistent());
+
+    }
+
 
     // Helper functions
 
