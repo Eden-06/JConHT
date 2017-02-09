@@ -34,7 +34,7 @@ import static de.tudresden.inf.lat.jconht.model.TupleTableEntries.*;
  */
 public class ContextTableau extends Tableau {
 
-    private static final boolean debugOutput = true;
+    private static final boolean debugOutput = false;
 
     private final Predicate<OWLClass> classIsAbstractedMetaConcept;
     private ContextOntology contextOntology;
@@ -88,22 +88,25 @@ public class ContextTableau extends Tableau {
                 ternaryTupleTableEntries(getExtensionManager()).forEach(System.out::println);
             }
 
-            if (contextOntology.containsRigidNames()) {
+//            if (contextOntology.containsRigidNames()) {
                 // rigid names are present
 
-                throw new RuntimeException("rigid names not implemented yet!");
+//                throw new RuntimeException("rigid names not implemented yet!");
 
 
                 //return false;
 
-            } else {
+//            } else {
                 // no rigid names are present
 
                 // Iterate over all tableau nodes and check whether one of them is not inner consistent.
                 Optional<Node> clashNode = tableauNodes()
                         .filter(node -> {
                             OWLReasoner reasoner = reasonerFactory.createReasoner(
-                                    contextOntology.getObjectOntology(Collections.singleton(typeOfNode(node))));
+                                    //contextOntology.getObjectOntology(Collections.singleton(typeOfNode(node))));
+                                    contextOntology.getObjectOntology(
+                                            positiveMetaConceptsOfNode(node),
+                                            negativeMetaConceptsOfNode(node)));
                             boolean result = !reasoner.isConsistent();
 
                             if (debugOutput && result) {
@@ -149,7 +152,7 @@ public class ContextTableau extends Tableau {
                     // All nodes are inner consistent.
                     return true;
                 }
-            }
+//            }
 
         } else {
 
