@@ -1,6 +1,5 @@
 package de.tudresden.inf.lat.jconht.model;
 
-import org.semanticweb.HermiT.tableau.Node;
 import org.semanticweb.owlapi.model.OWLClass;
 
 import java.util.Set;
@@ -16,13 +15,10 @@ public class Type {
 
     private Set<OWLClass> positiveConcepts;
     private Set<OWLClass> negativeConcepts;
-    private Node node;
 
-    public Type(Set<OWLClass> positiveConcepts, Set<OWLClass> negativeConcepts, Node node) {
+    public Type(Set<OWLClass> positiveConcepts, Set<OWLClass> negativeConcepts) {
         this.positiveConcepts = positiveConcepts;
         this.negativeConcepts = negativeConcepts;
-        this.node = node;
-
     }
 
     public Stream<OWLClass> positiveConcepts() {
@@ -33,7 +29,4 @@ public class Type {
         return negativeConcepts.stream();
     }
 
-    public Node getNode() {
-        return node;
-    }
 }

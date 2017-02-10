@@ -6,10 +6,7 @@ import org.junit.Test;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -342,7 +339,7 @@ public class ContextOntologyTest {
 
         assertEquals("Test 1 for getting the object ontology:",
                 objectOntologyAxiomSet,
-                contextOntology.getObjectOntology(posMetaConcepts, Stream.empty())
+                contextOntology.getObjectOntology(getType(posMetaConcepts, Stream.empty()))
                         .axioms().collect(Collectors.toSet()));
     }
 
@@ -359,7 +356,7 @@ public class ContextOntologyTest {
 
         assertEquals("Test 2 for getting the object ontology:",
                 objectOntologyAxiomSet,
-                contextOntology.getObjectOntology(posMetaConcepts, Stream.empty())
+                contextOntology.getObjectOntology(getType(posMetaConcepts, Stream.empty()))
                         .axioms().collect(Collectors.toSet()));
     }
 
@@ -377,7 +374,7 @@ public class ContextOntologyTest {
 
         assertEquals("Test 3 for getting the object ontology:",
                 objectOntologyAxiomSet,
-                contextOntology.getObjectOntology(Stream.empty(), negMetaConcepts)
+                contextOntology.getObjectOntology(getType(Stream.empty(), negMetaConcepts))
                         .axioms()
                         .map(this::replaceAnonymousIndividual)
                         .collect(Collectors.toSet()));
@@ -413,7 +410,7 @@ public class ContextOntologyTest {
 
         assertEquals("Test 4 for getting the object ontology:",
                 objectOntologyAxiomSet,
-                contextOntology.getObjectOntology(posMetaConcepts, negMetaConcepts)
+                contextOntology.getObjectOntology(getType(posMetaConcepts, negMetaConcepts))
                         .axioms()
                         .map(this::replaceAnonymousIndividual)
                         .collect(Collectors.toSet()));
@@ -500,4 +497,11 @@ public class ContextOntologyTest {
         setToModify.addAll(dualSet);
 
     }
+
+    private Set<Type> getType(Stream<OWLClass> pos, Stream<OWLClass> neg) {
+
+        return Collections.singleton(
+                new Type(pos.collect(Collectors.toSet()), neg.collect(Collectors.toSet())));
+    }
+
 }
