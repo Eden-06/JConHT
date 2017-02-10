@@ -5,6 +5,7 @@ import de.tudresden.inf.lat.jconht.model.Type;
 import org.semanticweb.HermiT.Configuration;
 import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.HermiT.ReasonerFactory;
+import org.semanticweb.HermiT.tableau.DependencySet;
 import org.semanticweb.HermiT.tableau.Node;
 import org.semanticweb.HermiT.tableau.Tableau;
 import org.semanticweb.owlapi.model.AsOWLClass;
@@ -79,7 +80,6 @@ public class ContextTableau extends Tableau {
         if (super.runCalculus()) {
 
             // Possibly a model for meta level is found.
-
             if (debugOutput) {
                 System.out.println(contextOntology);
                 System.out.println("meta ontology is consistent, following context model is found:");
@@ -88,71 +88,19 @@ public class ContextTableau extends Tableau {
                 ternaryTupleTableEntries(getExtensionManager()).forEach(System.out::println);
             }
 
-//            if (contextOntology.containsRigidNames()) {
-                // rigid names are present
+            if (contextOntology.containsRigidNames()) {
+                isAdmissibleWithRigid().ifPresent(clashSet -> getExtensionManager().setClash(clashSet));
+            } else {
+                isAdmissibleWithoutRigid().ifPresent(clashSet -> getExtensionManager().setClash(clashSet));
+            }
 
-//                throw new RuntimeException("rigid names not implemented yet!");
-
-
-                //return false;
-
-//            } else {
-                // no rigid names are present
-
-                // Iterate over all tableau nodes and check whether one of them is not inner consistent.
-                Optional<Node> clashNode = tableauNodes()
-                        .filter(node -> {
-                            OWLReasoner reasoner = reasonerFactory.createReasoner(
-                                    //contextOntology.getObjectOntology(Collections.singleton(typeOfNode(node))));
-                                    contextOntology.getObjectOntology(
-                                            positiveMetaConceptsOfNode(node),
-                                            negativeMetaConceptsOfNode(node)));
-                            boolean result = !reasoner.isConsistent();
-
-                            if (debugOutput && result) {
-                                System.out.println(String.join("", Collections.nCopies(100, "-")));
-                                System.out.println("--- object ontology for node " + node + " is consistent, following object model is found:");
-                                binaryTupleTableEntries(((Reasoner) reasoner).getTableau().getExtensionManager(),
-                                        contextOntology.getDataFactory())
-                                        .forEach(System.out::println);
-                                ternaryTupleTableEntries(((Reasoner) reasoner).getTableau().getExtensionManager())
-                                        .forEach(System.out::println);
-                                System.out.println(String.join("", Collections.nCopies(100, "-")));
-                            }
-
-                            return result;
-                        })
-                        .findFirst();
-
-                // Check whether a clash occurred, and initiate backtracking of HermiT if so.
-                if (clashNode.isPresent()) {
-
-                    // Obtain last entry that speaks about clashNode.
-                    BinaryTupleTableEntry lastEntryOfClashNode =
-                            binaryTupleTableEntries(getExtensionManager(), contextOntology.getDataFactory())
-                                    // Consider only entries that speak about clashNode.
-                                    .filter(entry -> entry.getNode().equals(clashNode.get()))
-                                    // Take the last entry, which is present!
-                                    .reduce((entry1, entry2) -> entry2)
-                                    .get();
-
-                    // Tell HermiT to backtrack to the dependency set associated with clashNode.
-                    getExtensionManager().setClash(lastEntryOfClashNode.getDependencySet());
-
-                    if (debugOutput) {
-                        System.out.println("Doing backtracking because of node " + clashNode.get() + " with " +
-                                lastEntryOfClashNode.getDependencySet());
-                    }
-
-                    // Perform actual backtracking.
-                    return runCalculus();
-
-                } else {
-
-                    // All nodes are inner consistent.
-                    return true;
-                }
-//            }
+            if (getExtensionManager().containsClash()) {
+                // Perform actual backtracking.
+                return runCalculus();
+            } else {
+                // All nodes are inner consistent.
+                return true;
+            }
 
         } else {
 
@@ -221,16 +169,67 @@ public class ContextTableau extends Tableau {
 
         return new Type(
                 positiveMetaConceptsOfNode(node).collect(Collectors.toSet()),
-                negativeMetaConceptsOfNode(node).collect(Collectors.toSet()),
-                node);
+                negativeMetaConceptsOfNode(node).collect(Collectors.toSet()));
     }
 
-    private boolean isAdmissible(Set<Type> types) {
+    /**
+     * This class checks for ontologies without rigid names whether the induced object types are admissible.
+     * If so, an empty optional is returned; if not, a dependency set, used for backtracking, is returned.
+     *
+     * @return Optional.empty() if admissible, a dependency set otherwise.
+     */
+    private Optional<DependencySet> isAdmissibleWithoutRigid() {
 
+        // Iterate over all tableau nodes and check whether one of them is not inner consistent.
+        Optional<Node> clashNode = tableauNodes()
+                .filter(node -> {
+                    OWLReasoner reasoner = reasonerFactory.createReasoner(
+                            contextOntology.getObjectOntology(Collections.singleton(typeOfNode(node))));
+                    boolean result = !reasoner.isConsistent();
 
-        return false;
+                    if (debugOutput && result) {
+                        System.out.println(String.join("", Collections.nCopies(100, "-")));
+                        System.out.println("--- object ontology for node " + node + " is consistent, following object model is found:");
+                        binaryTupleTableEntries(((Reasoner) reasoner).getTableau().getExtensionManager(),
+                                contextOntology.getDataFactory())
+                                .forEach(System.out::println);
+                        ternaryTupleTableEntries(((Reasoner) reasoner).getTableau().getExtensionManager())
+                                .forEach(System.out::println);
+                        System.out.println(String.join("", Collections.nCopies(100, "-")));
+                    }
+
+                    return result;
+                })
+                .findFirst();
+
+        // Check whether a clash occurred, and return dependency set if so.
+        if (clashNode.isPresent()) {
+
+            // Obtain the dependency set of last entry that speaks about clashNode.
+            DependencySet clashSet =
+                    binaryTupleTableEntries(getExtensionManager(), contextOntology.getDataFactory())
+                            // Consider only entries that speak about clashNode.
+                            .filter(entry -> entry.getNode().equals(clashNode.get()))
+                            // Take the last entry, which is present!
+                            .reduce((entry1, entry2) -> entry2)
+                            .get()
+                            .getDependencySet();
+
+            if (debugOutput) {
+                System.out.println("Node " + clashNode.get() + " is not admissible. Returning dependency set: " +
+                        clashSet);
+            }
+
+            return Optional.of(clashSet);
+
+        } else {
+            return Optional.empty();
+        }
     }
 
+    private Optional<DependencySet> isAdmissibleWithRigid() {
+        return isAdmissibleWithoutRigid();
+    }
 
     /**
      * @return A stream of HermiT's tableau nodes.
