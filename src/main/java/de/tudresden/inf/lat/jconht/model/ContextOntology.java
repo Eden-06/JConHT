@@ -36,6 +36,7 @@ public class ContextOntology {
     private final Predicate<OWLEntity> entityIsOWLClass;
     private final Predicate<OWLEntity> entityIsOWLObjectProperty;
     private final Predicate<OWLClass> classIsAbstractedMetaConcept;
+    private final boolean containsRigidNames;
     private OWLOntology metaOntology;
     private Map<OWLClass, OWLAxiom> objectAxiomsMap;
     //private Set<OWLClass> rigidClasses; // todo müssen wir rigid names wirklich als set speichern? welche Alternativen? siehe 10 Zeilen weiter unten
@@ -90,7 +91,7 @@ public class ContextOntology {
         iriIsRigid =
                 iri -> rootOntology
                         .axioms(AxiomType.ANNOTATION_ASSERTION)
-                        .filter(axiom -> axiom.getAnnotation().getProperty().equals(label))
+                        .filter(axiom -> axiom.getAnnotation().getProperty().isLabel())
                         .filter(axiom -> axiom.getValue().equals(rigid))
                         .map(axiom -> axiom.getSubject().asIRI().get())
                         .anyMatch(iri1 -> iri1.equals(iri));
@@ -128,6 +129,11 @@ public class ContextOntology {
         // Add dual axioms to meta Ontology
         addDualAxiomsToMetaOntology();
 
+        // Are there rigid names?
+        containsRigidNames = rootOntology.axioms(AxiomType.ANNOTATION_ASSERTION)
+                .filter(axiom -> axiom.getAnnotation().getProperty().isLabel())
+                .filter(axiom -> axiom.getValue().equals(rigid))
+                .findAny().isPresent();
     }
 
     public void clear() {
@@ -289,8 +295,8 @@ public class ContextOntology {
      *
      * @return true if the context ontology contains rigid names.
      */
-    public Boolean containsRigidNames() {
-        return rigidClasses().count() + rigidObjectProperties().count() != 0;
+    public boolean containsRigidNames() {
+        return containsRigidNames;
     }
 
 
