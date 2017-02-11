@@ -15,10 +15,7 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -184,7 +181,7 @@ public class ContextTableau extends Tableau {
         Optional<Node> clashNode = tableauNodes()
                 .filter(node -> {
                     OWLReasoner reasoner = reasonerFactory.createReasoner(
-                            contextOntology.getObjectOntology(Collections.singleton(typeOfNode(node))));
+                            contextOntology.getObjectOntology(Arrays.asList(typeOfNode(node))));
                     boolean result = !reasoner.isConsistent();
 
                     if (debugOutput && result) {
@@ -227,7 +224,11 @@ public class ContextTableau extends Tableau {
         }
     }
 
+    // TODO not implemented yet!!!
     private Optional<DependencySet> isAdmissibleWithRigid() {
+
+        //tableauNodes().map(node -> typeOfNode(node)).
+
         return isAdmissibleWithoutRigid();
     }
 

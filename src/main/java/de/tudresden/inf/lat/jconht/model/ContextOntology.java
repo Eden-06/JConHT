@@ -7,8 +7,8 @@ import org.semanticweb.owlapi.util.QNameShortFormProvider;
 import org.semanticweb.owlapi.util.SimpleRenderer;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -113,7 +113,7 @@ public class ContextOntology {
 
         // Obtain object axioms map
         objectAxiomsMap = rootOntology.axioms()
-                .filter(owlAxiom -> owlAxiom.annotations(isDefinedBy).count() > 0)
+                .filter(owlAxiom -> owlAxiom.annotations(isDefinedBy).count() == 1)
                 .collect(Collectors.toMap(
                         owlAxiom -> dataFactory.getOWLClass(
                                 owlAxiom.annotations(isDefinedBy)
@@ -156,8 +156,10 @@ public class ContextOntology {
                             .filter(owlAxiom -> owlAxiom.annotations(label)
                                     .filter(owlAnnotation -> owlAnnotation.getValue().equals(objectGlobal))
                                     .count() == 0)
-                            .collect(Collectors.toSet()),
-                    IRI.create(rootOntology.getOntologyID().getOntologyIRI().orElse(IRI.create("")) + "_meta"));
+                            .collect(Collectors.toSet()));
+            //TODO doch keine metaOntologyIRI, falls man von einer rootOntology mehrere ContextOntologies erzeugt,
+            // erzeugt man hier einen Fehler, da die metaOntology anscheinend schon existiert
+                    //IRI.create(rootOntology.getOntologyID().getOntologyIRI().orElse(IRI.create("")) + "_meta"));
 
         } catch (OWLOntologyCreationException e) {
             e.printStackTrace();
@@ -290,6 +292,11 @@ public class ContextOntology {
                 .map(dataFactory::getOWLObjectProperty);
     }
 
+    public Stream<OWLEntity> flexibleNames() {
+
+        return Stream.of(flexibleClasses(), flexibleObjectProperties()).flatMap(Function.identity());
+    }
+
     /**
      * This method checks whether the context ontology contains rigid names.
      *
@@ -347,37 +354,59 @@ public class ContextOntology {
      * @param types A set types for which the object ontology should be constructed.
      * @return The associated object ontology.
      */
-    public OWLOntology getObjectOntology(Set<Type> types) {
+    public OWLOntology getObjectOntology(List<Type> types) {
 
 //        if (containsRigidNames()) {
+//
+//            try {
+//                OWLOntology objectOntology = ontologyManager.createOntology();
+//
+//                IntStream.range(0, types.size()).forEach(idx -> {
+//                    OWLOntology ontologyToBeRenamed = getObjectOntologyForSingleType(types.get(idx));
+//                    AxiomRenamer renamer = new AxiomRenamer(ontologyToBeRenamed);
+//                    renamer.rename(flexibleNames().collect(Collectors.toSet()), idx);
+//                    objectOntology.addAxioms(ontologyToBeRenamed.axioms().collect(Collectors.toSet()));
+//                });
+//
+//                return objectOntology;
+//            } catch (OWLOntologyCreationException e) {
+//
+//                e.printStackTrace();
+//            }
 //            throw new RuntimeException("rigid names not implemented yet!");
 //        } else {
+            // no rigid names
+
             if (types.size() != 1) {
                 throw new ContextOntologyException("If no rigid names are present, getObjectOntology() can only " +
                         "be called for a single type!");
             }
-            Type type = types.stream().findAny().get();
-            try {
-                return ontologyManager.createOntology(Stream.of(
-                        globalObjectOntology(),
-                        type.positiveConcepts()
-                                .filter(classIsAbstractedMetaConcept)
-                                .map(objectAxiomsMap::get),
-                        type.negativeConcepts()
-                                .filter(classIsAbstractedMetaConcept)
-                                .map(objectAxiomsMap::get)
-                                .map(axiom -> axiom.accept(new AxiomNegator(dataFactory))))
-                        .flatMap(Function.identity()));
 
-            } catch (OWLOntologyCreationException e) {
-
-                e.printStackTrace();
-            }
-
-            return null;
+            return getObjectOntologyForSingleType(types.stream().findAny().get());
 //        }
     }
 
+    private OWLOntology getObjectOntologyForSingleType(Type type) {
+
+        try{
+            return ontologyManager.createOntology(Stream.of(
+                    globalObjectOntology(),
+                    type.positiveConcepts()
+                            .filter(classIsAbstractedMetaConcept)
+                            .map(objectAxiomsMap::get),
+                    type.negativeConcepts()
+                            .filter(classIsAbstractedMetaConcept)
+                            .map(objectAxiomsMap::get)
+                            .map(axiom -> axiom.accept(new AxiomNegator(dataFactory))))
+                    .flatMap(Function.identity()));
+
+        } catch (OWLOntologyCreationException e) {
+
+            e.printStackTrace();
+        }
+
+        return  null;
+    }
 
     /**
      * @return The OWL data factory of the ontology manager that was used to create the context.
