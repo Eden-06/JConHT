@@ -7,7 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
- * This class is used to generate the negation of a given OWLAxiom.
+ * This class is used to generate the weak negation of a given OWLAxiom.
  *
  * @author Stephan Böhme
  * @author Marcel Lippmann

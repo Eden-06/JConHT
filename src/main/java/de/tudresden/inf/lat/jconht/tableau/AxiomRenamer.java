@@ -6,7 +6,6 @@ import org.semanticweb.owlapi.util.OWLEntityRenamer;
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -28,9 +27,9 @@ public class AxiomRenamer {
 
 
     //todo hier direkt Streams zu nehmen geht nicht, oder? Wäre es sinnvoller? Schwierig, da ich flexible names mehrmals brauche
-    public void rename(Set<OWLEntity> flexibleNames, int numberOfNewNames) {
+    public void rename(Set<OWLEntity> flexibleNames, int index) {
 
-        IntStream.rangeClosed(1, numberOfNewNames).parallel().forEach(i -> {
+
             try {
                 // This ontology is a subset of ontologyToChange that contains all axioms with any flexible name
                 OWLOntology ontology = manager.createOntology(flexibleNames.stream()
@@ -39,14 +38,14 @@ public class AxiomRenamer {
                 OWLEntityRenamer renamer = new OWLEntityRenamer(manager, Collections.singleton(ontology));
 
                 flexibleNames.forEach(name ->
-                        manager.applyChanges(renamer.changeIRI(name, IRI.create(name.getIRI().getIRIString() + "_" + i))));
+                        manager.applyChanges(renamer.changeIRI(name, IRI.create(name.getIRI().getIRIString() + "_" + index))));
 
                 manager.addAxioms(ontologyToChange, ontology.axioms());
 
             } catch (OWLOntologyCreationException e) {
                 e.printStackTrace();
             }
-        });
+
 
         // Remove the original axioms containing flexible names from the ontology
         flexibleNames.forEach(name ->

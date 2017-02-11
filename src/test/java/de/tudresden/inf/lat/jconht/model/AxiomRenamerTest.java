@@ -11,8 +11,10 @@ import org.semanticweb.owlapi.model.*;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -78,20 +80,27 @@ public class AxiomRenamerTest {
     @Test
     public void test1() throws Exception {
 
-        //Todo test not finished yet
+        OWLOntology ontology1 = manager.createOntology(Stream.of(ax1, ax2, ax3, ax4, ax5));
 
-        OWLOntology ontology = manager.createOntology(Stream.of(ax1, ax2, ax3, ax4, ax5));
-
-        ontology.axioms().forEach(System.out::println);
-        System.out.println("\n");
-
-        AxiomRenamer renamer = new AxiomRenamer(ontology);
+        AxiomRenamer renamer = new AxiomRenamer(ontology1);
         Set<OWLEntity> flexibleNames = new HashSet<>(Arrays.asList(clsC, roleR));
         renamer.rename(flexibleNames, 3);
 
-        ontology.axioms().forEach(System.out::println);
+        OWLOntology ontology2 = manager.createOntology(Stream.of(
+                ax1,
+                dataFactory.getOWLSubClassOfAxiom(clsA, dataFactory.getOWLClass("cls:C_3")),
+                dataFactory.getOWLSubClassOfAxiom(clsB, dataFactory.getOWLClass("cls:C_3")),
+                dataFactory.getOWLSubClassOfAxiom(
+                        dataFactory.getOWLObjectSomeValuesFrom(
+                                dataFactory.getOWLObjectProperty("rol:r_3"),
+                                dataFactory.getOWLClass("cls:C_3")),
+                        dataFactory.getOWLObjectAllValuesFrom(
+                                dataFactory.getOWLObjectProperty("rol:r_3"),
+                                dataFactory.getOWLClass("cls:C_3"))),
+                ax5));
 
-        ontology.signature().forEach(System.out::println);
+        assertEquals(ontology1.axioms().collect(Collectors.toSet()),
+                ontology2.axioms().collect(Collectors.toSet()));
 
     }
 
