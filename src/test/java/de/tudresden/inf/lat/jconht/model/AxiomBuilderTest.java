@@ -4,8 +4,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+
+import java.util.Arrays;
+import java.util.HashSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -102,6 +106,8 @@ public class AxiomBuilderTest {
         assertFalse("((S)",validConceptSyntax("((S)"));
 
         assertTrue("{a}",validConceptSyntax("{a}"));
+
+        assertFalse("C ⊓ D @ global", validConceptSyntax("C ⊓ D @ global"));
 
     }
 
@@ -213,6 +219,9 @@ public class AxiomBuilderTest {
         assertTrue("C ⊑ D", validAxiomSyntax("C ⊑ D"));
         assertFalse("C ⊑ D ⊑ E", validAxiomSyntax("C ⊑ D ⊑ E"));
         assertFalse("C ⊑ A(a)", validAxiomSyntax("C ⊑ A(a)"));
+        assertTrue("C ⊑ A @ global", validAxiomSyntax("C ⊑ A @ global"));
+        assertTrue("C ⊑ A @ (meta1)", validAxiomSyntax("C ⊑ A @ (meta1)"));
+        assertFalse("C ⊑ A @ (A ⊓ B)", validAxiomSyntax("C ⊑ A @ (A ⊓ B)"));
 
     }
 
@@ -256,7 +265,40 @@ public class AxiomBuilderTest {
     }
 
 
+    @Test
+    public void testGlobalObjectAxiom() throws Exception {
+        System.out.println("Executing testGlobalObjectAxiom:");
 
+        assertEquals("C ⊑ D @ global",
+                builder.stringToOWLAxiom("C ⊑ D @ global"),
+                dataFactory.getOWLSubClassOfAxiom(
+                        dataFactory.getOWLClass("cls:C"),
+                        dataFactory.getOWLClass("cls:D"),
+                        new HashSet<>(Arrays.asList(dataFactory.getRDFSLabel("objectGlobal")))));
+    }
+
+    @Test
+    public void testObjectAxiom() throws Exception {
+        System.out.println("Executing testObjectAxiom:");
+
+        assertEquals("A ⊑ ⊥ @ meta1",
+                builder.stringToOWLAxiom("A ⊑ ⊥ @ meta1"),
+                dataFactory.getOWLSubClassOfAxiom(
+                        dataFactory.getOWLClass("cls:A"),
+                        dataFactory.getOWLNothing(),
+                        new HashSet<>(Arrays.asList(dataFactory.getOWLAnnotation(
+                                dataFactory.getRDFSIsDefinedBy(),
+                                IRI.create("cls:meta1"))))));
+
+        assertEquals("A(a) @ meta2",
+                builder.stringToOWLAxiom("A(a) @ meta2"),
+                dataFactory.getOWLClassAssertionAxiom(
+                        dataFactory.getOWLClass("cls:A"),
+                        dataFactory.getOWLNamedIndividual("ind:a"),
+                        new HashSet<>(Arrays.asList(dataFactory.getOWLAnnotation(
+                                dataFactory.getRDFSIsDefinedBy(),
+                                IRI.create("cls:meta2"))))));
+    }
 
     private boolean validRoleSyntax(String string) {
         try {

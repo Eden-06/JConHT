@@ -10,8 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 /**
@@ -28,8 +27,9 @@ public class ContextOntologyTest {
     private OWLOntologyManager manager;
     private OWLDataFactory dataFactory;
 
-    private OWLOntology rootOntology;
     private ContextOntology contextOntology;
+    private ContextOntology contextOntologyWithRigidNames;
+    private OWLOntology rootOntology;
     private AxiomBuilder builder;
 
     private OWLClass clsC;
@@ -88,29 +88,16 @@ public class ContextOntologyTest {
                 builder.stringToOWLAxiom("⊤ ⊑ meta5"),
                 //
                 // global object ontology
-                dataFactory.getOWLSubClassOfAxiom(clsA, clsB3, getObjectGlobal()),
+                builder.stringToOWLAxiom("A ⊑ B3 @ global"),
                 //
                 // mapping of o-axioms
-                dataFactory.getOWLSubClassOfAxiom(clsA, dataFactory.getOWLNothing(), getIsDefinedBy(meta1)),
-                dataFactory.getOWLClassAssertionAxiom(clsA, indA, getIsDefinedBy(meta2)),
-                dataFactory.getOWLClassAssertionAxiom(
-                        dataFactory.getOWLObjectIntersectionOf(
-                                clsB,
-                                dataFactory.getOWLObjectSomeValuesFrom(rolR, clsB)),
-                        indA,
-                        getIsDefinedBy(meta3)),
-                dataFactory.getOWLSubClassOfAxiom(
-                        dataFactory.getOWLObjectSomeValuesFrom(rolT, dataFactory.getOWLThing()),
-                        clsA,
-                        getIsDefinedBy(meta4)),
-                dataFactory.getOWLSubClassOfAxiom(clsA, clsB, getIsDefinedBy(meta5)),
-                //
-                // rigid names
-                isRigid(clsB),
-                isRigid(clsB2),
-                isRigid(clsC),
-                isRigid(rolT)
+                builder.stringToOWLAxiom("A ⊑ ⊥ @ meta1"),
+                builder.stringToOWLAxiom("A(a) @ meta2"),
+                builder.stringToOWLAxiom("(B ⊓ ∃R.B)(a) @ meta3"),
+                builder.stringToOWLAxiom("∃T.⊤ ⊑ A @ meta4"),
+                builder.stringToOWLAxiom("A ⊑ B @ meta5")
         ));
+
 
         // C ⊑ [A ⊑ ⊥] ⊓ [A(a)],  C(c),  [(B ⊓ ∃r.B)(a)](c),  [∃t.⊤ ⊑ A] ⊑ ∀s.C,  ⊤ ⊑ [A ⊑ B]
         // meta1 := [A ⊑ ⊥]
@@ -119,6 +106,17 @@ public class ContextOntologyTest {
         // meta4 := [∃t.⊤ ⊑ A]
         // meta5 := [A ⊑ B]
         contextOntology = new ContextOntology(rootOntology);
+
+
+        OWLOntology rootOntologyWithRigid = manager.createOntology(rootOntology.axioms());
+        rootOntologyWithRigid.addAxioms(Arrays.asList(
+                // rigid names
+                isRigid(clsB),
+                isRigid(clsB2),
+                isRigid(clsC),
+                isRigid(rolT)));
+
+        contextOntologyWithRigidNames = new ContextOntology(rootOntologyWithRigid);
     }
 
     @After
@@ -223,7 +221,7 @@ public class ContextOntologyTest {
 
         assertEquals("Test for rigid classes",
                 streamOfRigidClasses.collect(Collectors.toSet()),
-                contextOntology.rigidClasses().collect(Collectors.toSet()));
+                contextOntologyWithRigidNames.rigidClasses().collect(Collectors.toSet()));
     }
 
     @Test
@@ -234,7 +232,7 @@ public class ContextOntologyTest {
 
         assertEquals("Test for rigid object properties",
                 streamOfRigidObjProp.collect(Collectors.toSet()),
-                contextOntology.rigidObjectProperties().collect(Collectors.toSet()));
+                contextOntologyWithRigidNames.rigidObjectProperties().collect(Collectors.toSet()));
     }
 
     @Test
@@ -245,7 +243,7 @@ public class ContextOntologyTest {
 
         assertEquals("Test for flexible classes",
                 streamOfFlexibleClasses.collect(Collectors.toSet()),
-                contextOntology.flexibleClasses().collect(Collectors.toSet()));
+                contextOntologyWithRigidNames.flexibleClasses().collect(Collectors.toSet()));
     }
 
     @Test
@@ -256,14 +254,18 @@ public class ContextOntologyTest {
 
         assertEquals("Test for flexible object properties",
                 streamOfFlexibleObjProp.collect(Collectors.toSet()),
-                contextOntology.flexibleObjectProperties().collect(Collectors.toSet()));
+                contextOntologyWithRigidNames.flexibleObjectProperties().collect(Collectors.toSet()));
     }
 
     @Test
     public void testContainsRigidNames() throws Exception {
 
-        assertTrue(contextOntology.containsRigidNames());
+        assertFalse(contextOntology.containsRigidNames());
+        assertTrue(contextOntologyWithRigidNames.containsRigidNames());
     }
+
+
+    // Test outer abstracted meta concepts
 
     @Test
     public void testOuterAbstractedMetaConcepts() throws Exception {
@@ -456,6 +458,18 @@ public class ContextOntologyTest {
 //                contextOntology.getObjectOntology(new HashSet<>(Arrays.asList(meta1, meta3))).axioms().collect(Collectors.toSet()));
 //    }
 
+    @Test
+    public void testChangedRootOntology() throws Exception {
+        System.out.println("Executing testChangedRootOntology:");
+
+        assertTrue(contextOntologyWithRigidNames.rigidClasses().anyMatch(cls -> cls.equals(clsB)));
+        assertFalse(contextOntology.rigidClasses().anyMatch(cls -> cls.equals(clsB)));
+        rootOntology.addAxiom(isRigid(clsB));
+
+        // TODO here must stand "assertFalse(..."
+        assertTrue(contextOntology.rigidClasses().anyMatch(cls -> cls.equals(clsB)));
+    }
+
 
     // Helper functions
 
@@ -498,9 +512,9 @@ public class ContextOntologyTest {
 
     }
 
-    private Set<Type> getType(Stream<OWLClass> pos, Stream<OWLClass> neg) {
+    private List<Type> getType(Stream<OWLClass> pos, Stream<OWLClass> neg) {
 
-        return Collections.singleton(
+        return Arrays.asList(
                 new Type(pos.collect(Collectors.toSet()), neg.collect(Collectors.toSet())));
     }
 

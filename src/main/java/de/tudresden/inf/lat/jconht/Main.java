@@ -16,6 +16,8 @@ public class Main {
 
     // TODO ordentliche clear und dispose Methoden wo notwendig
 
+    // TODO Taking care of proper handling of meta and object role boxes
+
     public static void main(String[] args) {
 
         System.out.println("Welcome to JConHT!");

@@ -2,9 +2,7 @@ package de.tudresden.inf.lat.jconht.model;
 
 import org.semanticweb.owlapi.model.*;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -38,12 +36,23 @@ public class AxiomBuilder {
 
     public OWLAxiom stringToOWLAxiom(String string) {
 
+        string = string.trim();
+
+        Set<OWLAnnotation> annotations = new HashSet<>();
+        // Annotated axioms
+        int indexAt = string.indexOf('@');
+        if (indexAt != -1) {
+            annotations.add(stringToOWLAnnotation(string.substring(indexAt + 1)));
+            string = string.substring(0, indexAt).trim();
+        }
+
         // This part is about GCIs
         int indexSubseteq = string.indexOf('⊑');
         if (indexSubseteq != -1) {
             return dataFactory.getOWLSubClassOfAxiom(
                     this.stringToConcept(string.substring(0, indexSubseteq)),
-                    this.stringToConcept(string.substring(indexSubseteq + 1)));
+                    this.stringToConcept(string.substring(indexSubseteq + 1)),
+                    annotations);
         }
 
         // Then it must be some assertion axiom
@@ -51,19 +60,21 @@ public class AxiomBuilder {
             int indexClose = string.lastIndexOf(')');
             int indexOpen = indexOfMatchingParenthesis(string, ')', '(', false).orElseThrow(
                     () -> new AxiomBuilderException("\nAssertion Axiom must have matching openening '(': "
-                            + string));
+                            ));
             String[] indString = string.substring(indexOpen + 1, indexClose).trim().split(",");
             if (indString.length == 1) {
                 // Concept assertion
                 return dataFactory.getOWLClassAssertionAxiom(
                         stringToConcept(string.substring(0, indexOpen)),
-                        stringToIndividual(indString[0]));
+                        stringToIndividual(indString[0]),
+                        annotations);
             } else if (indString.length == 2) {
                 // Role assertion
                 return dataFactory.getOWLObjectPropertyAssertionAxiom(
                         stringToRole(string.substring(0, indexOpen)),
                         stringToIndividual(indString[0]),
-                        stringToIndividual(indString[1]));
+                        stringToIndividual(indString[1]),
+                        annotations);
             } else {
                 throw new AxiomBuilderException(
                         "\nAn assertion axiom must have one or two individuals: " +
@@ -122,6 +133,24 @@ public class AxiomBuilder {
                 } else {
                     return dataFactory.getOWLObjectProperty(rolePrefix + string);
                 }
+        }
+
+    }
+
+    public OWLAnnotation stringToOWLAnnotation(String string) {
+
+        OWLLiteral objectGlobal = dataFactory.getOWLLiteral("objectGlobal");
+
+        switch (string.trim()) {
+            case "global":
+                return dataFactory.getRDFSLabel(objectGlobal);
+            default:
+                if (!stringToConcept(string.trim()).isOWLClass()) {
+                    throw new AxiomBuilderException("Unsupported annotation: " + string);
+                }
+                return dataFactory.getOWLAnnotation(dataFactory.getRDFSIsDefinedBy(),
+                        stringToConcept(string.trim()).asOWLClass().getIRI());
+
         }
 
     }
