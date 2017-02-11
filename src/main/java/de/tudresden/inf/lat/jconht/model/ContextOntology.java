@@ -1,5 +1,6 @@
 package de.tudresden.inf.lat.jconht.model;
 
+import de.tudresden.inf.lat.jconht.tableau.AxiomRenamer;
 import org.semanticweb.owlapi.io.OWLObjectRenderer;
 import org.semanticweb.owlapi.io.ToStringRenderer;
 import org.semanticweb.owlapi.model.*;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -356,25 +358,25 @@ public class ContextOntology {
      */
     public OWLOntology getObjectOntology(List<Type> types) {
 
-//        if (containsRigidNames()) {
-//
-//            try {
-//                OWLOntology objectOntology = ontologyManager.createOntology();
-//
-//                IntStream.range(0, types.size()).forEach(idx -> {
-//                    OWLOntology ontologyToBeRenamed = getObjectOntologyForSingleType(types.get(idx));
-//                    AxiomRenamer renamer = new AxiomRenamer(ontologyToBeRenamed);
-//                    renamer.rename(flexibleNames().collect(Collectors.toSet()), idx);
-//                    objectOntology.addAxioms(ontologyToBeRenamed.axioms().collect(Collectors.toSet()));
-//                });
-//
-//                return objectOntology;
-//            } catch (OWLOntologyCreationException e) {
-//
-//                e.printStackTrace();
-//            }
-//            throw new RuntimeException("rigid names not implemented yet!");
-//        } else {
+        if (containsRigidNames()) {
+
+            try {
+                OWLOntology objectOntology = ontologyManager.createOntology();
+
+                IntStream.range(0, types.size()).forEach(idx -> {
+                    OWLOntology ontologyToBeRenamed = getObjectOntologyForSingleType(types.get(idx));
+                    AxiomRenamer renamer = new AxiomRenamer(ontologyToBeRenamed);
+                    renamer.rename(flexibleNames().collect(Collectors.toSet()), idx);
+                    objectOntology.addAxioms(ontologyToBeRenamed.axioms().collect(Collectors.toSet()));
+                });
+
+                return objectOntology;
+            } catch (OWLOntologyCreationException e) {
+
+                e.printStackTrace();
+            }
+            throw new RuntimeException("rigid names not implemented yet!");
+        } else {
             // no rigid names
 
             if (types.size() != 1) {

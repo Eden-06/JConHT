@@ -7,6 +7,7 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -337,12 +338,17 @@ public class ContextOntologyTest {
                         dataFactory.getOWLObjectSomeValuesFrom(rolT, dataFactory.getOWLThing()), clsA))
                 .collect(Collectors.toSet());
 
-        Stream<OWLClass> posMetaConcepts = Stream.of(meta1, meta2, meta3, meta4);
+        Supplier<Stream<OWLClass>> posMetaConcepts = () -> Stream.of(meta1, meta2, meta3, meta4);
 
         assertEquals("Test 1 for getting the object ontology:",
                 objectOntologyAxiomSet,
-                contextOntology.getObjectOntology(getType(posMetaConcepts, Stream.empty()))
+                contextOntology.getObjectOntology(getType(posMetaConcepts.get(), Stream.empty()))
                         .axioms().collect(Collectors.toSet()));
+
+        contextOntology
+                .getObjectOntology(getType(posMetaConcepts.get(), Stream.empty()))
+                .axioms()
+                .forEach(System.out::println);
     }
 
     @Test
@@ -418,6 +424,28 @@ public class ContextOntologyTest {
                         .collect(Collectors.toSet()));
     }
 
+    @Test
+    public void testGetObjectOntologyAllMetaConceptsPositiveWithRigidNames() throws Exception {
+
+        Set<OWLAxiom> objectOntologyAxiomSet = Stream.of(
+                builder.stringToOWLAxiom("A_0 ⊑ B3_0"),
+                builder.stringToOWLAxiom("A_0 ⊑ ⊥"),
+                builder.stringToOWLAxiom("A_0(a)"),
+                builder.stringToOWLAxiom("(B ⊓ ∃ R_0.B)(a)"),
+                builder.stringToOWLAxiom("∃ T.⊤ ⊑ A_0"))
+                .collect(Collectors.toSet());
+
+        Supplier<Stream<OWLClass>> posMetaConcepts = () -> Stream.of(meta1, meta2, meta3, meta4);
+
+        assertEquals("Test 1 for getting the object ontology:",
+                objectOntologyAxiomSet,
+                contextOntologyWithRigidNames
+                        .getObjectOntology(getType(posMetaConcepts.get(), Stream.empty()))
+                        .axioms()
+                        .collect(Collectors.toSet()));
+    }
+
+    //TODO getObjectOntology with several types
 
     @Test
     public void testClassAssertionWithAnonymousIndividuals() throws Exception {

@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 public class AxiomBuilder {
 
     private final static String regexConceptIRICompliant = "((^[A-Za-z0-9_]+)|(^[⊥⊤]))";
-    private final static String regexRoleIRICompliant = "((^[A-Za-z0-9]+)|(^[⊥⊤]))(\\^-1)?";
+    private final static String regexRoleIRICompliant = "((^[A-Za-z0-9_]+)|(^[⊥⊤]))(\\^-1)?";
     private final static String regexIndividualIRICompliant = "[A-Za-z0-9]+";
     private OWLDataFactory dataFactory;
     private String rolePrefix;
