@@ -7,8 +7,8 @@ import org.junit.Test;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertFalse;
@@ -272,11 +272,11 @@ public class ContextTableauTest {
 
     private Collection<OWLAnnotation> getIsDefinedBy(HasIRI hasIRI) {
 
-        return Arrays.asList(dataFactory.getOWLAnnotation(dataFactory.getRDFSIsDefinedBy(), hasIRI.getIRI()));
+        return Collections.singletonList(dataFactory.getOWLAnnotation(dataFactory.getRDFSIsDefinedBy(), hasIRI.getIRI()));
     }
 
     private Collection<OWLAnnotation> getRigid() {
 
-        return Arrays.asList(dataFactory.getRDFSLabel("rigid"));
+        return Collections.singletonList(dataFactory.getRDFSLabel("rigid"));
     }
 }

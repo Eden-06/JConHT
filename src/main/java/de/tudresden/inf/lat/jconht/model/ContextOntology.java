@@ -151,15 +151,15 @@ public class ContextOntology {
         try {
             //TODO hier auch wieder die Frage: metaOntology 1x im Constructor erzeugen und speichern oder Methode die Stream zurück gibt?
             metaOntology = ontologyManager.createOntology(rootOntology.axioms()
-                            .filter(owlAxiom -> owlAxiom.isOfType(AxiomType.LOGICAL_AXIOM_TYPES))
-                            .filter(owlAxiom -> owlAxiom.annotations(isDefinedBy).count() == 0)
-                            .filter(owlAxiom -> owlAxiom.annotations(label)
-                                    .filter(owlAnnotation -> owlAnnotation.getValue().equals(objectGlobal))
-                                    .count() == 0)
-                            .collect(Collectors.toSet()));
+                    .filter(owlAxiom -> owlAxiom.isOfType(AxiomType.LOGICAL_AXIOM_TYPES))
+                    .filter(owlAxiom -> owlAxiom.annotations(isDefinedBy).count() == 0)
+                    .filter(owlAxiom -> owlAxiom.annotations(label)
+                            .filter(owlAnnotation -> owlAnnotation.getValue().equals(objectGlobal))
+                            .count() == 0)
+                    .collect(Collectors.toSet()));
             //TODO doch keine metaOntologyIRI, falls man von einer rootOntology mehrere ContextOntologies erzeugt,
             // erzeugt man hier einen Fehler, da die metaOntology anscheinend schon existiert
-                    //IRI.create(rootOntology.getOntologyID().getOntologyIRI().orElse(IRI.create("")) + "_meta"));
+            //IRI.create(rootOntology.getOntologyID().getOntologyIRI().orElse(IRI.create("")) + "_meta"));
 
         } catch (OWLOntologyCreationException e) {
             e.printStackTrace();
@@ -383,12 +383,12 @@ public class ContextOntology {
             }
 
             return getObjectOntologyForSingleType(types.stream().findAny().get());
-//        }
+        }
     }
 
     private OWLOntology getObjectOntologyForSingleType(Type type) {
 
-        try{
+        try {
             return ontologyManager.createOntology(Stream.of(
                     globalObjectOntology(),
                     type.positiveConcepts()
@@ -405,7 +405,7 @@ public class ContextOntology {
             e.printStackTrace();
         }
 
-        return  null;
+        return null;
     }
 
     /**

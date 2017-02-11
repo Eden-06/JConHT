@@ -181,7 +181,7 @@ public class ContextTableau extends Tableau {
         Optional<Node> clashNode = tableauNodes()
                 .filter(node -> {
                     OWLReasoner reasoner = reasonerFactory.createReasoner(
-                            contextOntology.getObjectOntology(Arrays.asList(typeOfNode(node))));
+                            contextOntology.getObjectOntology(Collections.singletonList(typeOfNode(node))));
                     boolean result = !reasoner.isConsistent();
 
                     if (debugOutput && result) {
