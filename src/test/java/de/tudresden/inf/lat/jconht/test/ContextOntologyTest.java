@@ -449,20 +449,9 @@ public class ContextOntologyTest {
 
     @Test
     public void testClassAssertionWithAnonymousIndividuals() throws Exception {
-        //TODO das hier sollte klappen, tut es aber nicht, wie könnte man das testen? Bräuchte ich um ObjOntology richtig zu testen
-
-//        OWLIndividual anonymousIndividual = dataFactory.getOWLNamedIndividual("OWLAnonymousIndividual");
-//        Function<OWLAxiom, OWLAxiom> replaceAnonymousIndividual = owlAxiom ->
-//                owlAxiom.isOfType(AxiomType.CLASS_ASSERTION) &&
-//                        ((OWLClassAssertionAxiom) owlAxiom).getIndividual().isAnonymous() ?
-//                        dataFactory.getOWLClassAssertionAxiom(
-//                                ((OWLClassAssertionAxiom) owlAxiom).getClassExpression(),
-//                                anonymousIndividual) :
-//                        owlAxiom;
 
         OWLAxiom axiom1 = dataFactory.getOWLClassAssertionAxiom(clsC, dataFactory.getOWLAnonymousIndividual());
         OWLAxiom axiom2 = dataFactory.getOWLClassAssertionAxiom(clsC, dataFactory.getOWLAnonymousIndividual());
-        //OWLAxiom axiom3 = dataFactory.getOWLClassAssertionAxiom(clsC, indA);
 
         assertEquals(
                 replaceAnonymousIndividual(axiom1),

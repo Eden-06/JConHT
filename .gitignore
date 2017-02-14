@@ -9,3 +9,5 @@ src/main/java/de/tudresden/inf/lat/jconht/playground/
 .idea/libraries/Maven__junit_junit_4_12.xml
 *.project
 *.crom
+/NoRigidNames.txt
+/RigidNames.txt
