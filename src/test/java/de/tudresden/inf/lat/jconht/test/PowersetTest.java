@@ -1,5 +1,6 @@
-package de.tudresden.inf.lat.jconht.model;
+package de.tudresden.inf.lat.jconht.test;
 
+import de.tudresden.inf.lat.jconht.model.Powerset;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -68,7 +69,7 @@ public class PowersetTest {
     public void tmptest() throws Exception {
         System.out.println("Executing tmptest:");
 
-        Set<Integer> set = Stream.of(1,2,3).collect(Collectors.toSet());
+        Set<Integer> set = Stream.of(1, 2, 3).collect(Collectors.toSet());
 
 //        long num = 12;
 //
@@ -78,7 +79,13 @@ public class PowersetTest {
 
         long counter = 0;
         while (true) {
-            for (int i = 0; i < set.size(); i++) {if ((counter & (1L << i)) != 0) {System.out.print(1);} else {System.out.print(0);}}
+            for (int i = 0; i < set.size(); i++) {
+                if ((counter & (1L << i)) != 0) {
+                    System.out.print(1);
+                } else {
+                    System.out.print(0);
+                }
+            }
             System.out.println();
             counter++;
             if (counter == 20)

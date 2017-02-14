@@ -1,5 +1,6 @@
-package de.tudresden.inf.lat.jconht.model;
+package de.tudresden.inf.lat.jconht.test;
 
+import de.tudresden.inf.lat.jconht.model.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,11 +42,9 @@ public class ContextOntologyTest {
     private OWLClass meta4;
     private OWLClass meta5;
     private OWLClass clsB;
-    private OWLClass clsB2;
     private OWLClass clsB3;
     private OWLClass thing;
     private OWLIndividual indA;
-    private OWLIndividual indB;
     private OWLIndividual indC;
     private OWLObjectProperty rolR;
     private OWLObjectProperty rolS;
@@ -69,11 +68,10 @@ public class ContextOntologyTest {
         meta4 = dataFactory.getOWLClass("cls:meta4");
         meta5 = dataFactory.getOWLClass("cls:meta5");
         clsB = dataFactory.getOWLClass("cls:B");
-        clsB2 = dataFactory.getOWLClass("cls:B2");
+        OWLClass clsB2 = dataFactory.getOWLClass("cls:B2");
         clsB3 = dataFactory.getOWLClass("cls:B3");
         thing = dataFactory.getOWLThing();
         indA = dataFactory.getOWLNamedIndividual("ind:a");
-        indB = dataFactory.getOWLNamedIndividual("ind:b");
         indC = dataFactory.getOWLNamedIndividual("ind:c");
         rolR = dataFactory.getOWLObjectProperty("rol:R");
         rolS = dataFactory.getOWLObjectProperty("rol:S");
@@ -301,21 +299,21 @@ public class ContextOntologyTest {
         OWLOntology metaOntology = manager.createOntology(Arrays.asList(
                 builder.stringToOWLAxiom("C ⊑ meta1 ⊓ meta2"),
                 builder.stringToOWLAxiom("C ⊑ meta1 ⊓ meta2")
-                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Arrays.asList(meta1)))),
+                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Collections.singletonList(meta1)))),
                 builder.stringToOWLAxiom("C ⊑ meta1 ⊓ meta2")
-                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Arrays.asList(meta2)))),
+                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Collections.singletonList(meta2)))),
                 builder.stringToOWLAxiom("C ⊑ meta1 ⊓ meta2")
                         .accept(new AxiomToDual(dataFactory, new HashSet<>(Arrays.asList(meta1, meta2)))),
                 builder.stringToOWLAxiom("C(c)"),
                 builder.stringToOWLAxiom("(meta3)(c)"),
                 builder.stringToOWLAxiom("(meta3)(c)")
-                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Arrays.asList(meta3)))),
+                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Collections.singletonList(meta3)))),
                 builder.stringToOWLAxiom("meta4 ⊑ ∀S.C"),
                 builder.stringToOWLAxiom("meta4 ⊑ ∀S.C")
-                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Arrays.asList(meta4)))),
+                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Collections.singletonList(meta4)))),
                 builder.stringToOWLAxiom("⊤ ⊑ meta5"),
                 builder.stringToOWLAxiom("⊤ ⊑ meta5")
-                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Arrays.asList(meta5))))));
+                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Collections.singletonList(meta5))))));
 
         assertEquals("Test for getting the meta ontology:",
                 metaOntology.axioms().collect(Collectors.toSet()),
@@ -490,21 +488,11 @@ public class ContextOntologyTest {
 
     // Helper functions
 
-    private Collection<OWLAnnotation> getIsDefinedBy(HasIRI hasIRI) {
-
-        return Arrays.asList(dataFactory.getOWLAnnotation(dataFactory.getRDFSIsDefinedBy(), hasIRI.getIRI()));
-    }
-
     private OWLAnnotationAssertionAxiom isRigid(HasIRI hasIRI) {
 
         return dataFactory.getOWLAnnotationAssertionAxiom(
                 hasIRI.getIRI(),
                 dataFactory.getRDFSLabel("rigid"));
-    }
-
-    private Collection<OWLAnnotation> getObjectGlobal() {
-
-        return Arrays.asList(dataFactory.getRDFSLabel("objectGlobal"));
     }
 
     private OWLAxiom replaceAnonymousIndividual(OWLAxiom owlAxiom) {
@@ -531,7 +519,7 @@ public class ContextOntologyTest {
 
     private List<Type> getType(Stream<OWLClass> pos, Stream<OWLClass> neg) {
 
-        return Arrays.asList(
+        return Collections.singletonList(
                 new Type(pos.collect(Collectors.toSet()), neg.collect(Collectors.toSet())));
     }
 

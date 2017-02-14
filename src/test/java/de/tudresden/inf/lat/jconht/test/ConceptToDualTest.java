@@ -1,5 +1,6 @@
-package de.tudresden.inf.lat.jconht.model;
+package de.tudresden.inf.lat.jconht.test;
 
+import de.tudresden.inf.lat.jconht.model.ConceptToDual;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +27,6 @@ public class ConceptToDualTest {
     private OWLDataFactory dataFactory;
     private OWLClass clsA;
     private OWLClass clsB;
-    private OWLClass clsC;
     private Set<OWLClass> setA;
 
     @Before
@@ -35,7 +35,6 @@ public class ConceptToDualTest {
         dataFactory = manager.getOWLDataFactory();
         clsA = dataFactory.getOWLClass("cls:A");
         clsB = dataFactory.getOWLClass("cls:B");
-        clsC = dataFactory.getOWLClass("cls:C");
         setA = Stream.of(clsA).collect(Collectors.toSet());
 
     }

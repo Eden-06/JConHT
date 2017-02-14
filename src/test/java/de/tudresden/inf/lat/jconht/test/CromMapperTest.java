@@ -1,5 +1,6 @@
-package de.tudresden.inf.lat.jconht.model;
+package de.tudresden.inf.lat.jconht.test;
 
+import de.tudresden.inf.lat.jconht.model.ContextOntology;
 import de.tudresden.inf.lat.jconht.tableau.ContextReasoner;
 import org.junit.After;
 import org.junit.Before;
@@ -11,6 +12,7 @@ import org.semanticweb.owlapi.util.DefaultPrefixManager;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -60,9 +62,9 @@ public class CromMapperTest {
         dataFactory = manager.getOWLDataFactory();
         rosiPrefix = new DefaultPrefixManager("http://www.rosi-project.org/ontologies#");
 
-        String inputDir = new File("input").getAbsolutePath();
+        //String inputDir = new File("input").getAbsolutePath();
         File cromMapperTestOntologyFile = new File("input/CROMMapperTest/MapperTest.owl");
-        //TODO hier auch wieder die Frage, wie man die Ontology richtig lädt
+        //TODO again the question how to correctly load an ontology
         rawOntology = manager.loadOntology(IRI.create(cromMapperTestOntologyFile));
 
         numberOfAnonymousMetaConcepts = 0;
@@ -1143,7 +1145,8 @@ public class CromMapperTest {
 
     // Auxiliary methods used in the tests
 
-    private boolean isInconsistent(Stream<OWLAxiom>... axioms) throws OWLOntologyCreationException {
+    @SafeVarargs
+    private final boolean isInconsistent(Stream<OWLAxiom>... axioms) throws OWLOntologyCreationException {
 
         Stream<OWLAxiom> axiomsStream = Arrays.stream(axioms)
                 .flatMap(Function.identity());
@@ -1153,12 +1156,7 @@ public class CromMapperTest {
         ContextOntology contextOntology = new ContextOntology(rawOntology);
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
 
-        boolean inconsistent = !reasoner.isConsistent();
-
-        //contextOntology.clear();
-        //reasoner.dispose();
-
-        return inconsistent;
+        return !reasoner.isConsistent();
     }
 
     private Stream<OWLAxiom> getMetaTypeAssertion(OWLClassExpression metaType,
@@ -1268,12 +1266,12 @@ public class CromMapperTest {
 
     private Collection<OWLAnnotation> getIsDefinedBy(HasIRI hasIRI) {
 
-        return Arrays.asList(dataFactory.getOWLAnnotation(dataFactory.getRDFSIsDefinedBy(), hasIRI.getIRI()));
+        return Collections.singletonList(dataFactory.getOWLAnnotation(dataFactory.getRDFSIsDefinedBy(), hasIRI.getIRI()));
     }
 
     private Collection<OWLAnnotation> getObjectGlobal() {
 
-        return Arrays.asList(dataFactory.getRDFSLabel("objectGlobal"));
+        return Collections.singletonList(dataFactory.getRDFSLabel("objectGlobal"));
     }
 
 }

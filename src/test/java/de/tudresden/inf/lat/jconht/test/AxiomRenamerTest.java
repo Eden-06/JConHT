@@ -1,10 +1,9 @@
-package de.tudresden.inf.lat.jconht.model;
+package de.tudresden.inf.lat.jconht.test;
 
 import de.tudresden.inf.lat.jconht.tableau.AxiomRenamer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.semanticweb.HermiT.ReasonerFactory;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 
@@ -27,17 +26,11 @@ public class AxiomRenamerTest {
 
     private OWLOntologyManager manager;
     private OWLDataFactory dataFactory;
-    private ReasonerFactory reasonerFactory;
-    private AxiomRenamer axiomRenamer;
 
     private OWLClass clsA;
     private OWLClass clsB;
     private OWLClass clsC;
-    private OWLClass clsD;
-    private OWLIndividual indA;
-    private OWLIndividual indB;
     private OWLObjectProperty roleR;
-    private OWLObjectProperty roleS;
     private OWLAxiom ax1;
     private OWLAxiom ax2;
     private OWLAxiom ax3;
@@ -53,11 +46,8 @@ public class AxiomRenamerTest {
         clsA = dataFactory.getOWLClass("cls:A");
         clsB = dataFactory.getOWLClass("cls:B");
         clsC = dataFactory.getOWLClass("cls:C");
-        clsD = dataFactory.getOWLClass("cls:D");
-        indA = dataFactory.getOWLNamedIndividual("ind:a");
-        indB = dataFactory.getOWLNamedIndividual("ind:b");
         roleR = dataFactory.getOWLObjectProperty("rol:r");
-        roleS = dataFactory.getOWLObjectProperty("rol:s");
+        OWLObjectProperty roleS = dataFactory.getOWLObjectProperty("rol:s");
 
         ax1 = dataFactory.getOWLSubClassOfAxiom(clsA, clsB);
         ax2 = dataFactory.getOWLSubClassOfAxiom(clsA, clsC);
@@ -113,7 +103,7 @@ public class AxiomRenamerTest {
         renamer.rename(flexibleNames, 3);
 
         assertTrue("After renaming the original concepts cannot appear in ontology",
-                ontology.signature().noneMatch(owlEntity -> flexibleNames.contains(owlEntity)));
+                ontology.signature().noneMatch(flexibleNames::contains));
 
     }
 

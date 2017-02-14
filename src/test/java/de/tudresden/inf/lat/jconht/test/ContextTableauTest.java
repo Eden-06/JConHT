@@ -1,5 +1,7 @@
-package de.tudresden.inf.lat.jconht.model;
+package de.tudresden.inf.lat.jconht.test;
 
+import de.tudresden.inf.lat.jconht.model.AxiomBuilder;
+import de.tudresden.inf.lat.jconht.model.ContextOntology;
 import de.tudresden.inf.lat.jconht.tableau.ContextReasoner;
 import org.junit.After;
 import org.junit.Before;
@@ -257,7 +259,7 @@ public class ContextTableauTest {
                         dataFactory.getOWLObjectMinCardinality(2, rolR, clsB)),
                 dataFactory.getOWLSubClassOfAxiom(clsB,
                         dataFactory.getOWLObjectMinCardinality(2, rolR, clsC)),
-                dataFactory.getOWLClassAssertionAxiom(clsA,indA)
+                dataFactory.getOWLClassAssertionAxiom(clsA, indA)
         ));
 
         ContextOntology contextOntology = new ContextOntology(rootOntology);
@@ -267,16 +269,26 @@ public class ContextTableauTest {
 
     }
 
+    @Test
+    public void testRigidNames() throws Exception {
+        System.out.println("Executing testRigidNames:");
+        // TODO not done yet!
 
-    // Helper functions
+        OWLAxiom axiom = isRigid(clsA);
+        System.out.println(axiom);
+    }
+
+// Helper functions
 
     private Collection<OWLAnnotation> getIsDefinedBy(HasIRI hasIRI) {
 
         return Collections.singletonList(dataFactory.getOWLAnnotation(dataFactory.getRDFSIsDefinedBy(), hasIRI.getIRI()));
     }
 
-    private Collection<OWLAnnotation> getRigid() {
+    private OWLAnnotationAssertionAxiom isRigid(HasIRI hasIRI) {
 
-        return Collections.singletonList(dataFactory.getRDFSLabel("rigid"));
+        return dataFactory.getOWLAnnotationAssertionAxiom(
+                hasIRI.getIRI(),
+                dataFactory.getRDFSLabel("rigid"));
     }
 }

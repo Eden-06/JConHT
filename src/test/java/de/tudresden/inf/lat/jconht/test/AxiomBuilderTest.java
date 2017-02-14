@@ -1,5 +1,7 @@
-package de.tudresden.inf.lat.jconht.model;
+package de.tudresden.inf.lat.jconht.test;
 
+import de.tudresden.inf.lat.jconht.model.AxiomBuilder;
+import de.tudresden.inf.lat.jconht.model.AxiomBuilderException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,12 +10,10 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * This class ...
@@ -39,20 +39,19 @@ public class AxiomBuilderTest {
     }
 
 
-
     @Test
     public void testValidSyntaxRoles() throws Exception {
         System.out.println("Executing testValidSyntaxRoles:");
 
-        assertTrue("S",validRoleSyntax("S"));
-        assertTrue("⊤",validRoleSyntax("⊤"));
-        assertTrue("⊤^-1",validRoleSyntax("⊤^-1"));
-        assertTrue("S^-1",validRoleSyntax("S^-1"));
-        assertTrue("(S^-1)",validRoleSyntax("(S^-1)"));
-        assertTrue("ROLE",validRoleSyntax("ROLE"));
-        assertFalse("S_asd",validRoleSyntax("S_asd"));
-        assertFalse("(S)^-1",validRoleSyntax("(S)^-1"));
-        assertFalse("((S)",validRoleSyntax("((S)"));
+        assertTrue("S", validRoleSyntax("S"));
+        assertTrue("⊤", validRoleSyntax("⊤"));
+        assertTrue("⊤^-1", validRoleSyntax("⊤^-1"));
+        assertTrue("S^-1", validRoleSyntax("S^-1"));
+        assertTrue("(S^-1)", validRoleSyntax("(S^-1)"));
+        assertTrue("ROLE", validRoleSyntax("ROLE"));
+        assertTrue("S_asd", validRoleSyntax("S_asd"));
+        assertFalse("(S)^-1", validRoleSyntax("(S)^-1"));
+        assertFalse("((S)", validRoleSyntax("((S)"));
 
     }
 
@@ -92,20 +91,20 @@ public class AxiomBuilderTest {
     public void testValidSyntaxConcepts() throws Exception {
         System.out.println("Executing testValidSyntaxRoles:");
 
-        assertTrue("C",validConceptSyntax("C"));
-        assertTrue("langerString",validConceptSyntax("langerString"));
-        assertTrue("⊤",validConceptSyntax("⊤"));
-        assertTrue("C ⊓ ⊤",validConceptSyntax("C ⊓ ⊤"));
+        assertTrue("C", validConceptSyntax("C"));
+        assertTrue("langerString", validConceptSyntax("langerString"));
+        assertTrue("⊤", validConceptSyntax("⊤"));
+        assertTrue("C ⊓ ⊤", validConceptSyntax("C ⊓ ⊤"));
 
-        assertFalse("⊥S",validConceptSyntax("⊥S"));
-        assertFalse("S⊥",validConceptSyntax("S⊥"));
-        assertFalse("langer:String",validConceptSyntax("langer:String"));
-        assertFalse("⊥⊥",validConceptSyntax("⊥⊥"));
-        assertFalse("C ⊓ () ⊓ ⊤",validConceptSyntax("C ⊓ () ⊓ ⊤"));
-        assertFalse("(S)^-1",validConceptSyntax("(S)^-1"));
-        assertFalse("((S)",validConceptSyntax("((S)"));
+        assertFalse("⊥S", validConceptSyntax("⊥S"));
+        assertFalse("S⊥", validConceptSyntax("S⊥"));
+        assertFalse("langer:String", validConceptSyntax("langer:String"));
+        assertFalse("⊥⊥", validConceptSyntax("⊥⊥"));
+        assertFalse("C ⊓ () ⊓ ⊤", validConceptSyntax("C ⊓ () ⊓ ⊤"));
+        assertFalse("(S)^-1", validConceptSyntax("(S)^-1"));
+        assertFalse("((S)", validConceptSyntax("((S)"));
 
-        assertTrue("{a}",validConceptSyntax("{a}"));
+        assertTrue("{a}", validConceptSyntax("{a}"));
 
         assertFalse("C ⊓ D @ global", validConceptSyntax("C ⊓ D @ global"));
 
@@ -205,16 +204,16 @@ public class AxiomBuilderTest {
     public void testValidSyntaxAxioms() throws Exception {
         System.out.println("Executing testValidSyntaxRoles:");
 
-        assertTrue("C(a)",validAxiomSyntax("C(a)"));
-        assertFalse("C()",validAxiomSyntax("C()"));
-        assertFalse("C(⊥)",validAxiomSyntax("C(⊥)"));
+        assertTrue("C(a)", validAxiomSyntax("C(a)"));
+        assertFalse("C()", validAxiomSyntax("C()"));
+        assertFalse("C(⊥)", validAxiomSyntax("C(⊥)"));
         assertFalse("((C   )(a)", validAxiomSyntax("((C   )(a)"));
 
         assertTrue("r(a,b)", validAxiomSyntax("r(a,b)"));
         assertFalse("r(a,b,c)", validAxiomSyntax("r(a,b,c)"));
 
-        assertTrue("⊥(a)",validAxiomSyntax("⊥(a)"));
-        assertTrue("⊥(a,b)",validAxiomSyntax("⊥(a,b)"));
+        assertTrue("⊥(a)", validAxiomSyntax("⊥(a)"));
+        assertTrue("⊥(a,b)", validAxiomSyntax("⊥(a,b)"));
 
         assertTrue("C ⊑ D", validAxiomSyntax("C ⊑ D"));
         assertFalse("C ⊑ D ⊑ E", validAxiomSyntax("C ⊑ D ⊑ E"));
@@ -274,7 +273,7 @@ public class AxiomBuilderTest {
                 dataFactory.getOWLSubClassOfAxiom(
                         dataFactory.getOWLClass("cls:C"),
                         dataFactory.getOWLClass("cls:D"),
-                        new HashSet<>(Arrays.asList(dataFactory.getRDFSLabel("objectGlobal")))));
+                        new HashSet<>(Collections.singletonList(dataFactory.getRDFSLabel("objectGlobal")))));
     }
 
     @Test
@@ -286,7 +285,7 @@ public class AxiomBuilderTest {
                 dataFactory.getOWLSubClassOfAxiom(
                         dataFactory.getOWLClass("cls:A"),
                         dataFactory.getOWLNothing(),
-                        new HashSet<>(Arrays.asList(dataFactory.getOWLAnnotation(
+                        new HashSet<>(Collections.singletonList(dataFactory.getOWLAnnotation(
                                 dataFactory.getRDFSIsDefinedBy(),
                                 IRI.create("cls:meta1"))))));
 
@@ -295,7 +294,7 @@ public class AxiomBuilderTest {
                 dataFactory.getOWLClassAssertionAxiom(
                         dataFactory.getOWLClass("cls:A"),
                         dataFactory.getOWLNamedIndividual("ind:a"),
-                        new HashSet<>(Arrays.asList(dataFactory.getOWLAnnotation(
+                        new HashSet<>(Collections.singletonList(dataFactory.getOWLAnnotation(
                                 dataFactory.getRDFSIsDefinedBy(),
                                 IRI.create("cls:meta2"))))));
     }
@@ -304,7 +303,7 @@ public class AxiomBuilderTest {
         try {
             builder.stringToRole(string);
         } catch (AxiomBuilderException e) {
-            System.out.println(e);
+            //System.out.println(e);
             return false;
         }
         return true;
@@ -314,7 +313,7 @@ public class AxiomBuilderTest {
         try {
             builder.stringToConcept(string);
         } catch (AxiomBuilderException e) {
-            System.out.println(e);
+            //System.out.println(e);
             return false;
         }
         return true;
@@ -324,15 +323,11 @@ public class AxiomBuilderTest {
         try {
             builder.stringToOWLAxiom(string);
         } catch (AxiomBuilderException e) {
-            System.out.println(e);
+            //System.out.println(e);
             return false;
         }
         return true;
     }
-
-
-
-
 
 
 }

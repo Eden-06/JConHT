@@ -1,5 +1,6 @@
-package de.tudresden.inf.lat.jconht.model;
+package de.tudresden.inf.lat.jconht.test;
 
+import de.tudresden.inf.lat.jconht.model.AxiomToDual;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
