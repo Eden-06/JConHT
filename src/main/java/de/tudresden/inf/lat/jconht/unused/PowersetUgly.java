@@ -1,4 +1,4 @@
-package de.tudresden.inf.lat.jconht.model;
+package de.tudresden.inf.lat.jconht.unused;
 
 import java.util.HashSet;
 import java.util.Set;

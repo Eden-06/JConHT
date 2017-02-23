@@ -1,5 +1,6 @@
-package de.tudresden.inf.lat.jconht.model;
+package de.tudresden.inf.lat.jconht.unused;
 
+import de.tudresden.inf.lat.jconht.model.UnhandledHermiTObjectException;
 import org.semanticweb.HermiT.model.AtLeast;
 import org.semanticweb.HermiT.model.AtLeastConcept;
 import org.semanticweb.HermiT.model.AtomicConcept;
