@@ -1,6 +1,7 @@
 package de.tudresden.inf.lat.jconht.tableau;
 
 import de.tudresden.inf.lat.jconht.model.ContextOntology;
+import de.tudresden.inf.lat.jconht.model.PreModel;
 import de.tudresden.inf.lat.jconht.model.Type;
 import org.semanticweb.HermiT.Configuration;
 import org.semanticweb.HermiT.Reasoner;
@@ -73,12 +74,14 @@ public class ContextTableau extends Tableau {
     @Override
     protected boolean runCalculus() {
 
+//         return consistentInterpretations().filter(this::isAdmissible).findAny().isPresent();
+
         // First run Hypertableau algorithm on meta ontology
         if (super.runCalculus()) {
 
             // Possibly a model for meta level is found.
             if (debugOutput) {
-                System.out.println(contextOntology);
+                //System.out.println(contextOntology);
                 System.out.println("meta ontology is consistent, following context model is found:");
                 binaryTupleTableEntries(getExtensionManager(), contextOntology.getDataFactory())
                         .forEach(System.out::println);
@@ -91,14 +94,8 @@ public class ContextTableau extends Tableau {
                 isAdmissibleWithoutRigid().ifPresent(clashSet -> getExtensionManager().setClash(clashSet));
             }
 
-            if (getExtensionManager().containsClash()) {
-                // Perform actual backtracking.
-                return runCalculus();
-            } else {
-                // All nodes are inner consistent.
-                return true;
-            }
-
+            // All nodes are inner consistent. || Perform actual backtracking.
+            return !getExtensionManager().containsClash() || runCalculus();
         } else {
 
             // The meta-ontology is inconsistent, giving up.
@@ -232,6 +229,93 @@ public class ContextTableau extends Tableau {
         return isAdmissibleWithoutRigid();
     }
 
+    private boolean isAdmissible(PreModel model) {
+
+        // Iterate over all tableau nodes and check whether one of them is not inner consistent.
+        return tableauNodes()
+                // filter if there is any node that is not inner consistent.
+                .filter(node -> {
+                    OWLReasoner reasoner = reasonerFactory.createReasoner(
+                            contextOntology.getObjectOntology(Collections.singletonList(typeOfNode(node))));
+                    boolean result = !reasoner.isConsistent();
+
+                    if (debugOutput && result) {
+                        System.out.println(String.join("", Collections.nCopies(100, "-")));
+                        System.out.println("--- object ontology for node " + node + " is consistent, following object model is found:");
+                        binaryTupleTableEntries(((Reasoner) reasoner).getTableau().getExtensionManager(),
+                                contextOntology.getDataFactory())
+                                .forEach(System.out::println);
+                        ternaryTupleTableEntries(((Reasoner) reasoner).getTableau().getExtensionManager())
+                                .forEach(System.out::println);
+                        System.out.println(String.join("", Collections.nCopies(100, "-")));
+                    }
+
+                    return result;
+                })
+                .findAny().isPresent();
+    }
+
+
+    public Set<PreModel> listModels() {
+        Set<PreModel> models = new HashSet<>();
+
+        clear();
+        m_permanentDLOntology.getPositiveFacts()
+                .forEach(atom -> loadPositiveFact(new HashMap<>(), atom, m_dependencySetFactory.emptySet()));
+        m_permanentDLOntology.getNegativeFacts()
+                .forEach(atom -> loadNegativeFact(new HashMap<>(), atom, m_dependencySetFactory.emptySet()));
+        if (m_additionalDLOntology != null) {
+            m_additionalDLOntology.getPositiveFacts()
+                    .forEach(atom -> loadPositiveFact(new HashMap<>(), atom, m_dependencySetFactory.emptySet()));
+            m_additionalDLOntology.getNegativeFacts()
+                    .forEach(atom -> loadNegativeFact(new HashMap<>(), atom, m_dependencySetFactory.emptySet()));
+        }
+
+        // Ensure that at least one individual exists.
+        if (m_firstTableauNode == null) {
+            createNewNINode(m_dependencySetFactory.emptySet());
+        }
+        if (super.runCalculus()) {
+            models.add(new PreModel(getExtensionManager(), contextOntology.getDataFactory()));
+        }
+
+
+        Optional<BinaryTupleTableEntry> entry;
+        do {
+            entry = binaryTupleTableEntries(getExtensionManager(), contextOntology.getDataFactory())
+                    .filter(tuple -> !tuple.getDependencySet().isEmpty())
+                    .reduce((a, b) -> b);
+
+            if (entry.isPresent()) {
+                getExtensionManager().setClash(entry.get().getDependencySet());
+
+                if (super.runCalculus()) {
+                    models.add(new PreModel(getExtensionManager(), contextOntology.getDataFactory()));
+                }
+            }
+
+        } while (entry.isPresent());
+
+        return models;
+    }
+
+    /**
+     * Wrapper method for Tableau's runCalculus method. Used in ModelIterator.
+     *
+     * @return true iff ontology is consistent
+     */
+    private boolean tableauRunCalculus() {
+        return super.runCalculus();
+    }
+
+    /**
+     * @return A stream of Premodels that HermiT calculated
+     */
+    public Stream<PreModel> consistentInterpretations() {
+
+        return StreamSupport.stream(new ModelIterator().spliterator(), false);
+    }
+
     /**
      * @return A stream of HermiT's tableau nodes.
      */
@@ -240,6 +324,83 @@ public class ContextTableau extends Tableau {
         return StreamSupport.stream(new NodeIterator().spliterator(), false);
     }
 
+    /**
+     * This class realises an iterator for consistentInterpretations that Hermit calculates.
+     */
+    private class ModelIterator implements Iterator<PreModel>, Iterable<PreModel> {
+
+        private PreModel model;
+
+        /**
+         * The standard constructor initialising the internal state with the first model if the ontology is
+         * consistent.
+         */
+        public ModelIterator() {
+
+            clear();
+            m_permanentDLOntology.getPositiveFacts()
+                    .forEach(atom -> loadPositiveFact(new HashMap<>(), atom, m_dependencySetFactory.emptySet()));
+            m_permanentDLOntology.getNegativeFacts()
+                    .forEach(atom -> loadNegativeFact(new HashMap<>(), atom, m_dependencySetFactory.emptySet()));
+            if (m_additionalDLOntology != null) {
+                m_additionalDLOntology.getPositiveFacts()
+                        .forEach(atom -> loadPositiveFact(new HashMap<>(), atom, m_dependencySetFactory.emptySet()));
+                m_additionalDLOntology.getNegativeFacts()
+                        .forEach(atom -> loadNegativeFact(new HashMap<>(), atom, m_dependencySetFactory.emptySet()));
+            }
+
+            // Ensure that at least one individual exists.
+            if (m_firstTableauNode == null) {
+                createNewNINode(m_dependencySetFactory.emptySet());
+            }
+
+            if (tableauRunCalculus()) {
+                model = new PreModel(getExtensionManager(), contextOntology.getDataFactory());
+            } else {
+                model = null;
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+
+            return model != null;
+        }
+
+        @Override
+        public PreModel next() {
+
+            PreModel result = model;
+
+            Optional<BinaryTupleTableEntry> entry =
+                    binaryTupleTableEntries(getExtensionManager(), contextOntology.getDataFactory())
+                            .filter(tuple -> !tuple.getDependencySet().isEmpty())
+                            .reduce((a, b) -> b);
+
+            if (entry.isPresent()) {
+                getExtensionManager().setClash(entry.get().getDependencySet());
+
+                if (tableauRunCalculus()) {
+                    model = new PreModel(getExtensionManager(), contextOntology.getDataFactory());
+                } else {
+                    model = null;
+                }
+            } else {
+                model = null;
+            }
+
+
+
+
+            return result;
+        }
+
+        @Override
+        public Iterator<PreModel> iterator() {
+
+            return this;
+        }
+    }
 
     /**
      * This class realises an iterator for HermiT’s tableau nodes.

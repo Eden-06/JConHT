@@ -280,7 +280,42 @@ public class ContextTableauTest {
         System.out.println(axiom);
     }
 
-// Helper functions
+    @Test
+    public void testListModels() throws Exception {
+        System.out.println("Executing testListModels:");
+
+//        ContextReasoner reasoner = new ContextReasoner(new ContextOntology(manager.createOntology(Arrays.asList(
+//                builder.stringToOWLAxiom("A(a)")
+//                ,builder.stringToOWLAxiom("A ⊑ B1 ⊔ B2")
+//                ,builder.stringToOWLAxiom("A ⊑ C1 ⊔ C2")
+////                ,builder.stringToOWLAxiom("C1 ⊓ B2 ⊑ ⊥")
+////                ,builder.stringToOWLAxiom("A ⊑ ⊥")
+//                )), new Configuration(true,true)));
+//
+//        ((ContextTableau) reasoner.getTableau()).consistentInterpretations().forEach(System.out::println);
+//        System.out.println("---------------------------");
+
+        OWLOntology ontology = manager.createOntology(Stream.of(
+                // meta level
+                dataFactory.getOWLSubClassOfAxiom(clsC, A_ASubBottom),
+                dataFactory.getOWLClassAssertionAxiom(dataFactory.getOWLObjectIntersectionOf(clsC, A_Aa), indC),
+                // object level
+                axiom_ASubBottom,
+                axiom_Aa
+        ));
+
+        ContextOntology contextOntology = new ContextOntology(ontology, new Configuration(true, true));
+        ContextReasoner reasoner2 = new ContextReasoner(contextOntology);
+        ((ContextTableau) reasoner2.getTableau()).consistentInterpretations().forEach(System.out::println);
+
+        System.out.println("---------------------------");
+
+        ((ContextTableau) reasoner2.getTableau()).listModels().forEach(System.out::println);
+
+
+    }
+
+    // Helper functions
 
     private Collection<OWLAnnotation> getIsDefinedBy(HasIRI hasIRI) {
 
