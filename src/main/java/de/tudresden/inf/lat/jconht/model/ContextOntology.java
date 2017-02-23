@@ -27,6 +27,7 @@ public class ContextOntology {
     private final OWLOntologyManager ontologyManager;
     private final OWLDataFactory dataFactory;
     private final OWLOntology rootOntology;
+    private final Configuration configuration;
     private final OWLAnnotationProperty isDefinedBy;
     private final OWLAnnotationProperty label;
     private final OWLLiteral objectGlobal;
@@ -62,11 +63,12 @@ public class ContextOntology {
      *
      * @param rootOntology The correctly annotated root ontology. TODO: Specify what this actually means.
      */
-    public ContextOntology(OWLOntology rootOntology) {
+    public ContextOntology(OWLOntology rootOntology, Configuration configuration) {
 
         ontologyManager = rootOntology.getOWLOntologyManager();
         dataFactory = ontologyManager.getOWLDataFactory();
         this.rootOntology = rootOntology;
+        this.configuration = configuration;
 
 
         // Define OWLAnnotationProperties and -Values, OWLLiterals, Predicates
@@ -136,6 +138,12 @@ public class ContextOntology {
                 .filter(axiom -> axiom.getAnnotation().getProperty().isLabel())
                 .filter(axiom -> axiom.getValue().equals(rigid))
                 .findAny().isPresent();
+    }
+
+    public ContextOntology(OWLOntology rootOntology) {
+
+        this(rootOntology, new Configuration());
+
     }
 
     public void clear() {
@@ -418,6 +426,10 @@ public class ContextOntology {
         return ontologyManager.getOWLDataFactory();
     }
 
+    public Configuration getConfiguration() {
+
+        return configuration;
+    }
 
     public String getStatistics() {
 

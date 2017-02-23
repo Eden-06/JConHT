@@ -1,8 +1,10 @@
 package de.tudresden.inf.lat.jconht.test;
 
 import de.tudresden.inf.lat.jconht.model.AxiomBuilder;
+import de.tudresden.inf.lat.jconht.model.Configuration;
 import de.tudresden.inf.lat.jconht.model.ContextOntology;
 import de.tudresden.inf.lat.jconht.tableau.ContextReasoner;
+import de.tudresden.inf.lat.jconht.tableau.ContextTableau;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -95,7 +97,7 @@ public class ContextTableauTest {
                 axiom_Aa
         ));
 
-        ContextOntology contextOntology = new ContextOntology(ontology);
+        ContextOntology contextOntology = new ContextOntology(ontology, new Configuration(true, true));
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
 
         //System.out.println("contextOntology = " + contextOntology);

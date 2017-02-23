@@ -32,11 +32,10 @@ import static de.tudresden.inf.lat.jconht.model.TupleTableEntries.*;
  */
 public class ContextTableau extends Tableau {
 
-    private static final boolean debugOutput = false;
-
     private final Predicate<OWLClass> classIsAbstractedMetaConcept;
     private ContextOntology contextOntology;
     private OWLReasonerFactory reasonerFactory;
+    private boolean debugOutput = false;
 
     /**
      * This is the standard constructor.
@@ -58,6 +57,7 @@ public class ContextTableau extends Tableau {
 
         this.contextOntology = contextOntology;
         this.reasonerFactory = new ReasonerFactory();
+        this.debugOutput = contextOntology.getConfiguration().debugOutput();
 
         classIsAbstractedMetaConcept =
                 owlClass -> contextOntology.outerAbstractedMetaConcepts().anyMatch(metaConcept -> metaConcept.equals(owlClass));

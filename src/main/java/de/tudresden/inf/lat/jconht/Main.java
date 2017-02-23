@@ -17,6 +17,9 @@ public class Main {
     // TODO ordentliche clear und dispose Methoden wo notwendig
 
     // TODO Taking care of proper handling of meta and object role boxes
+    // meta RBoxAxioms müssen nicht gesondert behandelt werden, das sind einfach unannotierte OWLAxioms
+    // obj RBoxAxioms müssen global gelten, müssen also mit "objectGlobal" annotiert sein
+    // RBoxAxioms mit "definedBy" sind verboten! Das sollte vielleicht überprüft werden.
 
     public static void main(String[] args) {
 
