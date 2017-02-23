@@ -7,6 +7,11 @@ import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.QNameShortFormProvider;
 import org.semanticweb.owlapi.util.SimpleRenderer;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -335,6 +340,8 @@ public class ContextOntology {
      * @return Stream of OWL axioms that must hold in every context.
      */
     public Stream<OWLAxiom> globalObjectOntology() {
+        // TODO sehr gefährlich, rootOntology wird nicht in der contextOntology gespeichert, wenn später darauf-
+        // zugegriffen wird, könnte sie von außen schon geändert wurden sein.
         return rootOntology.axioms()
                 // consider only logical axioms
                 .filter(owlAxiom -> owlAxiom.isOfType(AxiomType.LOGICAL_AXIOM_TYPES))
@@ -367,6 +374,7 @@ public class ContextOntology {
     public OWLOntology getObjectOntology(List<Type> types) {
 
         if (containsRigidNames()) {
+        //if (false) {
 
             try {
                 OWLOntology objectOntology = ontologyManager.createOntology();
@@ -377,6 +385,15 @@ public class ContextOntology {
                     renamer.rename(flexibleNames().collect(Collectors.toSet()), idx);
                     objectOntology.addAxioms(ontologyToBeRenamed.axioms().collect(Collectors.toSet()));
                 });
+
+                Path path = Paths.get("RigidNames.txt");
+                try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+                    objectOntology.axioms().sorted().forEach(owlAxiom -> {
+                        try {
+                            writer.write(owlAxiom + "\n");
+                        } catch (IOException ignored) {}
+                    });
+                } catch (IOException ignored) {}
 
                 return objectOntology;
             } catch (OWLOntologyCreationException e) {
@@ -392,7 +409,18 @@ public class ContextOntology {
                         "be called for a single type!");
             }
 
-            return getObjectOntologyForSingleType(types.stream().findAny().get());
+            OWLOntology objectOntology = getObjectOntologyForSingleType(types.stream().findAny().get());
+
+            Path path = Paths.get("NoRigidNames.txt");
+            try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+                objectOntology.axioms().sorted().forEach(owlAxiom -> {
+                    try {
+                        writer.write(owlAxiom + "\n");
+                    } catch (IOException ignored) {}
+                });
+            } catch (IOException ignored) {}
+
+            return objectOntology;
         }
     }
 
