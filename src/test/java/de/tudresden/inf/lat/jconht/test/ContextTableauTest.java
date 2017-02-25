@@ -306,11 +306,11 @@ public class ContextTableauTest {
 
         ContextOntology contextOntology = new ContextOntology(ontology, new Configuration(true, true));
         ContextReasoner reasoner2 = new ContextReasoner(contextOntology);
-        ((ContextTableau) reasoner2.getTableau()).consistentInterpretations().forEach(System.out::println);
-
+        reasoner2.isConsistent();
         System.out.println("---------------------------");
-
         ((ContextTableau) reasoner2.getTableau()).listModels().forEach(System.out::println);
+        System.out.println("---------------------------");
+        ((ContextTableau) reasoner2.getTableau()).consistentInterpretations().forEach(System.out::println);
 
 
     }

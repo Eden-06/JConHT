@@ -6,6 +6,7 @@ import de.tudresden.inf.lat.jconht.model.Type;
 import org.semanticweb.HermiT.Configuration;
 import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.HermiT.ReasonerFactory;
+import org.semanticweb.HermiT.model.Term;
 import org.semanticweb.HermiT.tableau.DependencySet;
 import org.semanticweb.HermiT.tableau.Node;
 import org.semanticweb.HermiT.tableau.Tableau;
@@ -71,10 +72,14 @@ public class ContextTableau extends Tableau {
 //        contextOntology.clear();
 //    }
 
+//    @Override
+//    protected boolean runCalculus() {
+//
+//        return consistentInterpretations().filter(this::isAdmissible).findAny().isPresent();
+//    }
+
     @Override
     protected boolean runCalculus() {
-
-//         return consistentInterpretations().filter(this::isAdmissible).findAny().isPresent();
 
         // First run Hypertableau algorithm on meta ontology
         if (super.runCalculus()) {
@@ -178,7 +183,9 @@ public class ContextTableau extends Tableau {
         Optional<Node> clashNode = tableauNodes()
                 .filter(node -> {
                     OWLReasoner reasoner = reasonerFactory.createReasoner(
-                            contextOntology.getObjectOntology(Collections.singletonList(typeOfNode(node))));
+                            contextOntology.getObjectOntology(
+                                    positiveMetaConceptsOfNode(node),
+                                    negativeMetaConceptsOfNode(node)));
                     boolean result = !reasoner.isConsistent();
 
                     if (debugOutput && result) {
@@ -255,20 +262,21 @@ public class ContextTableau extends Tableau {
                 .findAny().isPresent();
     }
 
-
+    @Deprecated
     public Set<PreModel> listModels() {
         Set<PreModel> models = new HashSet<>();
+        Map<Term, Node> termsToNode = new HashMap<>();
 
         clear();
         m_permanentDLOntology.getPositiveFacts()
-                .forEach(atom -> loadPositiveFact(new HashMap<>(), atom, m_dependencySetFactory.emptySet()));
+                .forEach(atom -> loadPositiveFact(termsToNode, atom, m_dependencySetFactory.emptySet()));
         m_permanentDLOntology.getNegativeFacts()
-                .forEach(atom -> loadNegativeFact(new HashMap<>(), atom, m_dependencySetFactory.emptySet()));
+                .forEach(atom -> loadNegativeFact(termsToNode, atom, m_dependencySetFactory.emptySet()));
         if (m_additionalDLOntology != null) {
             m_additionalDLOntology.getPositiveFacts()
-                    .forEach(atom -> loadPositiveFact(new HashMap<>(), atom, m_dependencySetFactory.emptySet()));
+                    .forEach(atom -> loadPositiveFact(termsToNode, atom, m_dependencySetFactory.emptySet()));
             m_additionalDLOntology.getNegativeFacts()
-                    .forEach(atom -> loadNegativeFact(new HashMap<>(), atom, m_dependencySetFactory.emptySet()));
+                    .forEach(atom -> loadNegativeFact(termsToNode, atom, m_dependencySetFactory.emptySet()));
         }
 
         // Ensure that at least one individual exists.
@@ -309,7 +317,7 @@ public class ContextTableau extends Tableau {
     }
 
     /**
-     * @return A stream of Premodels that HermiT calculated
+     * @return A stream of Premodels that HermiT calculated.
      */
     public Stream<PreModel> consistentInterpretations() {
 
@@ -333,20 +341,21 @@ public class ContextTableau extends Tableau {
 
         /**
          * The standard constructor initialising the internal state with the first model if the ontology is
-         * consistent.
+         * consistent. The initialisation is taken from isSatisfiable(...) in HermiT's Tableau class.
          */
         public ModelIterator() {
+            Map<Term, Node> termsToNode = new HashMap<>();
 
             clear();
             m_permanentDLOntology.getPositiveFacts()
-                    .forEach(atom -> loadPositiveFact(new HashMap<>(), atom, m_dependencySetFactory.emptySet()));
+                    .forEach(atom -> loadPositiveFact(termsToNode, atom, m_dependencySetFactory.emptySet()));
             m_permanentDLOntology.getNegativeFacts()
-                    .forEach(atom -> loadNegativeFact(new HashMap<>(), atom, m_dependencySetFactory.emptySet()));
+                    .forEach(atom -> loadNegativeFact(termsToNode, atom, m_dependencySetFactory.emptySet()));
             if (m_additionalDLOntology != null) {
                 m_additionalDLOntology.getPositiveFacts()
-                        .forEach(atom -> loadPositiveFact(new HashMap<>(), atom, m_dependencySetFactory.emptySet()));
+                        .forEach(atom -> loadPositiveFact(termsToNode, atom, m_dependencySetFactory.emptySet()));
                 m_additionalDLOntology.getNegativeFacts()
-                        .forEach(atom -> loadNegativeFact(new HashMap<>(), atom, m_dependencySetFactory.emptySet()));
+                        .forEach(atom -> loadNegativeFact(termsToNode, atom, m_dependencySetFactory.emptySet()));
             }
 
             // Ensure that at least one individual exists.
@@ -388,9 +397,6 @@ public class ContextTableau extends Tableau {
             } else {
                 model = null;
             }
-
-
-
 
             return result;
         }

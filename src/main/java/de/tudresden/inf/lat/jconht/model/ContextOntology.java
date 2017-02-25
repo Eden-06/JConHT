@@ -363,6 +363,38 @@ public class ContextOntology {
     }
 
     /**
+     * This method returns an object ontology associated to the given sets of meta classes.
+     *
+     * @param positiveMetaClasses A set of meta classes whose axioms must hold in the object ontology.
+     * @param negativeMetaClasses A set of meta classes whose axioms must not hold in the object ontology.
+     * @return The associated object ontology.
+     */
+    public OWLOntology getObjectOntology(Stream<OWLClass> positiveMetaClasses, Stream<OWLClass> negativeMetaClasses) {
+
+        try {
+
+            //create the object ontology
+            return ontologyManager.createOntology(Stream.of(
+                    globalObjectOntology(),
+                    positiveMetaClasses
+                            .filter(classIsAbstractedMetaConcept)
+                            .map(objectAxiomsMap::get),
+                    negativeMetaClasses
+                            .filter(classIsAbstractedMetaConcept)
+                            .map(objectAxiomsMap::get)
+                            .map(axiom -> axiom.accept(new AxiomNegator(dataFactory))))
+                    .flatMap(Function.identity()));
+
+        } catch (OWLOntologyCreationException e) {
+
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    /**
      * This method returns an object ontology associated to the given set of types. If the context
      * ontology does not contain any rigid names, each world is checked separately. Hence, the
      * object ontology is only needed for a single type. If rigid names are present, a combined
