@@ -16,6 +16,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static de.tudresden.inf.lat.jconht.model.Powerset.powerset;
+import static org.junit.Assert.assertEquals;
 
 /**
  * This class ...
@@ -60,8 +61,9 @@ public class PowersetTest {
         powerset(intList).forEach(System.out::println);
 
 
-        LinkedList<Integer> intList2 = IntStream.range(1, 26).boxed().collect(Collectors.toCollection(LinkedList::new));
-        System.out.println(powerset(intList2).count());
+//        LinkedList<Integer> intList2 = IntStream.range(1, 26).boxed().collect(Collectors.toCollection(LinkedList::new));
+        LinkedList<Integer> intList2 = IntStream.range(1, 10).boxed().collect(Collectors.toCollection(LinkedList::new));
+        assertEquals(powerset(intList2).count(), 512);
     }
 
 
