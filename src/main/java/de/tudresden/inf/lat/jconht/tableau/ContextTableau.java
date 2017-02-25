@@ -182,24 +182,21 @@ public class ContextTableau extends Tableau {
         // Iterate over all tableau nodes and check whether one of them is not inner consistent.
         Optional<Node> clashNode = tableauNodes()
                 .filter(node -> {
-                    OWLReasoner reasoner = reasonerFactory.createReasoner(
-                            contextOntology.getObjectOntology(
-                                    positiveMetaConceptsOfNode(node),
-                                    negativeMetaConceptsOfNode(node)));
-                    boolean result = !reasoner.isConsistent();
-
-                    if (debugOutput && result) {
+                    OWLReasoner objectReasoner = reasonerFactory.createReasoner(
+                            contextOntology.getObjectOntology(Collections.singletonList(typeOfNode(node))));
+                    boolean isInconsistent = !objectReasoner.isConsistent();
+                    if (debugOutput && !isInconsistent) {
                         System.out.println(String.join("", Collections.nCopies(100, "-")));
                         System.out.println("--- object ontology for node " + node + " is consistent, following object model is found:");
-                        binaryTupleTableEntries(((Reasoner) reasoner).getTableau().getExtensionManager(),
+                        binaryTupleTableEntries(((Reasoner) objectReasoner).getTableau().getExtensionManager(),
                                 contextOntology.getDataFactory())
                                 .forEach(System.out::println);
-                        ternaryTupleTableEntries(((Reasoner) reasoner).getTableau().getExtensionManager())
+                        ternaryTupleTableEntries(((Reasoner) objectReasoner).getTableau().getExtensionManager())
                                 .forEach(System.out::println);
                         System.out.println(String.join("", Collections.nCopies(100, "-")));
                     }
 
-                    return result;
+                    return isInconsistent;
                 })
                 .findFirst();
 

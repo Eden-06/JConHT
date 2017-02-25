@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 public class AxiomRenamer {
     private OWLOntologyManager manager;
     private OWLOntology ontologyToChange;
-    private Function<OWLEntity, Stream<OWLAxiom>> axiomsContainingThatEntity;
+    private final Function<OWLEntity, Stream<OWLAxiom>> axiomsContainingThatEntity;
 
     public AxiomRenamer(OWLOntology ontologyToChange) {
         this.ontologyToChange = ontologyToChange;

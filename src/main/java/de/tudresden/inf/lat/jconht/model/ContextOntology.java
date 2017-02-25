@@ -7,18 +7,12 @@ import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.QNameShortFormProvider;
 import org.semanticweb.owlapi.util.SimpleRenderer;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -405,27 +399,35 @@ public class ContextOntology {
      */
     public OWLOntology getObjectOntology(List<Type> types) {
 
-        if (containsRigidNames()) {
-        //if (false) {
+        //if (containsRigidNames()) {
+        if (false) {
 
             try {
                 OWLOntology objectOntology = ontologyManager.createOntology();
 
-                IntStream.range(0, types.size()).forEach(idx -> {
+//                IntStream.range(0, types.size()).forEach(idx -> {
+//                    OWLOntology ontologyToBeRenamed = getObjectOntologyForSingleType(types.get(idx));
+//                    AxiomRenamer renamer = new AxiomRenamer(ontologyToBeRenamed);
+//                    renamer.rename(flexibleNames().collect(Collectors.toSet()), idx);
+//                    objectOntology.addAxioms(ontologyToBeRenamed.axioms().collect(Collectors.toSet()));
+//                });
+
+                // TODO for-loop only for easier debugging, renaming takes ages :(
+                for (int idx = 0; idx < types.size(); idx++) {
                     OWLOntology ontologyToBeRenamed = getObjectOntologyForSingleType(types.get(idx));
                     AxiomRenamer renamer = new AxiomRenamer(ontologyToBeRenamed);
                     renamer.rename(flexibleNames().collect(Collectors.toSet()), idx);
                     objectOntology.addAxioms(ontologyToBeRenamed.axioms().collect(Collectors.toSet()));
-                });
+                }
 
-                Path path = Paths.get("RigidNames.txt");
-                try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-                    objectOntology.axioms().sorted().forEach(owlAxiom -> {
-                        try {
-                            writer.write(owlAxiom + "\n");
-                        } catch (IOException ignored) {}
-                    });
-                } catch (IOException ignored) {}
+//                Path path = Paths.get("RigidNames.txt");
+//                try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+//                    objectOntology.axioms().sorted().forEach(owlAxiom -> {
+//                        try {
+//                            writer.write(owlAxiom + "\n");
+//                        } catch (IOException ignored) {}
+//                    });
+//                } catch (IOException ignored) {}
 
                 return objectOntology;
             } catch (OWLOntologyCreationException e) {
@@ -443,14 +445,14 @@ public class ContextOntology {
 
             OWLOntology objectOntology = getObjectOntologyForSingleType(types.stream().findAny().get());
 
-            Path path = Paths.get("NoRigidNames.txt");
-            try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-                objectOntology.axioms().sorted().forEach(owlAxiom -> {
-                    try {
-                        writer.write(owlAxiom + "\n");
-                    } catch (IOException ignored) {}
-                });
-            } catch (IOException ignored) {}
+//            Path path = Paths.get("NoRigidNames.txt");
+//            try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+//                objectOntology.axioms().sorted().forEach(owlAxiom -> {
+//                    try {
+//                        writer.write(owlAxiom + "\n");
+//                    } catch (IOException ignored) {}
+//                });
+//            } catch (IOException ignored) {}
 
             return objectOntology;
         }

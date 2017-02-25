@@ -1,5 +1,6 @@
 package de.tudresden.inf.lat.jconht.test;
 
+import de.tudresden.inf.lat.jconht.model.Configuration;
 import de.tudresden.inf.lat.jconht.model.ContextOntology;
 import de.tudresden.inf.lat.jconht.tableau.ContextReasoner;
 import org.junit.After;
@@ -31,6 +32,7 @@ public class CromMapperTest {
     private OWLOntologyManager manager;
     private OWLDataFactory dataFactory;
     private PrefixManager rosiPrefix;
+    private Configuration configuration;
 
     private OWLOntology rawOntology;
 
@@ -66,6 +68,7 @@ public class CromMapperTest {
         File cromMapperTestOntologyFile = new File("input/CROMMapperTest/MapperTest.owl");
         //TODO again the question how to correctly load an ontology
         rawOntology = manager.loadOntology(IRI.create(cromMapperTestOntologyFile));
+        configuration = new Configuration();
 
         numberOfAnonymousMetaConcepts = 0;
         numberOfAnonymousIndividuals = 0;
@@ -146,13 +149,21 @@ public class CromMapperTest {
     public void testEveryRoleIsPlayed() throws Exception {
         System.out.println("Executing testEveryRoleIsPlayed: ");
 
-        OWLIndividual individual = dataFactory.getOWLAnonymousIndividual();
+        OWLIndividual individual = createNewAnonymousIndividual();
+        // TODO warum klappt das nicht mit dataFactory.getOWLAnonymousIndividual() ?
 
-        assertTrue(isInconsistent(
+        Configuration conf = new Configuration(true, true);
+
+        assertTrue(isInconsistent(//conf,
                 getGlobalObjectTypeAssertion(roleTypes, individual),
+//                getGlobalObjectTypeAssertion(
+//                        dataFactory.getOWLObjectMaxCardinality(0, dataFactory.getOWLObjectInverseOf(plays)),
+//                        individual),
                 getGlobalObjectTypeAssertion(
-                        dataFactory.getOWLObjectMaxCardinality(0, dataFactory.getOWLObjectInverseOf(plays)),
-                        individual)));
+                        dataFactory.getOWLObjectComplementOf(dataFactory.getOWLObjectSomeValuesFrom(
+                                dataFactory.getOWLObjectInverseOf(plays),dataFactory.getOWLThing())),
+                        individual)
+        ));
     }
 
     @Test
@@ -1148,12 +1159,18 @@ public class CromMapperTest {
     @SafeVarargs
     private final boolean isInconsistent(Stream<OWLAxiom>... axioms) throws OWLOntologyCreationException {
 
+        return isInconsistent(new Configuration(), axioms);
+    }
+
+    @SafeVarargs
+    private final boolean isInconsistent(Configuration config, Stream<OWLAxiom>... axioms) throws OWLOntologyCreationException {
+
         Stream<OWLAxiom> axiomsStream = Arrays.stream(axioms)
                 .flatMap(Function.identity());
 
         manager.addAxioms(rawOntology, axiomsStream);
 
-        ContextOntology contextOntology = new ContextOntology(rawOntology);
+        ContextOntology contextOntology = new ContextOntology(rawOntology, config);
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
 
         return !reasoner.isConsistent();
