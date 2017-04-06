@@ -129,8 +129,16 @@ public class ContextOntology {
                                         .get()),
                         owlAxiom -> owlAxiom.getAxiomWithoutAnnotations()));
 
-        // Add dual axioms to meta Ontology
-        addDualAxiomsToMetaOntology();
+        // Add dual axioms to meta ontology
+        if (configuration.useDualization()){
+            addDualAxiomsToMetaOntology();
+        }
+
+        // Add repleted axioms to meta ontology
+        if (configuration.useRepletion()){
+            addRepletionAxiomsToMetaOntology();
+        }
+
 
         // Are there rigid names?
         containsRigidNames = rootOntology.axioms(AxiomType.ANNOTATION_ASSERTION)
@@ -175,6 +183,27 @@ public class ContextOntology {
             throw new ContextOntologyException(
                     "\nCould not construct meta ontology.");
         }
+    }
+
+    /**
+     * This method adds repletion axioms (e.g. ¬A_¬α ⊑ C for A_α ⊑ C) to the meta ontology. It is important that this
+     * method is called after the initialisation of the objectAxiomMap since it uses outerAbstractedMetaConcepts()
+     */
+    private void addRepletionAxiomsToMetaOntology() {
+
+        // Step 1: Add repletion  axioms to meta ontology
+        ontologyManager.addAxioms(metaOntology,
+                objectAxiomsMap.keySet().stream().map(owlClass ->
+                        dataFactory.getOWLSubClassOfAxiom(
+                                dataFactory.getOWLThing(),
+                                dataFactory.getOWLObjectUnionOf(owlClass, getDualClass(owlClass)))));
+
+        // Step 2: Add negated Axioms to objectAxiomMap
+        objectAxiomsMap.putAll(objectAxiomsMap.entrySet().stream()
+                .map(owlClassOWLAxiomEntry -> owlClassOWLAxiomEntry)
+                .collect(Collectors.toMap(
+                        entry -> getDualClass(entry.getKey()),
+                        entry -> entry.getValue().accept(new AxiomNegator(dataFactory)))));
     }
 
     /**

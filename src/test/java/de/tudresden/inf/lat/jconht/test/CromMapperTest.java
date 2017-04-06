@@ -32,7 +32,7 @@ public class CromMapperTest {
     private OWLOntologyManager manager;
     private OWLDataFactory dataFactory;
     private PrefixManager rosiPrefix;
-    private Configuration configuration;
+    private Configuration confWithDebug;
 
     private OWLOntology rawOntology;
 
@@ -68,7 +68,7 @@ public class CromMapperTest {
         File cromMapperTestOntologyFile = new File("input/CROMMapperTest/MapperTest.owl");
         //TODO again the question how to correctly load an ontology
         rawOntology = manager.loadOntology(IRI.create(cromMapperTestOntologyFile));
-        configuration = new Configuration();
+        confWithDebug = new Configuration(true, true, false, true);
 
         numberOfAnonymousMetaConcepts = 0;
         numberOfAnonymousIndividuals = 0;
@@ -152,9 +152,7 @@ public class CromMapperTest {
         OWLIndividual individual = createNewAnonymousIndividual();
         // TODO warum klappt das nicht mit dataFactory.getOWLAnonymousIndividual() ?
 
-        Configuration conf = new Configuration(true, true);
-
-        assertTrue(isInconsistent(//conf,
+        assertTrue(isInconsistent(//confWithDebug,
                 getGlobalObjectTypeAssertion(roleTypes, individual),
 //                getGlobalObjectTypeAssertion(
 //                        dataFactory.getOWLObjectMaxCardinality(0, dataFactory.getOWLObjectInverseOf(plays)),
@@ -898,7 +896,7 @@ public class CromMapperTest {
         OWLIndividual natural = dataFactory.getOWLAnonymousIndividual();
         OWLClass rt1 = dataFactory.getOWLClass("RTProhibition1", rosiPrefix);
 
-        assertFalse(isInconsistent(
+        assertFalse(isInconsistent(//confWithDebug,
                 getMetaTypeAssertion(ct, compartment),
                 getNaturalPlaysRoleInCompartmentAssertion(natural, rt1, compartment)
         ));
@@ -929,7 +927,7 @@ public class CromMapperTest {
         OWLClass rt1 = dataFactory.getOWLClass("RTProhibition1", rosiPrefix);
         OWLClass rt2 = dataFactory.getOWLClass("RTProhibition2", rosiPrefix);
 
-        assertTrue(isInconsistent(
+        assertTrue(isInconsistent(confWithDebug,
                 getMetaTypeAssertion(ct, compartment),
                 getNaturalPlaysRoleInCompartmentAssertion(natural, rt1, compartment),
                 getNaturalPlaysRoleInCompartmentAssertion(natural, rt2, compartment)

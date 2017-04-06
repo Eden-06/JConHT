@@ -10,15 +10,24 @@ public class Configuration {
 
     private boolean useUNA;
     private boolean debugOutput;
+    private boolean useDualization;
+    private boolean useRepletion;
 
     public Configuration() {
         useUNA = true;
         debugOutput = false;
+        useDualization = false;
+        useRepletion = true;
     }
 
-    public Configuration(boolean useUNA, boolean debugOutput) {
+    public Configuration(boolean useUNA,
+                         boolean debugOutput,
+                         boolean useDualization,
+                         boolean useRepletion) {
         this.useUNA = useUNA;
         this.debugOutput = debugOutput;
+        this.useDualization = useDualization;
+        this.useRepletion = useRepletion;
     }
 
     public boolean useUNA() {
@@ -27,5 +36,13 @@ public class Configuration {
 
     public boolean debugOutput() {
         return debugOutput;
+    }
+
+    public boolean useDualization() {
+        return useDualization;
+    }
+
+    public boolean useRepletion() {
+        return useRepletion;
     }
 }

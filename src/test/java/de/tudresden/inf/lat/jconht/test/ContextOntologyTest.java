@@ -298,22 +298,17 @@ public class ContextOntologyTest {
 
         OWLOntology metaOntology = manager.createOntology(Arrays.asList(
                 builder.stringToOWLAxiom("C ⊑ meta1 ⊓ meta2"),
-                builder.stringToOWLAxiom("C ⊑ meta1 ⊓ meta2")
-                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Collections.singletonList(meta1)))),
-                builder.stringToOWLAxiom("C ⊑ meta1 ⊓ meta2")
-                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Collections.singletonList(meta2)))),
-                builder.stringToOWLAxiom("C ⊑ meta1 ⊓ meta2")
-                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Arrays.asList(meta1, meta2)))),
                 builder.stringToOWLAxiom("C(c)"),
                 builder.stringToOWLAxiom("(meta3)(c)"),
-                builder.stringToOWLAxiom("(meta3)(c)")
-                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Collections.singletonList(meta3)))),
                 builder.stringToOWLAxiom("meta4 ⊑ ∀S.C"),
-                builder.stringToOWLAxiom("meta4 ⊑ ∀S.C")
-                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Collections.singletonList(meta4)))),
                 builder.stringToOWLAxiom("⊤ ⊑ meta5"),
-                builder.stringToOWLAxiom("⊤ ⊑ meta5")
-                        .accept(new AxiomToDual(dataFactory, new HashSet<>(Collections.singletonList(meta5))))));
+                // repletion axioms
+                builder.stringToOWLAxiom("⊤ ⊑ meta1 ⊔ DUAL.meta1"),
+                builder.stringToOWLAxiom("⊤ ⊑ meta2 ⊔ DUAL.meta2"),
+                builder.stringToOWLAxiom("⊤ ⊑ meta3 ⊔ DUAL.meta3"),
+                builder.stringToOWLAxiom("⊤ ⊑ meta4 ⊔ DUAL.meta4"),
+                builder.stringToOWLAxiom("⊤ ⊑ meta5 ⊔ DUAL.meta5")
+        ));
 
         assertEquals("Test for getting the meta ontology:",
                 metaOntology.axioms().collect(Collectors.toSet()),

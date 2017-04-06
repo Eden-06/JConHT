@@ -97,7 +97,7 @@ public class ContextTableauTest {
                 axiom_Aa
         ));
 
-        ContextOntology contextOntology = new ContextOntology(ontology, new Configuration(true, true));
+        ContextOntology contextOntology = new ContextOntology(ontology, new Configuration(true, true, false, true));
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
 
         //System.out.println("contextOntology = " + contextOntology);
@@ -304,7 +304,7 @@ public class ContextTableauTest {
                 axiom_Aa
         ));
 
-        ContextOntology contextOntology = new ContextOntology(ontology, new Configuration(true, true));
+        ContextOntology contextOntology = new ContextOntology(ontology, new Configuration(true, true, false, true));
         ContextReasoner reasoner2 = new ContextReasoner(contextOntology);
         reasoner2.isConsistent();
         System.out.println("---------------------------");
