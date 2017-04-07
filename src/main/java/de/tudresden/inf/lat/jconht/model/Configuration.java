@@ -13,13 +13,13 @@ public class Configuration {
     private boolean useDualization;
     private boolean useRepletion;
 
-    public Configuration() {
-        useUNA = true;
-        debugOutput = false;
-        useDualization = false;
-        useRepletion = true;
-    }
-
+    /**
+     * Constructor that sets all boolean fields accordingly.
+     * @param useUNA if <code>true</code>, the unique name assumption is used.
+     * @param debugOutput if <code>true</code>, then debug output is produced at several places.
+     * @param useDualization if <code>true</code>, then the dualized axioms are added to the context ontology.
+     * @param useRepletion if <code>true</code>, then the repletion axioms for the context ontology are added.
+     */
     public Configuration(boolean useUNA,
                          boolean debugOutput,
                          boolean useDualization,
@@ -29,6 +29,24 @@ public class Configuration {
         this.useDualization = useDualization;
         this.useRepletion = useRepletion;
     }
+
+    /**
+     * Default constructor, that uses the UNA, produces no debug output, adds repletion axioms, but not dualized axioms.
+     */
+    public Configuration() {
+        this(true, false, false, true);
+    }
+
+    /**
+     * Simplified constructor that sets the default values for <code>useUNA</code>, <code>useDualization</code> and
+     * <code>useRepletion</code>.
+     * @param debugOutput if <code>true</code>, then debug output is produced at several places.
+     */
+    public Configuration(boolean debugOutput) {
+        this(true, debugOutput, false, true);
+    }
+
+
 
     public boolean useUNA() {
         return useUNA;
