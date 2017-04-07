@@ -10,10 +10,7 @@ import org.semanticweb.HermiT.model.Term;
 import org.semanticweb.HermiT.tableau.DependencySet;
 import org.semanticweb.HermiT.tableau.Node;
 import org.semanticweb.HermiT.tableau.Tableau;
-import org.semanticweb.owlapi.model.AsOWLClass;
-import org.semanticweb.owlapi.model.ClassExpressionType;
-import org.semanticweb.owlapi.model.HasClassesInSignature;
-import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 
@@ -72,42 +69,44 @@ public class ContextTableau extends Tableau {
 //        contextOntology.clear();
 //    }
 
-//    @Override
-//    protected boolean runCalculus() {
-//
-//        return consistentInterpretations().filter(this::isAdmissible).findAny().isPresent();
-//    }
-
     @Override
     protected boolean runCalculus() {
 
-        // First run Hypertableau algorithm on meta ontology
-        if (super.runCalculus()) {
-
-            // Possibly a model for meta level is found.
-            if (debugOutput) {
-                //System.out.println(contextOntology);
-                System.out.println("meta ontology is consistent, following context model is found:");
-                binaryTupleTableEntries(getExtensionManager(), contextOntology.getDataFactory())
-                        .forEach(System.out::println);
-                ternaryTupleTableEntries(getExtensionManager()).forEach(System.out::println);
-            }
-
-            if (contextOntology.containsRigidNames()) {
-                isAdmissibleWithRigid().ifPresent(clashSet -> getExtensionManager().setClash(clashSet));
-            } else {
-                isAdmissibleWithoutRigid().ifPresent(clashSet -> getExtensionManager().setClash(clashSet));
-            }
-
-            // All nodes are inner consistent. || Perform actual backtracking.
-            return !getExtensionManager().containsClash() || runCalculus();
-        } else {
-
-            // The meta-ontology is inconsistent, giving up.
-            return false;
-        }
-
+        // Cycle through all consistent meta ABoxes (PreModels). If any of those is admissible, the context ontology is
+        // consistent, otherwise if all are inadmissible, the context ontology is inconsistent.
+        return consistentInterpretations().filter(this::isAdmissible).findAny().isPresent();
     }
+
+//    @Override
+//    protected boolean runCalculus() {
+//
+//        // First run Hypertableau algorithm on meta ontology
+//        if (super.runCalculus()) {
+//
+//            // Possibly a model for meta level is found.
+//            if (debugOutput) {
+//                //System.out.println(contextOntology);
+//                System.out.println("meta ontology is consistent, following context model is found:");
+//                binaryTupleTableEntries(getExtensionManager(), contextOntology.getDataFactory())
+//                        .forEach(System.out::println);
+//                ternaryTupleTableEntries(getExtensionManager()).forEach(System.out::println);
+//            }
+//
+//            if (contextOntology.containsRigidNames()) {
+//                isAdmissibleWithRigid().ifPresent(clashSet -> getExtensionManager().setClash(clashSet));
+//            } else {
+//                isAdmissibleWithoutRigid().ifPresent(clashSet -> getExtensionManager().setClash(clashSet));
+//            }
+//
+//            // All nodes are inner consistent. || Perform actual backtracking.
+//            return !getExtensionManager().containsClash() || runCalculus();
+//        } else {
+//
+//            // The meta-ontology is inconsistent, giving up.
+//            return false;
+//        }
+//
+//    }
 
     /**
      * This method returns the set of OWLClasses that are abstracted meta concepts and must hold for a given node.
@@ -166,9 +165,13 @@ public class ContextTableau extends Tableau {
 
     private Type typeOfNode(Node node) {
 
-        return new Type(
+        Type type = new Type(
                 positiveMetaConceptsOfNode(node).collect(Collectors.toSet()),
                 negativeMetaConceptsOfNode(node).collect(Collectors.toSet()));
+        if (debugOutput) {
+            System.out.println("types for node " + node + ":\n" + type);
+        }
+        return type;
     }
 
     /**
@@ -185,6 +188,10 @@ public class ContextTableau extends Tableau {
                     OWLReasoner objectReasoner = reasonerFactory.createReasoner(
                             contextOntology.getObjectOntology(Collections.singletonList(typeOfNode(node))));
                     boolean isInconsistent = !objectReasoner.isConsistent();
+                    if (debugOutput) {
+                        System.out.println("Object ontology for node " + node + ":");
+                        objectReasoner.getRootOntology().axioms().forEach(System.out::println);
+                    }
                     if (debugOutput && !isInconsistent) {
                         System.out.println(String.join("", Collections.nCopies(100, "-")));
                         System.out.println("--- object ontology for node " + node + " is consistent, following object model is found:");
@@ -203,14 +210,17 @@ public class ContextTableau extends Tableau {
         // Check whether a clash occurred, and return dependency set if so.
         if (clashNode.isPresent()) {
 
-            // Obtain the dependency set of last entry that speaks about clashNode.
+            // Obtain the last non-empty dependency set of last entry that speaks about clashNode.
             DependencySet clashSet =
                     binaryTupleTableEntries(getExtensionManager(), contextOntology.getDataFactory())
                             // Consider only entries that speak about clashNode.
                             .filter(entry -> entry.getNode().equals(clashNode.get()))
+                            // Consider only entries with non-empty dependency sets
+                            .filter(entry -> !entry.getDependencySet().isEmpty())
                             // Take the last entry, which is present!
                             .reduce((entry1, entry2) -> entry2)
-                            .get()
+                            // If no such element is present, simply take the first entry in the binaryTupleTable (note that it has an empty depency set)
+                            .orElse(new BinaryTupleTableEntry(0,getExtensionManager(),contextOntology.getDataFactory()))
                             .getDependencySet();
 
             if (debugOutput) {
@@ -225,38 +235,85 @@ public class ContextTableau extends Tableau {
         }
     }
 
-    // TODO not implemented yet!!!
-    private Optional<DependencySet> isAdmissibleWithRigid() {
+//    // TODO not implemented yet!!!
+//    private Optional<DependencySet> isAdmissibleWithRigid() {
+//
+//        //tableauNodes().map(node -> typeOfNode(node)).
+//
+//        return isAdmissibleWithoutRigid();
+//    }
 
-        //tableauNodes().map(node -> typeOfNode(node)).
-
-        return isAdmissibleWithoutRigid();
-    }
-
+    /**
+     * This method checks the admissibility of an input ABox. These ABoxes are premodels returned by the hypertableau
+     * calculus on meta level. If there are rigid names, a single (larger) object ontology is generated by using the
+     * renaming technique and tested for consistency. If no rigid names are present, for each node an object ontology
+     * is generated and tested. There, if all nodes are 'ok', the ABox is admissible.
+     *
+     * @param model A model for the meta ontology.
+     * @return <code>true</code> if ABox is admissible.
+     */
     private boolean isAdmissible(PreModel model) {
 
-        // Iterate over all tableau nodes and check whether one of them is not inner consistent.
-        return tableauNodes()
-                // filter if there is any node that is not inner consistent.
-                .filter(node -> {
-                    OWLReasoner reasoner = reasonerFactory.createReasoner(
-                            contextOntology.getObjectOntology(Collections.singletonList(typeOfNode(node))));
-                    boolean result = !reasoner.isConsistent();
+        if (contextOntology.containsRigidNames()) {
+        //if (false) {
+            // Generate object ontology with renaming and check for admissibility
+            OWLReasoner objectReasoner = reasonerFactory.createReasoner(
+                    contextOntology.getObjectOntology(tableauNodes()
+                            .map(this::typeOfNode)
+                            .collect(Collectors.toList())));
+            boolean isConsistent = objectReasoner.isConsistent();
+            if (debugOutput) {
+                System.out.println("Object ontology with renaming:\n");
+                objectReasoner.getRootOntology().axioms().forEach(System.out::println);
+                System.out.println(String.join("", Collections.nCopies(100, "-")));
+                if (isConsistent) {
+                    binaryTupleTableEntries(((Reasoner) objectReasoner).getTableau().getExtensionManager(),
+                            contextOntology.getDataFactory())
+                            .forEach(System.out::println);
+                    ternaryTupleTableEntries(((Reasoner) objectReasoner).getTableau().getExtensionManager())
+                            .forEach(System.out::println);
+                } else {
+                    System.out.println("--- object ontology is inconsistent.");
+                }
+                System.out.println(String.join("", Collections.nCopies(100, "-")));
+            }
+            return isConsistent;
 
-                    if (debugOutput && result) {
-                        System.out.println(String.join("", Collections.nCopies(100, "-")));
-                        System.out.println("--- object ontology for node " + node + " is consistent, following object model is found:");
-                        binaryTupleTableEntries(((Reasoner) reasoner).getTableau().getExtensionManager(),
-                                contextOntology.getDataFactory())
-                                .forEach(System.out::println);
-                        ternaryTupleTableEntries(((Reasoner) reasoner).getTableau().getExtensionManager())
-                                .forEach(System.out::println);
-                        System.out.println(String.join("", Collections.nCopies(100, "-")));
-                    }
+        } else {
+            // No rigid names
 
-                    return result;
-                })
-                .findAny().isPresent();
+            // Iterate over all tableau nodes and check whether one of them is not inner consistent.
+            boolean thereExistsNodeThatIsNotInnerConsistent = tableauNodes()
+                    // filter if there is any node that is not inner consistent.
+                    .filter(node -> {
+                        OWLOntology objectOntology = contextOntology.getObjectOntology(Collections.singletonList(typeOfNode(node)));
+                        OWLReasoner reasoner = reasonerFactory.createReasoner(objectOntology);
+                        boolean isInconsistent = !reasoner.isConsistent();
+                        if (debugOutput) {
+                            System.out.println("Object ontology for node " + node + ":");
+                            reasoner.getRootOntology().axioms().forEach(System.out::println);
+                            System.out.println(String.join("", Collections.nCopies(100, "-")));
+                            if (!isInconsistent) {
+                                System.out.println("--- object ontology for node " + node
+                                        + " is consistent, following object model is found:");
+                                binaryTupleTableEntries(((Reasoner) reasoner).getTableau().getExtensionManager(),
+                                        contextOntology.getDataFactory())
+                                        .forEach(System.out::println);
+                                ternaryTupleTableEntries(((Reasoner) reasoner).getTableau().getExtensionManager())
+                                        .forEach(System.out::println);
+                            } else {
+                                System.out.println("--- object ontology for node " + node
+                                        + " is inconsistent.");
+                            }
+                            System.out.println(String.join("", Collections.nCopies(100, "-")));
+                        }
+
+                        return isInconsistent;
+                    })
+                    .findAny().isPresent();
+
+            return !thereExistsNodeThatIsNotInnerConsistent;
+        }
     }
 
     @Deprecated
@@ -310,7 +367,9 @@ public class ContextTableau extends Tableau {
      * @return true iff ontology is consistent
      */
     private boolean tableauRunCalculus() {
-        return super.runCalculus();
+        boolean result = super.runCalculus();
+
+        return result;
     }
 
     /**
@@ -360,15 +419,34 @@ public class ContextTableau extends Tableau {
                 createNewNINode(m_dependencySetFactory.emptySet());
             }
 
+            model = null;
+        }
+
+        @Override
+        public boolean hasNext() {
+            // Only do backtracking when there already is a model (not in the very first call of hasNext()
+            if (model!=null) {
+                Optional<BinaryTupleTableEntry> entry =
+                        binaryTupleTableEntries(getExtensionManager(), contextOntology.getDataFactory())
+                        .filter(tuple -> !tuple.getDependencySet().isEmpty())
+                        .reduce((a,b) -> b);
+                DependencySet clashSet;
+                if (entry.isPresent()) {
+                    // If there is any node with a non-empty dependency set, use it for backtracking
+                    clashSet = entry.get().getDependencySet();
+                } else {
+                    // Otherwise we cycled through all models and are done -> set clash with empty dependency set
+                    clashSet = new BinaryTupleTableEntry(0, getExtensionManager(), contextOntology.getDataFactory())
+                            .getDependencySet();
+                }
+                getExtensionManager().setClash(clashSet);
+            }
+
             if (tableauRunCalculus()) {
                 model = new PreModel(getExtensionManager(), contextOntology.getDataFactory());
             } else {
                 model = null;
             }
-        }
-
-        @Override
-        public boolean hasNext() {
 
             return model != null;
         }
@@ -376,26 +454,13 @@ public class ContextTableau extends Tableau {
         @Override
         public PreModel next() {
 
-            PreModel result = model;
-
-            Optional<BinaryTupleTableEntry> entry =
-                    binaryTupleTableEntries(getExtensionManager(), contextOntology.getDataFactory())
-                            .filter(tuple -> !tuple.getDependencySet().isEmpty())
-                            .reduce((a, b) -> b);
-
-            if (entry.isPresent()) {
-                getExtensionManager().setClash(entry.get().getDependencySet());
-
-                if (tableauRunCalculus()) {
-                    model = new PreModel(getExtensionManager(), contextOntology.getDataFactory());
-                } else {
-                    model = null;
-                }
-            } else {
-                model = null;
+            if (debugOutput) {
+                //System.out.println(contextOntology);
+                System.out.println("meta ontology is consistent, following context model is found:");
+                System.out.println(model.toStringWithDependencySet());
             }
 
-            return result;
+            return model;
         }
 
         @Override
