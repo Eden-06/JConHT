@@ -29,13 +29,36 @@ public class PreModel {
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
-        binEntries.forEach(x -> builder.append(x.getNode())
+//        binEntries.forEach(x -> builder.append(x).append("\n"));
+//        terEntries.forEach(x -> builder.append(x).append("\n"));
+
+        binEntries.forEach(x -> builder
+                .append(x.getNode())
                 .append('\t')
                 .append(x.getClassExpression())
                 .append("\n"));
-        terEntries.forEach(x -> builder.append(x).append("\n"));
+        terEntries.forEach(x -> {
+            builder.append(x.getNodeFrom());
+            builder.append('\t');
+            if (x.getRole().isPresent()) {
+                builder.append(x.getRole().get());
+                builder.append('\t');
+            } else if (x.getInequality().isPresent()) {
+                builder.append("!=");
+                builder.append('\t');
+            }
+            builder.append(x.getNodeTo());
+            builder.append('\n');
+        });
 
         return builder.toString();
 
+    }
+
+    public String toStringWithDependencySet() {
+        StringBuilder builder = new StringBuilder();
+        binEntries.forEach(x -> builder.append(x).append("\n"));
+        terEntries.forEach(x -> builder.append(x).append("\n"));
+        return builder.toString();
     }
 }

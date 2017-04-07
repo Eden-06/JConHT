@@ -29,4 +29,11 @@ public class Type {
         return negativeConcepts.stream();
     }
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("pos: ").append(positiveConcepts).append('\n');
+        builder.append("neg: ").append(negativeConcepts).append('\n');
+        return builder.toString();
+    }
 }
