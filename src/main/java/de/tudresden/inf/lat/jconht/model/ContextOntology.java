@@ -186,8 +186,8 @@ public class ContextOntology {
     }
 
     /**
-     * This method adds repletion axioms (e.g. ¬A_¬α ⊑ C for A_α ⊑ C) to the meta ontology. It is important that this
-     * method is called after the initialisation of the objectAxiomMap since it uses outerAbstractedMetaConcepts()
+     * This method adds repletion axioms (e.g. ⊤ ⊑ A_α ⊔ A_¬α for all A_α) to the meta ontology. It is important that
+     * this method is called after the initialisation of the objectAxiomMap since it uses its key set.
      */
     private void addRepletionAxiomsToMetaOntology() {
 
