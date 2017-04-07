@@ -4,6 +4,8 @@ import org.semanticweb.owlapi.model.*;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class ...
@@ -60,7 +62,7 @@ public class AxiomBuilder {
             int indexClose = string.lastIndexOf(')');
             int indexOpen = indexOfMatchingParenthesis(string, ')', '(', false).orElseThrow(
                     () -> new AxiomBuilderException("\nAssertion Axiom must have matching openening '(': "
-                            ));
+                    ));
             String[] indString = string.substring(indexOpen + 1, indexClose).trim().split(",");
             if (indString.length == 1) {
                 // Concept assertion
@@ -209,6 +211,8 @@ public class AxiomBuilder {
         EXISTENTIAL("EXISTENTIAL RESTRICTION"),
         VALUE("VALUE RESTRICTION"),
         NOMINAL("NOMINAL"),
+        MINCARD("MINCARD"),
+        MAXCARD("MAXCARD"),
         UNKNOWN("UNKNOWN");
 
         private String name;
@@ -291,6 +295,16 @@ public class AxiomBuilder {
                 return;
             }
 
+            if (string.startsWith("≥")) {
+                type = OWLStringExpressionType.MINCARD;
+                return;
+            }
+
+            if (string.startsWith("≤")) {
+                type = OWLStringExpressionType.MAXCARD;
+                return;
+            }
+
             if (string.startsWith("¬")) {
                 type = OWLStringExpressionType.NEGATION;
                 left = Optional.of(new OWLStringExpression(string.substring(1)));
@@ -343,6 +357,35 @@ public class AxiomBuilder {
                 return dataFactory.getOWLObjectSomeValuesFrom(
                         stringToRole(string.substring(1, indexDot)),
                         stringToConcept(string.substring(indexDot + 1)));
+            }
+
+            if (type == OWLStringExpressionType.MINCARD || type == OWLStringExpressionType.MAXCARD) {
+                int indexDot = string.indexOf('.');
+                if (indexDot == -1)
+                    throw new AxiomBuilderException("Cardinality restriction must have a dot: " + string);
+                Matcher matcher = Pattern.compile("\\d+").matcher(string);
+                if (!matcher.find())
+                    throw new AxiomBuilderException("Cardinality restriction must have a number:" + string);
+                //int n = Integer.valueOf(matcher.group());
+                int indexLastDigit = matcher.end();
+                if (indexLastDigit > indexDot)
+                    throw new AxiomBuilderException("The first number in cardinality restriction must be before the dot:" + string);
+                int n;
+                try {
+                    n = Integer.parseInt(string.substring(1,indexLastDigit).trim());
+                } catch (NumberFormatException e) {
+                    throw new AxiomBuilderException("NumberFormatException in:" + string);
+                }
+
+                if (type == OWLStringExpressionType.MINCARD) {
+                    return dataFactory.getOWLObjectMinCardinality(n,
+                            stringToRole(string.substring(indexLastDigit, indexDot)),
+                            stringToConcept(string.substring(indexDot + 1)));
+                } else {
+                    return dataFactory.getOWLObjectMaxCardinality(n,
+                            stringToRole(string.substring(indexLastDigit, indexDot)),
+                            stringToConcept(string.substring(indexDot + 1)));
+                }
             }
 
             if (type == OWLStringExpressionType.VALUE) {

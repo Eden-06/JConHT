@@ -108,6 +108,21 @@ public class AxiomBuilderTest {
 
         assertFalse("C ⊓ D @ global", validConceptSyntax("C ⊓ D @ global"));
 
+        assertTrue("≥2R.B", validConceptSyntax("≥2R.B"));
+        assertTrue("≥23 R2.B3", validConceptSyntax("≥23 R2.B3"));
+        assertTrue("≥  23  R2 . B3", validConceptSyntax("≥  23  R2 . B3"));
+        assertFalse("≥ R.B", validConceptSyntax("≥ R.B"));
+        assertFalse("≥ R.B2", validConceptSyntax("≥ R.B2"));
+        assertFalse("≥ 2 .B2", validConceptSyntax("≥ 2 .B2"));
+        assertFalse("≥ R2.B", validConceptSyntax("≥ R2.B"));
+
+        assertTrue("≤2R.B", validConceptSyntax("≤2R.B"));
+        assertTrue("≤23 R2.B3", validConceptSyntax("≤23 R2.B3"));
+        assertTrue("≤  23  R2 . B3", validConceptSyntax("≤  23  R2 . B3"));
+        assertFalse("≤ R.B", validConceptSyntax("≤ R.B"));
+        assertFalse("≤ R.B2", validConceptSyntax("≤ R.B2"));
+        assertFalse("≤ 2 .B2", validConceptSyntax("≤ 2 .B2"));
+        assertFalse("≤ R2.B", validConceptSyntax("≤ R2.B"));
     }
 
     @Test
@@ -198,6 +213,20 @@ public class AxiomBuilderTest {
                                 dataFactory.getOWLObjectProperty("rol:plays")),
                         dataFactory.getOWLObjectOneOf(
                                 dataFactory.getOWLNamedIndividual("ind:counter"))));
+
+        assertEquals("≥ 23 RR4.B2",
+                builder.stringToConcept("≥ 23 RR4.B2"),
+                dataFactory.getOWLObjectMinCardinality(
+                        23,
+                        dataFactory.getOWLObjectProperty("rol:RR4"),
+                        dataFactory.getOWLClass("cls:B2")));
+
+        assertEquals("≤ 5 ST.⊤",
+                builder.stringToConcept("≤ 5 ST.⊤"),
+                dataFactory.getOWLObjectMaxCardinality(
+                        5,
+                        dataFactory.getOWLObjectProperty("rol:ST"),
+                        dataFactory.getOWLThing()));
     }
 
     @Test
