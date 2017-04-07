@@ -33,6 +33,7 @@ public class CromMapperTest {
     private OWLDataFactory dataFactory;
     private PrefixManager rosiPrefix;
     private Configuration confWithDebug;
+    private Configuration confWithoutDebug;
 
     private OWLOntology rawOntology;
 
@@ -68,7 +69,8 @@ public class CromMapperTest {
         File cromMapperTestOntologyFile = new File("input/CROMMapperTest/MapperTest.owl");
         //TODO again the question how to correctly load an ontology
         rawOntology = manager.loadOntology(IRI.create(cromMapperTestOntologyFile));
-        confWithDebug = new Configuration(true, true, false, true);
+        confWithDebug = new Configuration(true, true, true, false);
+        confWithoutDebug = new Configuration(true, false, true, false);
 
         numberOfAnonymousMetaConcepts = 0;
         numberOfAnonymousIndividuals = 0;
@@ -101,7 +103,7 @@ public class CromMapperTest {
     public void testRawOntologyIsConsistent() throws Exception {
         System.out.println("Executing testRawOntologyIsConsistent: ");
 
-        ContextOntology contextOntology = new ContextOntology(rawOntology);
+        ContextOntology contextOntology = new ContextOntology(rawOntology, confWithoutDebug);
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
 
         System.out.println(contextOntology.getStatistics());
@@ -642,7 +644,7 @@ public class CromMapperTest {
         OWLClass compartmentType = dataFactory.getOWLClass("OccurrenceRTTest2", rosiPrefix);
         OWLIndividual compartment = dataFactory.getOWLAnonymousIndividual();
 
-        assertFalse(isInconsistent(
+        assertFalse(isInconsistent(//new Configuration(true, true ,false, true),
                 getBottomNTIsBottom(),
                 getMetaTypeAssertion(compartmentType, compartment)
         ));
@@ -1157,7 +1159,7 @@ public class CromMapperTest {
     @SafeVarargs
     private final boolean isInconsistent(Stream<OWLAxiom>... axioms) throws OWLOntologyCreationException {
 
-        return isInconsistent(new Configuration(), axioms);
+        return isInconsistent(confWithoutDebug, axioms);
     }
 
     @SafeVarargs

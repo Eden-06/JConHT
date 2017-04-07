@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Stream;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -29,21 +30,9 @@ public class ContextTableauTest {
     private OWLOntologyManager manager;
     private OWLDataFactory dataFactory;
     private AxiomBuilder builder;
+    private Configuration confWithDebug;
+    private Configuration confWithoutDebug;
 
-    private OWLClass clsC;
-    private OWLClass clsA;
-    private OWLClass clsB;
-    private OWLClass A_Aa;
-    private OWLClass A_notAa;
-    private OWLClass A_ASubBottom;
-    private OWLClass thing;
-    private OWLIndividual indA;
-    private OWLIndividual indC;
-    private OWLObjectProperty rolR;
-
-    private OWLAxiom axiom_Aa;
-    private OWLAxiom axiom_notAa;
-    private OWLAxiom axiom_ASubBottom;
 
     @Before
     public void setUp() throws Exception {
@@ -51,21 +40,8 @@ public class ContextTableauTest {
         manager = OWLManager.createOWLOntologyManager();
         dataFactory = manager.getOWLDataFactory();
         builder = new AxiomBuilder(dataFactory);
-
-        clsC = dataFactory.getOWLClass("cls:C");
-        clsA = dataFactory.getOWLClass("cls:A");
-        clsB = dataFactory.getOWLClass("cls:B");
-        A_Aa = dataFactory.getOWLClass("cls:A_Aa");
-        A_notAa = dataFactory.getOWLClass("cls:A_notAa");
-        indA = dataFactory.getOWLNamedIndividual("ind:a");
-        indC = dataFactory.getOWLNamedIndividual("ind:c");
-        A_ASubBottom = dataFactory.getOWLClass("cls:A_ASubBottom");
-        rolR = dataFactory.getOWLObjectProperty("rol:R");
-        thing = dataFactory.getOWLThing();
-
-        axiom_Aa = dataFactory.getOWLClassAssertionAxiom(clsA, indA, getIsDefinedBy(A_Aa));
-        axiom_notAa = dataFactory.getOWLClassAssertionAxiom(dataFactory.getOWLObjectComplementOf(clsA), indA, getIsDefinedBy(A_notAa));
-        axiom_ASubBottom = dataFactory.getOWLSubClassOfAxiom(clsA, dataFactory.getOWLNothing(), getIsDefinedBy(A_ASubBottom));
+        confWithDebug = new Configuration(true);
+        confWithoutDebug = new Configuration(false);
 
     }
 
@@ -76,28 +52,20 @@ public class ContextTableauTest {
         manager.clearOntologies();
     }
 
-
-    @Test
-    public void testInconsistentOntologyWithRigidNames() throws Exception {
-        // TODO
-
-
-    }
-
     // This tests example 7 from the technical report about ALC-ALC.
     @Test
     public void testExample7() throws Exception {
 
         OWLOntology ontology = manager.createOntology(Stream.of(
                 // meta level
-                dataFactory.getOWLSubClassOfAxiom(clsC, A_ASubBottom),
-                dataFactory.getOWLClassAssertionAxiom(dataFactory.getOWLObjectIntersectionOf(clsC, A_Aa), indC),
-                // object level
-                axiom_ASubBottom,
-                axiom_Aa
+                builder.stringToOWLAxiom("C ⊑ meta1"),
+                builder.stringToOWLAxiom("(C ⊓ meta2)(c)"),
+                // mapping of o-axioms
+                builder.stringToOWLAxiom("A ⊑ ⊥ @ meta1"),
+                builder.stringToOWLAxiom("A(a) @ meta2")
         ));
 
-        ContextOntology contextOntology = new ContextOntology(ontology, new Configuration(true, true, false, true));
+        ContextOntology contextOntology = new ContextOntology(ontology, confWithDebug);
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
 
         //System.out.println("contextOntology = " + contextOntology);
@@ -110,17 +78,12 @@ public class ContextTableauTest {
     public void testNegatedObjAxioms1() throws Exception {
         // (¬[A(a)] ⊓ ¬[¬A(a)])(s)
 
-
         OWLOntology rootOntology = manager.createOntology(Stream.of(
                 // meta level
-                dataFactory.getOWLClassAssertionAxiom(
-                        dataFactory.getOWLObjectIntersectionOf(
-                                dataFactory.getOWLObjectComplementOf(A_Aa),
-                                dataFactory.getOWLObjectComplementOf(A_notAa)),
-                        indC),
-                // object level
-                axiom_Aa,
-                axiom_notAa
+                builder.stringToOWLAxiom("(¬meta1 ⊓ ¬meta2)(c)"),
+                // mapping of o-axioms
+                builder.stringToOWLAxiom("A(a) @ meta1"),
+                builder.stringToOWLAxiom("¬A(a) @ meta2")
         ));
 
         ContextOntology contextOntology = new ContextOntology(rootOntology);
@@ -142,21 +105,12 @@ public class ContextTableauTest {
         // ¬C(s),  ⊤ ⊑ C ⊔ ¬[A(a)],  ⊤ ⊑ C ⊔ ¬[¬A(a)]
         OWLOntology rootOntology = manager.createOntology(Stream.of(
                 // meta level
-                dataFactory.getOWLClassAssertionAxiom(
-                        dataFactory.getOWLObjectComplementOf(clsC), indC),
-                dataFactory.getOWLSubClassOfAxiom(
-                        thing,
-                        dataFactory.getOWLObjectUnionOf(
-                                clsC,
-                                dataFactory.getOWLObjectComplementOf(A_Aa))),
-                dataFactory.getOWLSubClassOfAxiom(
-                        thing,
-                        dataFactory.getOWLObjectUnionOf(
-                                clsC,
-                                dataFactory.getOWLObjectComplementOf(A_notAa))),
-                // object level
-                axiom_Aa,
-                axiom_notAa
+                builder.stringToOWLAxiom("¬C(s)"),
+                builder.stringToOWLAxiom("⊤ ⊑ C ⊔ ¬meta1"),
+                builder.stringToOWLAxiom("⊤ ⊑ C ⊔ ¬meta2"),
+                // mapping of o-axioms
+                builder.stringToOWLAxiom("A(a) @ meta1"),
+                builder.stringToOWLAxiom("¬A(a) @ meta2")
         ));
 
         ContextOntology contextOntology = new ContextOntology(rootOntology);
@@ -179,12 +133,11 @@ public class ContextTableauTest {
         OWLOntology rootOntology = manager.createOntology(Stream.of(
                 // meta level
                 builder.stringToOWLAxiom("¬C(c)"),
-                builder.stringToOWLAxiom("A_notAa ⊑ C"),
-                builder.stringToOWLAxiom("¬C ⊑ A_ASubBottom"),
-                // object level
-                axiom_Aa,
-                axiom_notAa,
-                axiom_ASubBottom
+                builder.stringToOWLAxiom("meta1 ⊑ C"),
+                builder.stringToOWLAxiom("¬C ⊑ meta2"),
+                // mapping of o-axioms
+                builder.stringToOWLAxiom("¬A(a) @ meta1"),
+                builder.stringToOWLAxiom("A ⊑ ⊥ @ meta2")
         ));
 
         ContextOntology contextOntology = new ContextOntology(rootOntology);
@@ -203,28 +156,23 @@ public class ContextTableauTest {
     public void testBranchingWithNegatedAxioms() throws Exception {
         // [¬A(a)] ⊓ [A(a)] ⊑ C, C(c), (∃r.C)(c)
 
-        OWLObjectProperty rolR = dataFactory.getOWLObjectProperty("rol:R");
-
         OWLOntology rootOntology = manager.createOntology(Stream.of(
-                //
                 // meta level
-                dataFactory.getOWLSubClassOfAxiom(
-                        dataFactory.getOWLObjectIntersectionOf(A_notAa, A_Aa),
-                        clsC),
-                dataFactory.getOWLClassAssertionAxiom(clsC, indC),
-                dataFactory.getOWLClassAssertionAxiom(dataFactory.getOWLObjectSomeValuesFrom(rolR, clsC), indC),
-                //
-                // object level
-                axiom_Aa,
-                axiom_notAa));
+                builder.stringToOWLAxiom("meta1 ⊓ meta2 ⊑ C"),
+                builder.stringToOWLAxiom("C(c)"),
+                builder.stringToOWLAxiom("(∃R.C)(c)"),
+                // mapping of o-axioms
+                builder.stringToOWLAxiom("A(a) @ meta1"),
+                builder.stringToOWLAxiom("¬A(a) @ meta2")
+        ));
 
         ContextOntology contextOntology = new ContextOntology(rootOntology);
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
 
-        System.out.println("contextOntology = " + contextOntology);
-        System.out.println("---------------------------------------------------------------------");
-        System.out.println("reasoner.getTableau().getPermanentDLOntology() = " + reasoner.getTableau().getPermanentDLOntology());
-        System.out.println("---------------------------------------------------------------------");
+//        System.out.println("contextOntology = " + contextOntology);
+//        System.out.println("---------------------------------------------------------------------");
+//        System.out.println("reasoner.getTableau().getPermanentDLOntology() = " + reasoner.getTableau().getPermanentDLOntology());
+//        System.out.println("---------------------------------------------------------------------");
 
         assertTrue(reasoner.isConsistent());
 
@@ -233,17 +181,13 @@ public class ContextTableauTest {
     @Test
     public void testObjectOntologyConsistencyRecursion() throws Exception {
 
-        OWLClass meta1 = dataFactory.getOWLClass("cls:meta1");
-        OWLClass meta2 = dataFactory.getOWLClass("cls:meta2");
-        OWLClass meta3 = dataFactory.getOWLClass("cls:meta3");
-
         OWLOntology rootOntology = manager.createOntology(Stream.of(
-                dataFactory.getOWLClassAssertionAxiom(thing, indA, getIsDefinedBy(meta1)),
-                dataFactory.getOWLClassAssertionAxiom(thing, indA, getIsDefinedBy(meta2)),
-                dataFactory.getOWLClassAssertionAxiom(thing, indA, getIsDefinedBy(meta3))
+                builder.stringToOWLAxiom("⊤(a) @ meta1"),
+                builder.stringToOWLAxiom("⊤(a) @ meta2"),
+                builder.stringToOWLAxiom("⊤(a) @ meta3")
         ));
 
-        ContextOntology contextOntology = new ContextOntology(rootOntology);
+        ContextOntology contextOntology = new ContextOntology(rootOntology, new Configuration(true));
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
 
         assertTrue(reasoner.isConsistent());
@@ -257,14 +201,12 @@ public class ContextTableauTest {
         System.out.println("Executing testModelWithSeveralNodes:");
 
         OWLOntology rootOntology = manager.createOntology(Stream.of(
-                dataFactory.getOWLSubClassOfAxiom(clsA,
-                        dataFactory.getOWLObjectMinCardinality(2, rolR, clsB)),
-                dataFactory.getOWLSubClassOfAxiom(clsB,
-                        dataFactory.getOWLObjectMinCardinality(2, rolR, clsC)),
-                dataFactory.getOWLClassAssertionAxiom(clsA, indA)
+                builder.stringToOWLAxiom("A ⊑ ≥ 2R.B"),
+                builder.stringToOWLAxiom("B ⊑ ≥ 2R.C"),
+                builder.stringToOWLAxiom("A(a)")
         ));
 
-        ContextOntology contextOntology = new ContextOntology(rootOntology);
+        ContextOntology contextOntology = new ContextOntology(rootOntology, confWithDebug);
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
 
         assertTrue(reasoner.isConsistent());
@@ -272,47 +214,134 @@ public class ContextTableauTest {
     }
 
     @Test
-    public void testRigidNames() throws Exception {
-        System.out.println("Executing testRigidNames:");
-        // TODO not done yet!
+    public void testInconsistentOntologyForRigidNamesPre() throws Exception {
+        System.out.println("Executing testInconsistentOntologyForRigidNamesPre:");
 
-        OWLAxiom axiom = isRigid(clsA);
-        System.out.println(axiom);
+        OWLOntology rootOntology = manager.createOntology(Stream.of(
+                builder.stringToOWLAxiom("meta1(c)"),
+                builder.stringToOWLAxiom("meta1 ⊑ ∃R.meta2"),
+                // mapping of o-axioms
+                builder.stringToOWLAxiom("A(a) @ meta1"),
+                builder.stringToOWLAxiom("¬A(a) @ meta2")
+        ));
+
+        ContextOntology contextOntology = new ContextOntology(rootOntology, confWithDebug);
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+
+        assertTrue(reasoner.isConsistent());
     }
 
     @Test
-    public void testListModels() throws Exception {
-        System.out.println("Executing testListModels:");
+    public void testInconsistentOntologyForRigidNames() throws Exception {
+        System.out.println("Executing testInconsistentOntologyForRigidNames:");
 
-//        ContextReasoner reasoner = new ContextReasoner(new ContextOntology(manager.createOntology(Arrays.asList(
-//                builder.stringToOWLAxiom("A(a)")
-//                ,builder.stringToOWLAxiom("A ⊑ B1 ⊔ B2")
-//                ,builder.stringToOWLAxiom("A ⊑ C1 ⊔ C2")
-////                ,builder.stringToOWLAxiom("C1 ⊓ B2 ⊑ ⊥")
-////                ,builder.stringToOWLAxiom("A ⊑ ⊥")
-//                )), new Configuration(true,true)));
-//
-//        ((ContextTableau) reasoner.getTableau()).consistentInterpretations().forEach(System.out::println);
-//        System.out.println("---------------------------");
+        OWLOntology rootOntology = manager.createOntology(Stream.of(
+                builder.stringToOWLAxiom("meta1(c)"),
+                builder.stringToOWLAxiom("meta1 ⊑ ∃R.meta2"),
+                // mapping of o-axioms
+                builder.stringToOWLAxiom("A(a) @ meta1"),
+                builder.stringToOWLAxiom("¬A(a) @ meta2"),
+                // Rigidity axioms
+                isRigid(builder.stringToConcept("A").asOWLClass())
+        ));
+
+        ContextOntology contextOntology = new ContextOntology(rootOntology, confWithDebug);
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+
+        assertFalse(reasoner.isConsistent());
+    }
+
+    @Test
+    public void testConsistentInterpretations1() throws Exception {
+        System.out.println("Executing testConsistentInterpretations1:");
 
         OWLOntology ontology = manager.createOntology(Stream.of(
                 // meta level
-                dataFactory.getOWLSubClassOfAxiom(clsC, A_ASubBottom),
-                dataFactory.getOWLClassAssertionAxiom(dataFactory.getOWLObjectIntersectionOf(clsC, A_Aa), indC),
-                // object level
-                axiom_ASubBottom,
-                axiom_Aa
+                builder.stringToOWLAxiom("A(a)"),
+                builder.stringToOWLAxiom("A ⊑ B1 ⊔ B2 ⊔ B3"),
+                builder.stringToOWLAxiom("A ⊑ C1 ⊔ C2")
         ));
 
-        ContextOntology contextOntology = new ContextOntology(ontology, new Configuration(true, true, false, true));
-        ContextReasoner reasoner2 = new ContextReasoner(contextOntology);
-        reasoner2.isConsistent();
-        System.out.println("---------------------------");
-        ((ContextTableau) reasoner2.getTableau()).listModels().forEach(System.out::println);
-        System.out.println("---------------------------");
-        ((ContextTableau) reasoner2.getTableau()).consistentInterpretations().forEach(System.out::println);
+        ContextOntology contextOntology = new ContextOntology(ontology, confWithDebug);
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+        //((ContextTableau) reasoner.getTableau()).consistentInterpretations().forEach(System.out::println);
+        assertEquals(((ContextTableau) reasoner.getTableau()).consistentInterpretations().count(),6);
+    }
 
+    @Test
+    public void testConsistentInterpretations2() throws Exception {
+        System.out.println("Executing testConsistentInterpretations2:");
 
+        OWLOntology ontology = manager.createOntology(Stream.of(
+                // meta level
+                builder.stringToOWLAxiom("A(a)"),
+                builder.stringToOWLAxiom("A ⊑ B1 ⊔ B2 ⊔ B3"),
+                builder.stringToOWLAxiom("A ⊑ C1 ⊔ C2"),
+                builder.stringToOWLAxiom("A ⊑ ⊥")
+        ));
+
+        ContextOntology contextOntology = new ContextOntology(ontology, confWithDebug);
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+        ((ContextTableau) reasoner.getTableau()).consistentInterpretations().forEach(System.out::println);
+        assertEquals(((ContextTableau) reasoner.getTableau()).consistentInterpretations().count(),0);
+    }
+
+    @Test
+    public void testConsistentInterpretations3() throws Exception {
+        System.out.println("Executing testConsistentInterpretations3:");
+
+        OWLOntology ontology = manager.createOntology(Stream.of(
+                // meta level
+                builder.stringToOWLAxiom("A(a)"),
+                builder.stringToOWLAxiom("A ⊑ B1 ⊔ B2 ⊔ B3"),
+                builder.stringToOWLAxiom("A ⊑ C1 ⊔ C2 ⊔ C3"),
+                builder.stringToOWLAxiom("A ⊑ D1 ⊔ D2 ⊔ D3"),
+                builder.stringToOWLAxiom("C1 ⊓ B2 ⊑ ⊥"),
+                builder.stringToOWLAxiom("C3 ⊓ B1 ⊓ D3 ⊑ ⊥")
+        ));
+
+        ContextOntology contextOntology = new ContextOntology(ontology, confWithDebug);
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+        ((ContextTableau) reasoner.getTableau()).consistentInterpretations().forEach(System.out::println);
+        assertEquals(((ContextTableau) reasoner.getTableau()).consistentInterpretations().count(),23);
+    }
+
+    @Test
+    public void testConsistentInterpretations4() throws Exception {
+        System.out.println("Executing testConsistentInterpretations4:");
+
+        OWLOntology ontology = manager.createOntology(Stream.of(
+                // meta level
+                builder.stringToOWLAxiom("C ⊑ meta1"),
+                builder.stringToOWLAxiom("(C ⊓ meta2)(c)"),
+                // object level
+                builder.stringToOWLAxiom("A ⊑ ⊥ @ meta1"),
+                builder.stringToOWLAxiom("A(a) @ meta2")
+        ));
+
+        ContextOntology contextOntology = new ContextOntology(ontology, confWithDebug);
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+        //System.out.println(reasoner.isConsistent());
+        //((ContextTableau) reasoner.getTableau()).consistentInterpretations().forEach(System.out::println);
+        assertEquals(((ContextTableau) reasoner.getTableau()).consistentInterpretations().count(),1);
+    }
+
+    @Test
+    public void testConsistentInterpretations5() throws Exception {
+        System.out.println("Executing testConsistentInterpretations5:");
+
+        OWLOntology ontology = manager.createOntology(Stream.of(
+                // meta level
+                builder.stringToOWLAxiom("A(a)"),
+                builder.stringToOWLAxiom("A ⊑ ∃ R.B ⊔ ∃ S.C")
+                //builder.stringToOWLAxiom("B ⊑ ⊥")
+        ));
+
+        ContextOntology contextOntology = new ContextOntology(ontology, confWithDebug);
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+        System.out.println(reasoner.isConsistent());
+        ((ContextTableau) reasoner.getTableau()).consistentInterpretations().forEach(System.out::println);
+        assertEquals(((ContextTableau) reasoner.getTableau()).consistentInterpretations().count(),2);
     }
 
     // Helper functions
