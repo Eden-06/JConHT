@@ -40,20 +40,38 @@ public class AxiomBuilder {
 
         string = string.trim();
 
+        // First handle annotations
         Set<OWLAnnotation> annotations = new HashSet<>();
-        // Annotated axioms
         int indexAt = string.indexOf('@');
         if (indexAt != -1) {
             annotations.add(stringToOWLAnnotation(string.substring(indexAt + 1)));
             string = string.substring(0, indexAt).trim();
         }
 
-        // This part is about GCIs
+        // Is the axiom a GCI?
         int indexSubseteq = string.indexOf('⊑');
         if (indexSubseteq != -1) {
             return dataFactory.getOWLSubClassOfAxiom(
                     this.stringToConcept(string.substring(0, indexSubseteq)),
                     this.stringToConcept(string.substring(indexSubseteq + 1)),
+                    annotations);
+        }
+
+        // Is it a concept equivalence?
+        int indexEquiv = string.indexOf('≡');
+        if (indexEquiv != -1) {
+            return dataFactory.getOWLEquivalentClassesAxiom(
+                    this.stringToConcept(string.substring(0, indexEquiv)),
+                    this.stringToConcept(string.substring(indexEquiv + 1)),
+                    annotations);
+        }
+
+        // Is it a DifferentIndividualAxiom?
+        int indexNeq = string.indexOf('≠');
+        if (indexNeq != -1) {
+            return dataFactory.getOWLDifferentIndividualsAxiom(
+                    this.stringToIndividual(string.substring(0, indexNeq)),
+                    this.stringToIndividual(string.substring(indexNeq + 1)),
                     annotations);
         }
 
@@ -372,7 +390,7 @@ public class AxiomBuilder {
                     throw new AxiomBuilderException("The first number in cardinality restriction must be before the dot:" + string);
                 int n;
                 try {
-                    n = Integer.parseInt(string.substring(1,indexLastDigit).trim());
+                    n = Integer.parseInt(string.substring(1, indexLastDigit).trim());
                 } catch (NumberFormatException e) {
                     throw new AxiomBuilderException("NumberFormatException in:" + string);
                 }
