@@ -18,7 +18,7 @@ Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 Prefix: rosi: <http://www.rosi-project.org/ontologies#>
 
-Ontology: <http://www.rosi-project.org/ontologies/2016-12-16/Bank>
+Ontology: <http://www.rosi-project.org/ontologies/2017-04-11/Bank>
 
 
 
@@ -100,13 +100,13 @@ Class: rosi:NaturalTypes
 		owl:Nothing
 
 Class: rosi:Person
-	Annotations: rdfs:label "rigid"
+#	Annotations: rdfs:label "rigid"
 
 Class: rosi:Company
-	Annotations: rdfs:label "rigid"
+#	Annotations: rdfs:label "rigid"
 
 Class: rosi:Account
-	Annotations: rdfs:label "rigid"
+#	Annotations: rdfs:label "rigid"
 
 
 
@@ -135,7 +135,7 @@ Class: rosi:RoleTypes
 ##############
 
 Class: rosi:Source
-	Annotations: rdfs:label "non-rigid"
+#	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysSource
 	EquivalentTo:
@@ -152,7 +152,7 @@ Class: rosi:NaturalTypes
 ##############
 
 Class: rosi:Target
-	Annotations: rdfs:label "non-rigid"
+#	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysTarget
 	EquivalentTo:
@@ -169,7 +169,7 @@ Class: rosi:NaturalTypes
 ##################
 
 Class: rosi:Consultant
-	Annotations: rdfs:label "non-rigid"
+#	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysConsultant
 	EquivalentTo:
@@ -186,7 +186,7 @@ Class: rosi:NaturalTypes
 ################
 
 Class: rosi:Customer
-	Annotations: rdfs:label "non-rigid"
+#	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysCustomer
 	EquivalentTo:
@@ -203,7 +203,7 @@ Class: rosi:NaturalTypes
 #####################
 
 Class: rosi:MoneyTransfer
-	Annotations: rdfs:label "non-rigid"
+#	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysMoneyTransfer
 	EquivalentTo:
@@ -220,7 +220,7 @@ Class: rosi:NaturalTypes
 ########################
 
 Class: rosi:CheckingsAccount
-	Annotations: rdfs:label "non-rigid"
+#	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysCheckingsAccount
 	EquivalentTo:
@@ -237,7 +237,7 @@ Class: rosi:NaturalTypes
 ######################
 
 Class: rosi:SavingsAccount
-	Annotations: rdfs:label "non-rigid"
+#	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysSavingsAccount
 	EquivalentTo:
@@ -260,7 +260,7 @@ Class: rosi:NaturalTypes
 ObjectProperty: owl:bottomObjectProperty
 
 ObjectProperty: rosi:plays
-    Annotations: rdfs:label "non-rigid"
+#	Annotations: rdfs:label "non-rigid"
 	Domain:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:NaturalTypes
@@ -466,7 +466,7 @@ Class: rosi:Transaction
 #############
 
 ObjectProperty: rosi:trans
-    Annotations: rdfs:label "non-rigid"
+#	Annotations: rdfs:label "non-rigid"
 	SubPropertyOf:
 		owl:bottomObjectProperty
 	Domain:
@@ -499,7 +499,7 @@ Class: rosi:Bank
 ##############
 
 ObjectProperty: rosi:own_ca
-    Annotations: rdfs:label "non-rigid"
+#	Annotations: rdfs:label "non-rigid"
 	SubPropertyOf:
 		owl:bottomObjectProperty
 	Domain:
@@ -532,7 +532,7 @@ Class: rosi:Transaction
 ###############
 
 ObjectProperty: rosi:advices
-    Annotations: rdfs:label "non-rigid"
+#	Annotations: rdfs:label "non-rigid"
 	SubPropertyOf:
 		owl:bottomObjectProperty
 	Domain:
@@ -565,7 +565,7 @@ Class: rosi:Transaction
 ##############
 
 ObjectProperty: rosi:own_sa
-    Annotations: rdfs:label "non-rigid"
+#	Annotations: rdfs:label "non-rigid"
 	SubPropertyOf:
 		owl:bottomObjectProperty
 	Domain:
@@ -615,7 +615,7 @@ Class: rosi:RoleGroups
 ###########################
 
 Class: rosi:GeneratedRoleGroup2
-	Annotations: rdfs:label "non-rigid"
+#	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup2
 	EquivalentTo:
@@ -663,7 +663,7 @@ Class: rosi:MustPlayGeneratedRoleGroup2
 ###########################
 
 Class: rosi:GeneratedRoleGroup1
-	Annotations: rdfs:label "non-rigid"
+#	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup1
 	EquivalentTo:
@@ -793,7 +793,7 @@ Class: rosi:Bank
 
 
 ObjectProperty: rosi:count
-    Annotations: rdfs:label "non-rigid"
+#	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:RoleTypes
 	SubClassOf:
@@ -847,4 +847,5 @@ Class: rosi:Transaction
 # This is the end of the automatically generated OWL File.                                         #
 # If you want to add any axioms manually you should do it below here.                              #
 ####################################################################################################
+
 

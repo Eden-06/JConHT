@@ -18,7 +18,7 @@ Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 Prefix: rosi: <http://www.rosi-project.org/ontologies#>
 
-Ontology: <http://www.rosi-project.org/ontologies/2016-12-20/MapperTest>
+Ontology: <http://www.rosi-project.org/ontologies/2017-04-13/MapperTest>
 
 
 
@@ -47,23 +47,28 @@ AnnotationProperty: rdfs:isDefinedBy
 
 Class: owl:Thing
 	SubClassOf:
-		rosi:CompartmentTypes
+		rosi:CompartmentType
 	DisjointUnionOf:
 		Annotations: rdfs:label "objectGlobal"
-		rosi:NaturalTypes,
-		rosi:RoleTypes,
+		rosi:PotentialPlayer,
+		rosi:RoleType,
 		rosi:RoleGroups,
 		{rosi:occurrenceCounter}
 
 Class: owl:Nothing
 
-Class: rosi:CompartmentTypes
+Class: rosi:CompartmentType
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 
-Class: rosi:RoleTypes
+Class: rosi:RoleType
 
 Class: rosi:RoleGroups
+
+Class: rosi:PotentialPlayer
+	DisjointUnionOf:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:NaturalType#, rosi:CompartmentType
 
 Individual: rosi:occurrenceCounter
 
@@ -75,10 +80,32 @@ Individual: rosi:occurrenceCounter
 ####################################################################################################
 
 
-Class: rosi:CompartmentTypes
+Class: rosi:CompartmentType
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		owl:Nothing
+    DisjointUnionOf:
+        Annotations: rdfs:label "objectGlobal"
+        rosi:EmptyCompartment,
+        rosi:FillsTest1,
+        rosi:FillsTest2,
+        rosi:CTDisjoint1,
+        rosi:CTDisjoint2,
+        rosi:RolesCantBePlayedTwice,
+        rosi:RoleTypesAreDisjoint,
+        rosi:RSTDomainRange1,
+        rosi:RSTDomainRangeDifferent,
+        rosi:OccurrenceRTTest1,
+        rosi:OccurrenceRTTest2,
+        rosi:OccurrenceRTTest3,
+        rosi:CardinalConstraints,
+        rosi:RoleImplication,
+        rosi:RoleProhibition,
+        rosi:RoleEquivalence,
+        rosi:ComplexRiehle,
+        rosi:RGsMinMaxTest,
+        rosi:OccurrenceRGTest,
+        rosi:Inconsistent1
     DisjointUnionOf:
         rosi:EmptyCompartment,
         rosi:FillsTest1,
@@ -142,6 +169,289 @@ Class: rosi:OccurrenceRGTest
 
 Class: rosi:Inconsistent1
 
+#ObjectProperty: rosi:nested
+
+Class: rosi:EmptyCompartmentPlaysNothing
+Class: rosi:EmptyCompartmentPlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:EmptyCompartment and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:EmptyCompartmentPlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedEmptyCompartment
+#	EquivalentTo:
+#		not rosi:EmptyCompartmentPlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:EmptyCompartment)
+Class: rosi:FillsTest1PlaysNothing
+Class: rosi:FillsTest1PlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:FillsTest1 and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:FillsTest1PlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedFillsTest1
+#	EquivalentTo:
+#		not rosi:FillsTest1PlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:FillsTest1)
+Class: rosi:FillsTest2PlaysNothing
+Class: rosi:FillsTest2PlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:FillsTest2 and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:FillsTest2PlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedFillsTest2
+#	EquivalentTo:
+#		not rosi:FillsTest2PlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:FillsTest2)
+Class: rosi:CTDisjoint1PlaysNothing
+Class: rosi:CTDisjoint1PlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:CTDisjoint1 and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:CTDisjoint1PlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedCTDisjoint1
+#	EquivalentTo:
+#		not rosi:CTDisjoint1PlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:CTDisjoint1)
+Class: rosi:CTDisjoint2PlaysNothing
+Class: rosi:CTDisjoint2PlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:CTDisjoint2 and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:CTDisjoint2PlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedCTDisjoint2
+#	EquivalentTo:
+#		not rosi:CTDisjoint2PlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:CTDisjoint2)
+Class: rosi:RolesCantBePlayedTwicePlaysNothing
+Class: rosi:RolesCantBePlayedTwicePlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RolesCantBePlayedTwice and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:RolesCantBePlayedTwicePlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedRolesCantBePlayedTwice
+#	EquivalentTo:
+#		not rosi:RolesCantBePlayedTwicePlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:RolesCantBePlayedTwice)
+Class: rosi:RoleTypesAreDisjointPlaysNothing
+Class: rosi:RoleTypesAreDisjointPlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RoleTypesAreDisjoint and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:RoleTypesAreDisjointPlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedRoleTypesAreDisjoint
+#	EquivalentTo:
+#		not rosi:RoleTypesAreDisjointPlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:RoleTypesAreDisjoint)
+Class: rosi:RSTDomainRange1PlaysNothing
+Class: rosi:RSTDomainRange1PlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RSTDomainRange1 and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:RSTDomainRange1PlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedRSTDomainRange1
+#	EquivalentTo:
+#		not rosi:RSTDomainRange1PlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:RSTDomainRange1)
+Class: rosi:RSTDomainRangeDifferentPlaysNothing
+Class: rosi:RSTDomainRangeDifferentPlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RSTDomainRangeDifferent and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:RSTDomainRangeDifferentPlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedRSTDomainRangeDifferent
+#	EquivalentTo:
+#		not rosi:RSTDomainRangeDifferentPlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:RSTDomainRangeDifferent)
+Class: rosi:OccurrenceRTTest1PlaysNothing
+Class: rosi:OccurrenceRTTest1PlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:OccurrenceRTTest1 and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:OccurrenceRTTest1PlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedOccurrenceRTTest1
+#	EquivalentTo:
+#		not rosi:OccurrenceRTTest1PlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:OccurrenceRTTest1)
+Class: rosi:OccurrenceRTTest2PlaysNothing
+Class: rosi:OccurrenceRTTest2PlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:OccurrenceRTTest2 and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:OccurrenceRTTest2PlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedOccurrenceRTTest2
+#	EquivalentTo:
+#		not rosi:OccurrenceRTTest2PlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:OccurrenceRTTest2)
+Class: rosi:OccurrenceRTTest3PlaysNothing
+Class: rosi:OccurrenceRTTest3PlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:OccurrenceRTTest3 and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:OccurrenceRTTest3PlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedOccurrenceRTTest3
+#	EquivalentTo:
+#		not rosi:OccurrenceRTTest3PlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:OccurrenceRTTest3)
+Class: rosi:CardinalConstraintsPlaysNothing
+Class: rosi:CardinalConstraintsPlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:CardinalConstraints and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:CardinalConstraintsPlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedCardinalConstraints
+#	EquivalentTo:
+#		not rosi:CardinalConstraintsPlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:CardinalConstraints)
+Class: rosi:RoleImplicationPlaysNothing
+Class: rosi:RoleImplicationPlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RoleImplication and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:RoleImplicationPlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedRoleImplication
+#	EquivalentTo:
+#		not rosi:RoleImplicationPlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:RoleImplication)
+Class: rosi:RoleProhibitionPlaysNothing
+Class: rosi:RoleProhibitionPlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RoleProhibition and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:RoleProhibitionPlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedRoleProhibition
+#	EquivalentTo:
+#		not rosi:RoleProhibitionPlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:RoleProhibition)
+Class: rosi:RoleEquivalencePlaysNothing
+Class: rosi:RoleEquivalencePlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RoleEquivalence and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:RoleEquivalencePlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedRoleEquivalence
+#	EquivalentTo:
+#		not rosi:RoleEquivalencePlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:RoleEquivalence)
+Class: rosi:ComplexRiehlePlaysNothing
+Class: rosi:ComplexRiehlePlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:ComplexRiehle and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:ComplexRiehlePlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedComplexRiehle
+#	EquivalentTo:
+#		not rosi:ComplexRiehlePlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:ComplexRiehle)
+Class: rosi:RGsMinMaxTestPlaysNothing
+Class: rosi:RGsMinMaxTestPlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:RGsMinMaxTest and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:RGsMinMaxTestPlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedRGsMinMaxTest
+#	EquivalentTo:
+#		not rosi:RGsMinMaxTestPlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:RGsMinMaxTest)
+Class: rosi:OccurrenceRGTestPlaysNothing
+Class: rosi:OccurrenceRGTestPlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:OccurrenceRGTest and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:OccurrenceRGTestPlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedOccurrenceRGTest
+#	EquivalentTo:
+#		not rosi:OccurrenceRGTestPlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:OccurrenceRGTest)
+Class: rosi:Inconsistent1PlaysNothing
+Class: rosi:Inconsistent1PlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:label "objectGlobal"
+		rosi:Inconsistent1 and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:Inconsistent1PlaysNothing
+		owl:Nothing
+
+#Class: rosi:HasNestedInconsistent1
+#	EquivalentTo:
+#		not rosi:Inconsistent1PlaysNothing
+#	EquivalentTo:
+#		(rosi:nested some rosi:Inconsistent1)
+
 
 
 
@@ -150,36 +460,36 @@ Class: rosi:Inconsistent1
 ####################################################################################################
 
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 	SubClassOf:
 		owl:Nothing
 
 Class: rosi:NTFiller1
-	Annotations: rdfs:label "rigid"
+
 
 Class: rosi:NTFiller2
-	Annotations: rdfs:label "rigid"
+
 
 Class: rosi:BottomNT
-	Annotations: rdfs:label "rigid"
+
 
 Class: rosi:DefaultNT
-	Annotations: rdfs:label "rigid"
+
 
 Class: rosi:NTInheritance1
-	Annotations: rdfs:label "rigid"
+
 
 Class: rosi:NTInheritance2
-	Annotations: rdfs:label "rigid"
+
 
 Class: rosi:NTInheritance3
-	Annotations: rdfs:label "rigid"
+
 
 Class: rosi:NTInheritance4
-	Annotations: rdfs:label "rigid"
+
 
 Class: rosi:NTInheritance5
-	Annotations: rdfs:label "rigid"
+
 
 
 
@@ -188,7 +498,7 @@ Class: rosi:NTInheritance5
 # The declaration of all role types that occur in the model                                        #
 ####################################################################################################
 
-Class: rosi:RoleTypes
+Class: rosi:RoleType
 	DisjointUnionOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:RTFills1,
@@ -230,7 +540,7 @@ Class: rosi:RoleTypes
 	    rosi:RTIncons1_3,
 	    rosi:RTIncons1_4
 
-Class: rosi:RoleTypes
+Class: rosi:RoleType
 			SubClassOf:
 				Annotations: rdfs:label "objectGlobal"
 				inverse (rosi:plays) exactly 1 owl:Thing
@@ -239,14 +549,13 @@ Class: rosi:RoleTypes
 ################
 
 Class: rosi:RTFills1
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTFills1
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTFills1
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTFills1
@@ -256,14 +565,13 @@ Class: rosi:NaturalTypes
 ################
 
 Class: rosi:RTFills2
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTFills2
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTFills2
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTFills2
@@ -273,14 +581,13 @@ Class: rosi:NaturalTypes
 ###########
 
 Class: rosi:RT1
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRT1
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RT1
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RT1
@@ -290,14 +597,13 @@ Class: rosi:NaturalTypes
 ###########
 
 Class: rosi:RT2
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRT2
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RT2
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RT2
@@ -307,14 +613,13 @@ Class: rosi:NaturalTypes
 ###########################
 
 Class: rosi:RTCantBePlayedTwice
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTCantBePlayedTwice
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTCantBePlayedTwice
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTCantBePlayedTwice
@@ -324,14 +629,13 @@ Class: rosi:NaturalTypes
 ###################
 
 Class: rosi:RTDisjoint1
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTDisjoint1
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTDisjoint1
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTDisjoint1
@@ -341,14 +645,13 @@ Class: rosi:NaturalTypes
 ###################
 
 Class: rosi:RTDisjoint2
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTDisjoint2
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTDisjoint2
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTDisjoint2
@@ -358,14 +661,13 @@ Class: rosi:NaturalTypes
 ###################
 
 Class: rosi:RTRSTDomain
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTRSTDomain
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTRSTDomain
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTRSTDomain
@@ -375,14 +677,13 @@ Class: rosi:NaturalTypes
 ##################
 
 Class: rosi:RTRSTRange
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTRSTRange
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTRSTRange
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTRSTRange
@@ -392,14 +693,13 @@ Class: rosi:NaturalTypes
 ###################
 
 Class: rosi:RTRSTDomRan
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTRSTDomRan
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTRSTDomRan
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTRSTDomRan
@@ -409,14 +709,13 @@ Class: rosi:NaturalTypes
 #####################
 
 Class: rosi:RTOccurrence1
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTOccurrence1
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTOccurrence1
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTOccurrence1
@@ -426,14 +725,13 @@ Class: rosi:NaturalTypes
 #####################
 
 Class: rosi:RTOccurrence2
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTOccurrence2
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTOccurrence2
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTOccurrence2
@@ -443,14 +741,13 @@ Class: rosi:NaturalTypes
 #####################
 
 Class: rosi:RTOccurrence3
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTOccurrence3
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTOccurrence3
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTOccurrence3
@@ -460,14 +757,13 @@ Class: rosi:NaturalTypes
 #####################
 
 Class: rosi:RTOccurrence4
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTOccurrence4
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTOccurrence4
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTOccurrence4
@@ -477,14 +773,13 @@ Class: rosi:NaturalTypes
 ###############
 
 Class: rosi:RTCard1
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTCard1
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTCard1
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTCard1
@@ -494,14 +789,13 @@ Class: rosi:NaturalTypes
 ###############
 
 Class: rosi:RTCard2
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTCard2
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTCard2
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTCard2
@@ -511,14 +805,13 @@ Class: rosi:NaturalTypes
 ###############
 
 Class: rosi:RTCard3
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTCard3
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTCard3
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTCard3
@@ -528,14 +821,13 @@ Class: rosi:NaturalTypes
 ###############
 
 Class: rosi:RTCard4
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTCard4
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTCard4
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTCard4
@@ -545,14 +837,13 @@ Class: rosi:NaturalTypes
 ###############
 
 Class: rosi:RTCard5
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTCard5
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTCard5
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTCard5
@@ -562,14 +853,13 @@ Class: rosi:NaturalTypes
 ###############
 
 Class: rosi:RTCard6
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTCard6
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTCard6
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTCard6
@@ -579,14 +869,13 @@ Class: rosi:NaturalTypes
 ######################
 
 Class: rosi:RTImplication1
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTImplication1
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTImplication1
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTImplication1
@@ -596,14 +885,13 @@ Class: rosi:NaturalTypes
 ######################
 
 Class: rosi:RTImplication2
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTImplication2
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTImplication2
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTImplication2
@@ -613,14 +901,13 @@ Class: rosi:NaturalTypes
 ######################
 
 Class: rosi:RTProhibition1
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTProhibition1
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTProhibition1
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTProhibition1
@@ -630,14 +917,13 @@ Class: rosi:NaturalTypes
 ######################
 
 Class: rosi:RTProhibition2
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTProhibition2
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTProhibition2
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTProhibition2
@@ -647,14 +933,13 @@ Class: rosi:NaturalTypes
 ######################
 
 Class: rosi:RTEquivalence1
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTEquivalence1
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTEquivalence1
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTEquivalence1
@@ -664,14 +949,13 @@ Class: rosi:NaturalTypes
 ######################
 
 Class: rosi:RTEquivalence2
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTEquivalence2
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTEquivalence2
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTEquivalence2
@@ -681,14 +965,13 @@ Class: rosi:NaturalTypes
 #################
 
 Class: rosi:RTRiehle1
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTRiehle1
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTRiehle1
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTRiehle1
@@ -698,14 +981,13 @@ Class: rosi:NaturalTypes
 #################
 
 Class: rosi:RTRiehle2
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTRiehle2
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTRiehle2
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTRiehle2
@@ -715,14 +997,13 @@ Class: rosi:NaturalTypes
 #################
 
 Class: rosi:RTRiehle3
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTRiehle3
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTRiehle3
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTRiehle3
@@ -732,14 +1013,13 @@ Class: rosi:NaturalTypes
 ############
 
 Class: rosi:RT_A
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRT_A
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RT_A
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RT_A
@@ -749,14 +1029,13 @@ Class: rosi:NaturalTypes
 ############
 
 Class: rosi:RT_B
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRT_B
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RT_B
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RT_B
@@ -766,14 +1045,13 @@ Class: rosi:NaturalTypes
 ############
 
 Class: rosi:RT_C
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRT_C
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RT_C
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RT_C
@@ -783,14 +1061,13 @@ Class: rosi:NaturalTypes
 ############
 
 Class: rosi:RT_D
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRT_D
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RT_D
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RT_D
@@ -800,14 +1077,13 @@ Class: rosi:NaturalTypes
 ############
 
 Class: rosi:RT_E
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRT_E
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RT_E
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RT_E
@@ -817,14 +1093,13 @@ Class: rosi:NaturalTypes
 ###################
 
 Class: rosi:RTIncons1_1
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTIncons1_1
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTIncons1_1
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTIncons1_1
@@ -834,14 +1109,13 @@ Class: rosi:NaturalTypes
 ###################
 
 Class: rosi:RTIncons1_2
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTIncons1_2
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTIncons1_2
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTIncons1_2
@@ -851,14 +1125,13 @@ Class: rosi:NaturalTypes
 ###################
 
 Class: rosi:RTIncons1_3
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTIncons1_3
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTIncons1_3
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTIncons1_3
@@ -868,14 +1141,13 @@ Class: rosi:NaturalTypes
 ###################
 
 Class: rosi:RTIncons1_4
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysRTIncons1_4
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:RTIncons1_4
 		
-Class: rosi:NaturalTypes
+Class: rosi:PotentialPlayer
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:RTIncons1_4
@@ -891,13 +1163,12 @@ Class: rosi:NaturalTypes
 ObjectProperty: owl:bottomObjectProperty
 
 ObjectProperty: rosi:plays
-	Annotations: rdfs:label "non-rigid"
 	Domain:
 		Annotations: rdfs:label "objectGlobal"
-		rosi:NaturalTypes
+		rosi:PotentialPlayer
 	Range:
 		Annotations: rdfs:label "objectGlobal"
-		rosi:RoleTypes or rosi:RoleGroups
+		rosi:RoleType or rosi:RoleGroups
 	SubPropertyOf:
 		owl:bottomObjectProperty
 		
@@ -909,7 +1180,7 @@ ObjectProperty: rosi:plays
 # Natural type inheritance                                                                         #
 ####################################################################################################
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 	DisjointUnionOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:NTFiller1, rosi:NTFiller2, rosi:BottomNT, rosi:DefaultNT, rosi:NTInheritance1, rosi:NTInheritance2
@@ -3873,7 +4144,6 @@ Class: rosi:OccurrenceRGTest
 #################
 
 ObjectProperty: rosi:RSTDomRan
-	Annotations: rdfs:label "non-rigid"
 	SubPropertyOf:
 		owl:bottomObjectProperty
 	Domain:
@@ -3960,7 +4230,6 @@ Class: rosi:Inconsistent1
 #####################
 
 ObjectProperty: rosi:RSTSameDomRan
-	Annotations: rdfs:label "non-rigid"
 	SubPropertyOf:
 		owl:bottomObjectProperty
 	Domain:
@@ -4047,7 +4316,6 @@ Class: rosi:Inconsistent1
 ################
 
 ObjectProperty: rosi:RSTCard1
-	Annotations: rdfs:label "non-rigid"
 	SubPropertyOf:
 		owl:bottomObjectProperty
 	Domain:
@@ -4134,7 +4402,6 @@ Class: rosi:Inconsistent1
 ################
 
 ObjectProperty: rosi:RSTCard2
-	Annotations: rdfs:label "non-rigid"
 	SubPropertyOf:
 		owl:bottomObjectProperty
 	Domain:
@@ -4221,7 +4488,6 @@ Class: rosi:Inconsistent1
 ################
 
 ObjectProperty: rosi:RSTCard3
-	Annotations: rdfs:label "non-rigid"
 	SubPropertyOf:
 		owl:bottomObjectProperty
 	Domain:
@@ -4338,14 +4604,13 @@ Class: rosi:RoleGroups
 ###########################
 
 Class: rosi:GeneratedRoleGroup9
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup9
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:GeneratedRoleGroup9
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:GeneratedRoleGroup9
@@ -4363,7 +4628,7 @@ Class: rosi:GeneratedRoleGroup9Atoms
 Class: rosi:PlaysGeneratedRoleGroup9
     EquivalentTo:
         Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup9InComplexRiehle
-        rosi:NaturalTypes and (rosi:plays min 1 rosi:GeneratedRoleGroup9Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup9Elements)
+        rosi:NaturalType and (rosi:plays min 1 rosi:GeneratedRoleGroup9Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup9Elements)
 
 Class: rosi:___SatisfyGeneratedRoleGroup9InComplexRiehle
 
@@ -4386,14 +4651,13 @@ Class: rosi:MustPlayGeneratedRoleGroup9
 ###########################
 
 Class: rosi:GeneratedRoleGroup8
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup8
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:GeneratedRoleGroup8
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:GeneratedRoleGroup8
@@ -4411,7 +4675,7 @@ Class: rosi:GeneratedRoleGroup8Atoms
 Class: rosi:PlaysGeneratedRoleGroup8
     EquivalentTo:
         Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup8InComplexRiehle
-        rosi:NaturalTypes and (rosi:plays max 0 rosi:GeneratedRoleGroup8Elements)
+        rosi:NaturalType and (rosi:plays max 0 rosi:GeneratedRoleGroup8Elements)
 
 Class: rosi:___SatisfyGeneratedRoleGroup8InComplexRiehle
 
@@ -4427,14 +4691,13 @@ Class: rosi:ComplexRiehle
 ###########################
 
 Class: rosi:GeneratedRoleGroup7
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup7
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:GeneratedRoleGroup7
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:GeneratedRoleGroup7
@@ -4452,7 +4715,7 @@ Class: rosi:GeneratedRoleGroup7Atoms
 Class: rosi:PlaysGeneratedRoleGroup7
     EquivalentTo:
         Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup7InOccurrenceRGTest
-        rosi:NaturalTypes and (rosi:plays min 2 rosi:GeneratedRoleGroup7Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup7Elements)
+        rosi:NaturalType and (rosi:plays min 2 rosi:GeneratedRoleGroup7Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup7Elements)
 
 Class: rosi:___SatisfyGeneratedRoleGroup7InOccurrenceRGTest
 
@@ -4475,14 +4738,13 @@ Class: rosi:MustPlayGeneratedRoleGroup7
 ###########################
 
 Class: rosi:GeneratedRoleGroup6
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup6
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:GeneratedRoleGroup6
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:GeneratedRoleGroup6
@@ -4500,7 +4762,7 @@ Class: rosi:GeneratedRoleGroup6Atoms
 Class: rosi:PlaysGeneratedRoleGroup6
     EquivalentTo:
         Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup6InInconsistent1
-        rosi:NaturalTypes and (rosi:plays min 1 rosi:GeneratedRoleGroup6Elements) and (rosi:plays max 1 rosi:GeneratedRoleGroup6Elements)
+        rosi:NaturalType and (rosi:plays min 1 rosi:GeneratedRoleGroup6Elements) and (rosi:plays max 1 rosi:GeneratedRoleGroup6Elements)
 
 Class: rosi:___SatisfyGeneratedRoleGroup6InInconsistent1
 
@@ -4523,14 +4785,13 @@ Class: rosi:MustPlayGeneratedRoleGroup6
 ###########################
 
 Class: rosi:GeneratedRoleGroup5
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup5
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:GeneratedRoleGroup5
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:GeneratedRoleGroup5
@@ -4548,7 +4809,7 @@ Class: rosi:GeneratedRoleGroup5Atoms
 Class: rosi:PlaysGeneratedRoleGroup5
     EquivalentTo:
         Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup5InInconsistent1
-        rosi:NaturalTypes and (rosi:plays min 2 rosi:GeneratedRoleGroup5Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup5Elements)
+        rosi:NaturalType and (rosi:plays min 2 rosi:GeneratedRoleGroup5Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup5Elements)
 
 Class: rosi:___SatisfyGeneratedRoleGroup5InInconsistent1
 
@@ -4571,14 +4832,13 @@ Class: rosi:MustPlayGeneratedRoleGroup5
 ###########################
 
 Class: rosi:GeneratedRoleGroup4
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup4
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:GeneratedRoleGroup4
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:GeneratedRoleGroup4
@@ -4596,7 +4856,7 @@ Class: rosi:GeneratedRoleGroup4Atoms
 Class: rosi:PlaysGeneratedRoleGroup4
     EquivalentTo:
         Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup4InInconsistent1
-        rosi:NaturalTypes and (rosi:plays min 2 rosi:GeneratedRoleGroup4Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup4Elements)
+        rosi:NaturalType and (rosi:plays min 2 rosi:GeneratedRoleGroup4Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup4Elements)
 
 Class: rosi:___SatisfyGeneratedRoleGroup4InInconsistent1
 
@@ -4619,14 +4879,13 @@ Class: rosi:MustPlayGeneratedRoleGroup4
 ###########################
 
 Class: rosi:GeneratedRoleGroup3
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup3
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:GeneratedRoleGroup3
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:GeneratedRoleGroup3
@@ -4644,7 +4903,7 @@ Class: rosi:GeneratedRoleGroup3Atoms
 Class: rosi:PlaysGeneratedRoleGroup3
     EquivalentTo:
         Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup3InInconsistent1
-        rosi:NaturalTypes and (rosi:plays min 1 rosi:GeneratedRoleGroup3Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup3Elements)
+        rosi:NaturalType and (rosi:plays min 1 rosi:GeneratedRoleGroup3Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup3Elements)
 
 Class: rosi:___SatisfyGeneratedRoleGroup3InInconsistent1
 
@@ -4667,14 +4926,13 @@ Class: rosi:MustPlayGeneratedRoleGroup3
 ###########################
 
 Class: rosi:GeneratedRoleGroup2
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup2
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:GeneratedRoleGroup2
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:GeneratedRoleGroup2
@@ -4692,7 +4950,7 @@ Class: rosi:GeneratedRoleGroup2Atoms
 Class: rosi:PlaysGeneratedRoleGroup2
     EquivalentTo:
         Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup2InRGsMinMaxTest
-        rosi:NaturalTypes and (rosi:plays min 2 rosi:GeneratedRoleGroup2Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup2Elements)
+        rosi:NaturalType and (rosi:plays min 2 rosi:GeneratedRoleGroup2Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup2Elements)
 
 Class: rosi:___SatisfyGeneratedRoleGroup2InRGsMinMaxTest
 
@@ -4715,14 +4973,13 @@ Class: rosi:MustPlayGeneratedRoleGroup2
 ############################
 
 Class: rosi:GeneratedRoleGroup10
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup10
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:GeneratedRoleGroup10
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:GeneratedRoleGroup10
@@ -4740,7 +4997,7 @@ Class: rosi:GeneratedRoleGroup10Atoms
 Class: rosi:PlaysGeneratedRoleGroup10
     EquivalentTo:
         Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup10InComplexRiehle
-        rosi:NaturalTypes and (rosi:plays max 0 rosi:GeneratedRoleGroup10Elements)
+        rosi:NaturalType and (rosi:plays max 0 rosi:GeneratedRoleGroup10Elements)
 
 Class: rosi:___SatisfyGeneratedRoleGroup10InComplexRiehle
 
@@ -4756,14 +5013,13 @@ Class: rosi:ComplexRiehle
 ###########################
 
 Class: rosi:GeneratedRoleGroup1
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup1
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:GeneratedRoleGroup1
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:GeneratedRoleGroup1
@@ -4781,7 +5037,7 @@ Class: rosi:GeneratedRoleGroup1Atoms
 Class: rosi:PlaysGeneratedRoleGroup1
     EquivalentTo:
         Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup1InRoleProhibition
-        rosi:NaturalTypes and (rosi:plays min 1 rosi:GeneratedRoleGroup1Elements) and (rosi:plays max 1 rosi:GeneratedRoleGroup1Elements)
+        rosi:NaturalType and (rosi:plays min 1 rosi:GeneratedRoleGroup1Elements) and (rosi:plays max 1 rosi:GeneratedRoleGroup1Elements)
 
 Class: rosi:___SatisfyGeneratedRoleGroup1InRoleProhibition
 
@@ -4804,14 +5060,13 @@ Class: rosi:MustPlayGeneratedRoleGroup1
 ############################
 
 Class: rosi:GeneratedRoleGroup12
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup12
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:GeneratedRoleGroup12
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:GeneratedRoleGroup12
@@ -4829,7 +5084,7 @@ Class: rosi:GeneratedRoleGroup12Atoms
 Class: rosi:PlaysGeneratedRoleGroup12
     EquivalentTo:
         Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup12InComplexRiehle
-        rosi:NaturalTypes and (rosi:plays min 1 rosi:GeneratedRoleGroup12Elements) and (rosi:plays max 1 rosi:GeneratedRoleGroup12Elements)
+        rosi:NaturalType and (rosi:plays min 1 rosi:GeneratedRoleGroup12Elements) and (rosi:plays max 1 rosi:GeneratedRoleGroup12Elements)
 
 Class: rosi:___SatisfyGeneratedRoleGroup12InComplexRiehle
 
@@ -4852,14 +5107,13 @@ Class: rosi:MustPlayGeneratedRoleGroup12
 ############################
 
 Class: rosi:GeneratedRoleGroup11
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup11
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:GeneratedRoleGroup11
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:GeneratedRoleGroup11
@@ -4877,7 +5131,7 @@ Class: rosi:GeneratedRoleGroup11Atoms
 Class: rosi:PlaysGeneratedRoleGroup11
     EquivalentTo:
         Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup11InComplexRiehle
-        rosi:NaturalTypes and (rosi:plays min 1 rosi:GeneratedRoleGroup11Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup11Elements)
+        rosi:NaturalType and (rosi:plays min 1 rosi:GeneratedRoleGroup11Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup11Elements)
 
 Class: rosi:___SatisfyGeneratedRoleGroup11InComplexRiehle
 
@@ -4900,14 +5154,13 @@ Class: rosi:MustPlayGeneratedRoleGroup11
 ############################
 
 Class: rosi:GeneratedRoleGroup14
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup14
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:GeneratedRoleGroup14
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:GeneratedRoleGroup14
@@ -4925,7 +5178,7 @@ Class: rosi:GeneratedRoleGroup14Atoms
 Class: rosi:PlaysGeneratedRoleGroup14
     EquivalentTo:
         Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup14InRoleImplication
-        rosi:NaturalTypes and (rosi:plays min 1 rosi:GeneratedRoleGroup14Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup14Elements)
+        rosi:NaturalType and (rosi:plays min 1 rosi:GeneratedRoleGroup14Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup14Elements)
 
 Class: rosi:___SatisfyGeneratedRoleGroup14InRoleImplication
 
@@ -4948,14 +5201,13 @@ Class: rosi:MustPlayGeneratedRoleGroup14
 ############################
 
 Class: rosi:GeneratedRoleGroup13
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup13
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:GeneratedRoleGroup13
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:GeneratedRoleGroup13
@@ -4973,7 +5225,7 @@ Class: rosi:GeneratedRoleGroup13Atoms
 Class: rosi:PlaysGeneratedRoleGroup13
     EquivalentTo:
         Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup13InRoleImplication
-        rosi:NaturalTypes and (rosi:plays max 0 rosi:GeneratedRoleGroup13Elements)
+        rosi:NaturalType and (rosi:plays max 0 rosi:GeneratedRoleGroup13Elements)
 
 Class: rosi:___SatisfyGeneratedRoleGroup13InRoleImplication
 
@@ -4989,14 +5241,13 @@ Class: rosi:RoleImplication
 ############################
 
 Class: rosi:GeneratedRoleGroup15
-	Annotations: rdfs:label "non-rigid"
 
 Class: rosi:PlaysGeneratedRoleGroup15
 	EquivalentTo:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays some rosi:GeneratedRoleGroup15
 
-Class: rosi:NaturalTypes
+Class: rosi:NaturalType
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:plays max 1 rosi:GeneratedRoleGroup15
@@ -5014,7 +5265,7 @@ Class: rosi:GeneratedRoleGroup15Atoms
 Class: rosi:PlaysGeneratedRoleGroup15
     EquivalentTo:
         Annotations: rdfs:isDefinedBy rosi:___SatisfyGeneratedRoleGroup15InRoleEquivalence
-        rosi:NaturalTypes and (rosi:plays min 2 rosi:GeneratedRoleGroup15Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup15Elements)
+        rosi:NaturalType and (rosi:plays min 2 rosi:GeneratedRoleGroup15Elements) and (rosi:plays max 2 rosi:GeneratedRoleGroup15Elements)
 
 Class: rosi:___SatisfyGeneratedRoleGroup15InRoleEquivalence
 
@@ -5112,9 +5363,8 @@ Class: rosi:CardinalConstraints
 
 
 ObjectProperty: rosi:count
-	Annotations: rdfs:label "non-rigid"
 
-Class: rosi:RoleTypes
+Class: rosi:RoleType
 	SubClassOf:
 		Annotations: rdfs:label "objectGlobal"
 		inverse (rosi:count) exactly 1 {rosi:occurrenceCounter}
