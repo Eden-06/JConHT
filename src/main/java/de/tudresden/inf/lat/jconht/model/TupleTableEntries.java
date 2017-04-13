@@ -137,8 +137,47 @@ public class TupleTableEntries {
 
         @Override
         public String toString() {
+            StringBuilder builder = new StringBuilder();
 
-            return getNode() + "\t" + getClassExpression() + "\t" + getDependencySet();
+            switch (getNode().getNodeType()) {
+                case NAMED_NODE:
+                    builder.append("Named\t");
+                    break;
+                case NI_NODE:
+                    builder.append("NI   \t");
+                    break;
+                case GRAPH_NODE:
+                    builder.append("Graph\t");
+                    break;
+                case TREE_NODE:
+                    builder.append("Tree \t");
+                    break;
+                case CONCRETE_NODE:
+                    builder.append("Concrete ");
+                    break;
+                case ROOT_CONSTANT_NODE:
+                    builder.append("Root \t");
+            }
+            builder.append(getNode());
+            if (getNode().isMerged()) {
+                builder.append("->").append(getNode().getMergedInto());
+            } else {
+                builder.append("    ");
+            }
+            if (getNode().isBlocked()) {
+                builder.append("||").append(getNode().getBlocker());
+            } else {
+                builder.append("   ");
+            }
+            builder.append('\t');
+            builder.append(getDependencySet());
+            if (getDependencySet().toString().length()<8) {
+                builder.append('\t');
+            }
+            builder.append('\t');
+            builder.append(getClassExpression());
+
+            return builder.toString();
         }
 
         @Override
@@ -269,6 +308,7 @@ public class TupleTableEntries {
             builder.append(getNodeFrom());
             builder.append('\t');
             if (getRole().isPresent()) {
+                //noinspection OptionalGetWithoutIsPresent
                 builder.append(getRole().get());
                 builder.append('\t');
             } else if (getInequality().isPresent()) {
