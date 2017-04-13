@@ -11,3 +11,6 @@ src/main/java/de/tudresden/inf/lat/jconht/playground/
 *.crom
 /NoRigidNames.txt
 /RigidNames.txt
+out/*
+input/Benchmark/*
+input/CromMapperTest/test*.owl
