@@ -15,7 +15,7 @@
         </dependency>
         <dependency>
             <groupId>net.sourceforge.owlapi</groupId>
-            <artifactId>owlapi-distribution</artifactId>
+            <artifactId>owlapi-apibinding</artifactId>
             <version>5.0.2</version>
         </dependency>
         <dependency>
