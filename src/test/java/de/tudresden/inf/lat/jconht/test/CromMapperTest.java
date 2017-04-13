@@ -1,5 +1,6 @@
 package de.tudresden.inf.lat.jconht.test;
 
+import de.tudresden.inf.lat.jconht.model.AxiomBuilder;
 import de.tudresden.inf.lat.jconht.model.Configuration;
 import de.tudresden.inf.lat.jconht.model.ContextOntology;
 import de.tudresden.inf.lat.jconht.tableau.ContextReasoner;
@@ -34,6 +35,7 @@ public class CromMapperTest {
     private PrefixManager rosiPrefix;
     private Configuration confWithDebug;
     private Configuration confWithoutDebug;
+    private AxiomBuilder builder;
 
     private OWLOntology rawOntology;
 
@@ -64,21 +66,25 @@ public class CromMapperTest {
         manager = OWLManager.createOWLOntologyManager();
         dataFactory = manager.getOWLDataFactory();
         rosiPrefix = new DefaultPrefixManager("http://www.rosi-project.org/ontologies#");
+        builder = new AxiomBuilder(dataFactory,
+                "http://www.rosi-project.org/ontologies#",
+                "ind:",
+                "http://www.rosi-project.org/ontologies#");
 
         //String inputDir = new File("input").getAbsolutePath();
         File cromMapperTestOntologyFile = new File("input/CROMMapperTest/MapperTest.owl");
         //TODO again the question how to correctly load an ontology
         rawOntology = manager.loadOntology(IRI.create(cromMapperTestOntologyFile));
-        confWithDebug = new Configuration(true, true, true, false);
-        confWithoutDebug = new Configuration(true, false, true, false);
+        confWithDebug = new Configuration(true, true, false, false);
+        confWithoutDebug = new Configuration(true, false, false, false);
 
         numberOfAnonymousMetaConcepts = 0;
         numberOfAnonymousIndividuals = 0;
 
-        naturalTypes = dataFactory.getOWLClass("NaturalTypes", rosiPrefix);
-        roleTypes = dataFactory.getOWLClass("RoleTypes", rosiPrefix);
+        naturalTypes = dataFactory.getOWLClass("NaturalType", rosiPrefix);
+        roleTypes = dataFactory.getOWLClass("RoleType", rosiPrefix);
         roleGroups = dataFactory.getOWLClass("RoleGroups", rosiPrefix);
-        compartmentTypes = dataFactory.getOWLClass("CompartmentTypes", rosiPrefix);
+        compartmentTypes = dataFactory.getOWLClass("CompartmentType", rosiPrefix);
         nothing = dataFactory.getOWLNothing();
 
         plays = dataFactory.getOWLObjectProperty("plays", rosiPrefix);
@@ -210,16 +216,13 @@ public class CromMapperTest {
 
         OWLIndividual occurrenceCounter = dataFactory.getOWLNamedIndividual("occurrenceCounter", rosiPrefix);
         OWLClassExpression natTypeOrRoleTypeOrRoleGroup = dataFactory.getOWLObjectUnionOf(
-                dataFactory.getOWLClass("NaturalTypes", rosiPrefix),
-                dataFactory.getOWLClass("RoleTypes", rosiPrefix),
-                dataFactory.getOWLClass("RoleGroups", rosiPrefix));
+                naturalTypes, roleTypes, roleGroups, compartmentTypes);
 
         assertTrue(isInconsistent(
                 getGlobalObjectTypeAssertion(natTypeOrRoleTypeOrRoleGroup, occurrenceCounter)));
     }
 
 
-    
 
 
 
@@ -534,6 +537,28 @@ public class CromMapperTest {
         ));
     }
 
+    @Test
+    public void testRSTInOtherCTPre() throws Exception {
+        System.out.println("Executing testRSTInOtherCTPre:");
+
+        assertFalse(isInconsistent(confWithDebug,Stream.of(
+                builder.stringToOWLAxiom("RSTDomainRange1(c)"),
+                builder.stringToOWLAxiom("RSTDomRan(a,b) @ meta1"),
+                builder.stringToOWLAxiom("meta1(c)")
+        )));
+    }
+
+    @Test
+    public void testRSTInOtherCT() throws Exception {
+        System.out.println("Executing testRSTInOtherCT:");
+
+        assertTrue(isInconsistent(confWithDebug,Stream.of(
+                builder.stringToOWLAxiom("ComplexRiehle(c)"),
+                builder.stringToOWLAxiom("RSTDomRan(a,b) @ meta1"),
+                builder.stringToOWLAxiom("meta1(c)")
+        )));
+    }
+
     // Tests for the occurrence constraints (for role types)
 
     @Test
@@ -840,7 +865,7 @@ public class CromMapperTest {
     }
 
 
-    // Tests for  role groups
+    // Tests for role groups
 
 
     @Test

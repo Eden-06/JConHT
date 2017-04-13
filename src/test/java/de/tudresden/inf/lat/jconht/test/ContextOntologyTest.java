@@ -44,6 +44,7 @@ public class ContextOntologyTest {
     private OWLClass clsB;
     private OWLClass clsB3;
     private OWLClass thing;
+    private OWLClass nothing;
     private OWLIndividual indA;
     private OWLIndividual indC;
     private OWLObjectProperty rolR;
@@ -71,6 +72,7 @@ public class ContextOntologyTest {
         OWLClass clsB2 = dataFactory.getOWLClass("cls:B2");
         clsB3 = dataFactory.getOWLClass("cls:B3");
         thing = dataFactory.getOWLThing();
+        nothing = dataFactory.getOWLNothing();
         indA = dataFactory.getOWLNamedIndividual("ind:a");
         indC = dataFactory.getOWLNamedIndividual("ind:c");
         rolR = dataFactory.getOWLObjectProperty("rol:R");
@@ -175,7 +177,7 @@ public class ContextOntologyTest {
     @Test
     public void testMetaSignature() throws Exception {
 
-        Set<OWLClass> classSet = new HashSet<>(Arrays.asList(clsC, thing, meta1, meta2, meta3, meta4, meta5));
+        Set<OWLClass> classSet = new HashSet<>(Arrays.asList(clsC, thing, nothing, meta1, meta2, meta3, meta4, meta5));
         addDualSetTo(classSet, abstractedMetaConcepts);
         Set<OWLEntity> metaSignatureSet = new HashSet<>(Arrays.asList((OWLEntity) indC, rolS));
         metaSignatureSet.addAll(classSet);
@@ -189,7 +191,7 @@ public class ContextOntologyTest {
     @Test
     public void testMetaClassesInSignature() throws Exception {
 
-        Set<OWLClass> conceptSet = new HashSet<>(Arrays.asList(clsC, thing, meta1, meta2, meta3, meta4, meta5));
+        Set<OWLClass> conceptSet = new HashSet<>(Arrays.asList(clsC, thing, nothing, meta1, meta2, meta3, meta4, meta5));
         addDualSetTo(conceptSet, abstractedMetaConcepts);
 
         assertEquals("Test for classes in meta signature",
@@ -307,7 +309,12 @@ public class ContextOntologyTest {
                 builder.stringToOWLAxiom("⊤ ⊑ meta2 ⊔ DUAL.meta2"),
                 builder.stringToOWLAxiom("⊤ ⊑ meta3 ⊔ DUAL.meta3"),
                 builder.stringToOWLAxiom("⊤ ⊑ meta4 ⊔ DUAL.meta4"),
-                builder.stringToOWLAxiom("⊤ ⊑ meta5 ⊔ DUAL.meta5")
+                builder.stringToOWLAxiom("⊤ ⊑ meta5 ⊔ DUAL.meta5"),
+                builder.stringToOWLAxiom("meta1 ⊓ DUAL.meta1 ⊑ ⊥"),
+                builder.stringToOWLAxiom("meta2 ⊓ DUAL.meta2 ⊑ ⊥"),
+                builder.stringToOWLAxiom("meta3 ⊓ DUAL.meta3 ⊑ ⊥"),
+                builder.stringToOWLAxiom("meta4 ⊓ DUAL.meta4 ⊑ ⊥"),
+                builder.stringToOWLAxiom("meta5 ⊓ DUAL.meta5 ⊑ ⊥")
         ));
 
         assertEquals("Test for getting the meta ontology:",

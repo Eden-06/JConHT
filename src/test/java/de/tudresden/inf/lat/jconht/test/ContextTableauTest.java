@@ -8,16 +8,17 @@ import de.tudresden.inf.lat.jconht.tableau.ContextTableau;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.semanticweb.HermiT.tableau.Node;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * This is a test class for testing the correct dealing with rigid names .
@@ -30,6 +31,7 @@ public class ContextTableauTest {
     private OWLOntologyManager manager;
     private OWLDataFactory dataFactory;
     private AxiomBuilder builder;
+    private AxiomBuilder rosiBuilder;
     private Configuration confWithDebug;
     private Configuration confWithoutDebug;
 
@@ -40,6 +42,10 @@ public class ContextTableauTest {
         manager = OWLManager.createOWLOntologyManager();
         dataFactory = manager.getOWLDataFactory();
         builder = new AxiomBuilder(dataFactory);
+        rosiBuilder = new AxiomBuilder(dataFactory,
+                "http://www.rosi-project.org/ontologies#",
+                "ind:",
+                "http://www.rosi-project.org/ontologies#");
         confWithDebug = new Configuration(true);
         confWithoutDebug = new Configuration(false);
 
@@ -265,7 +271,7 @@ public class ContextTableauTest {
         ContextOntology contextOntology = new ContextOntology(ontology, confWithDebug);
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
         //((ContextTableau) reasoner.getTableau()).consistentInterpretations().forEach(System.out::println);
-        assertEquals(((ContextTableau) reasoner.getTableau()).consistentInterpretations().count(),6);
+        assertEquals(((ContextTableau) reasoner.getTableau()).consistentInterpretations().count(), 6);
     }
 
     @Test
@@ -283,7 +289,7 @@ public class ContextTableauTest {
         ContextOntology contextOntology = new ContextOntology(ontology, confWithDebug);
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
         ((ContextTableau) reasoner.getTableau()).consistentInterpretations().forEach(System.out::println);
-        assertEquals(((ContextTableau) reasoner.getTableau()).consistentInterpretations().count(),0);
+        assertEquals(((ContextTableau) reasoner.getTableau()).consistentInterpretations().count(), 0);
     }
 
     @Test
@@ -303,7 +309,7 @@ public class ContextTableauTest {
         ContextOntology contextOntology = new ContextOntology(ontology, confWithDebug);
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
         ((ContextTableau) reasoner.getTableau()).consistentInterpretations().forEach(System.out::println);
-        assertEquals(((ContextTableau) reasoner.getTableau()).consistentInterpretations().count(),23);
+        assertEquals(((ContextTableau) reasoner.getTableau()).consistentInterpretations().count(), 23);
     }
 
     @Test
@@ -323,7 +329,7 @@ public class ContextTableauTest {
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
         //System.out.println(reasoner.isConsistent());
         //((ContextTableau) reasoner.getTableau()).consistentInterpretations().forEach(System.out::println);
-        assertEquals(((ContextTableau) reasoner.getTableau()).consistentInterpretations().count(),1);
+        assertEquals(((ContextTableau) reasoner.getTableau()).consistentInterpretations().count(), 1);
     }
 
     @Test
@@ -341,8 +347,199 @@ public class ContextTableauTest {
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
         System.out.println(reasoner.isConsistent());
         ((ContextTableau) reasoner.getTableau()).consistentInterpretations().forEach(System.out::println);
-        assertEquals(((ContextTableau) reasoner.getTableau()).consistentInterpretations().count(),2);
+        assertEquals(((ContextTableau) reasoner.getTableau()).consistentInterpretations().count(), 2);
     }
+
+    @Test
+    public void testMetaConceptsOfNode() throws Exception {
+        System.out.println("Executing testMetaConceptsOfNode:");
+
+        OWLOntology ontology = manager.createOntology(Stream.of(
+                builder.stringToOWLAxiom("C(c)"),
+                builder.stringToOWLAxiom("meta1(c)"),
+                builder.stringToOWLAxiom("¬D(c)"),
+                builder.stringToOWLAxiom("¬meta2(c)"),
+                //
+                builder.stringToOWLAxiom("A(a) @ meta1"),
+                builder.stringToOWLAxiom("B(a) @ meta2")
+        ));
+
+        ContextOntology contextOntology = new ContextOntology(ontology, confWithDebug);
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+        reasoner.isConsistent();
+        ContextTableau contextTableau = (ContextTableau) reasoner.getTableau();
+        Node node = contextTableau.getFirstTableauNode();
+        if (contextOntology.getConfiguration().debugOutput()) {
+            contextTableau.positiveMetaConceptsOfNode(node).forEach(System.out::println);
+            System.out.println();
+            contextTableau.negativeMetaConceptsOfNode(node).forEach(System.out::println);
+        }
+
+        assertEquals("Test positive meta concepts:",
+                contextTableau.positiveMetaConceptsOfNode(node).collect(Collectors.toSet()),
+                Stream.of(
+                        dataFactory.getOWLClass("cls:meta1"),
+                        dataFactory.getOWLClass("cls:DUAL.meta2")
+                ).collect(Collectors.toSet()));
+
+        assertEquals("Test negative meta concepts:",
+                contextTableau.negativeMetaConceptsOfNode(node).collect(Collectors.toSet()),
+                Stream.of(
+                        dataFactory.getOWLClass("cls:meta2")
+                ).collect(Collectors.toSet()));
+
+    }
+
+    @Test
+    public void testMergedNodes() throws Exception {
+        System.out.println("Executing testMergedNodes:");
+
+        OWLOntology ontology = manager.createOntology(Stream.of(
+                builder.stringToOWLAxiom("A(a)"),
+                builder.stringToOWLAxiom("B(b)"),
+                builder.stringToOWLAxiom("C(c)"),
+                builder.stringToOWLAxiom("R(a,b)"),
+                builder.stringToOWLAxiom("R(a,c)"),
+                builder.stringToOWLAxiom("A ⊑ ≤ 1 R.⊤")));
+
+        ContextOntology contextOntology = new ContextOntology(ontology, confWithDebug);
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+        reasoner.isConsistent();
+    }
+
+    @Test
+    public void testMergeNodes2() throws Exception {
+        System.out.println("Executing testMergeNodes2:");
+
+        OWLOntology ontology = manager.createOntology(Stream.of(
+                builder.stringToOWLAxiom("(≥2count.B)(a) @ global"),
+                builder.stringToOWLAxiom("B ⊑ ∃ plays^-1.A @ global"),
+                builder.stringToOWLAxiom("A ⊑ ≤1plays.B @ global"),
+                builder.stringToOWLAxiom("∃ plays.B ⊑ ≥1plays.(C) @ global"),
+                builder.stringToOWLAxiom("A ⊑ ≤1plays.C @ global"),
+                builder.stringToOWLAxiom("C ⊑ ∃ count^-1 .{a} @ global"),
+                builder.stringToOWLAxiom("(≤1count.C)(a) @ global"),
+
+
+                builder.stringToOWLAxiom("C ⊑ ≤1plays^-1.A @ global"),
+                builder.stringToOWLAxiom("C ⊑ ≥1plays^-1.A @ global")
+//
+//
+//                builder.stringToOWLAxiom("(A⊓B)⊔(A⊓C)⊔(A⊓D)⊔(B⊓C) ⊑ ⊥ @ global"),
+//                builder.stringToOWLAxiom("¬(A⊔B⊔C)(a) @ global"),
+//                builder.stringToOWLAxiom("∃plays.⊤ ⊑ A @ global"),
+//                builder.stringToOWLAxiom("∃count.⊤ ⊑ {a} @ global"),
+//                //
+//                builder.stringToOWLAxiom("A ⊑ ≤1plays.B @ global"),
+//                builder.stringToOWLAxiom("A ⊑ ≤1plays.C @ global"),
+//                //
+//                builder.stringToOWLAxiom("C ⊑ ∃ plays^-1.A @ global"),
+//                //
+//                builder.stringToOWLAxiom("∃ plays.B ⊑ ≤1plays.(C) @ global"),
+//                builder.stringToOWLAxiom("∃ plays.B ⊑ ≥1plays.(C) @ global"),
+//                builder.stringToOWLAxiom("B ⊑ ∃ count^-1 .{a} @ global"),
+//                builder.stringToOWLAxiom("C ⊑ ∃ count^-1 .{a} @ global"),
+//                //
+//                builder.stringToOWLAxiom("(≤1count.C)(a) @ global")
+        ));
+
+        ContextOntology contextOntology = new ContextOntology(ontology, confWithDebug);
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+        reasoner.isConsistent();
+    }
+
+    @Test
+    public void testBankExamplePre() throws Exception {
+        System.out.println("Executing testBankExamplePre:");
+
+        assertTrue(checkBankExample(true, Stream.of()));
+
+    }
+
+    @Test
+    public void testBankExampleWithBank() throws Exception {
+        System.out.println("Executing testBankExampleWithBank:");
+
+        assertTrue(checkBankExample(true, Stream.of(
+                rosiBuilder.stringToOWLAxiom("Bank(c)")
+        )));
+    }
+
+    @Test
+    public void testBankExampleWithTransaction() throws Exception {
+        System.out.println("Executing testBankExampleWithTransaction:");
+
+        assertTrue(checkBankExample(true, Stream.of(
+                rosiBuilder.stringToOWLAxiom("Transaction(c)")
+        )));
+    }
+
+    @Test
+    public void testBankExampleWithTransactionInconsistent1() throws Exception {
+        System.out.println("Executing testBankExampleWithTransactionInconsistent1:");
+
+        assertFalse(checkBankExample(false, Stream.of(
+                rosiBuilder.stringToOWLAxiom("Transaction(c)"),
+                rosiBuilder.stringToOWLAxiom("Transaction ⊑ meta1"),
+                rosiBuilder.stringToOWLAxiom("Source ⊑ ⊥ @ meta1")
+        )));
+    }
+
+    @Test
+    public void testBankExampleWithTransactionInconsistent2() throws Exception {
+        System.out.println("Executing testBankExampleWithTransactionInconsistent2:");
+
+        assertFalse(checkBankExample(false, Stream.of(
+                rosiBuilder.stringToOWLAxiom("Transaction(c)"),
+                rosiBuilder.stringToOWLAxiom("Transaction ⊑ meta1"),
+                rosiBuilder.stringToOWLAxiom("Target ⊑ ⊥ @ meta1")
+        )));
+    }
+
+    @Test
+    public void testBankExampleWithTransactionInconsistent3() throws Exception {
+        System.out.println("Executing testBankExampleWithTransactionInconsistent3:");
+
+        assertFalse(checkBankExample(false, Stream.of(
+                rosiBuilder.stringToOWLAxiom("Transaction(c)"),
+                rosiBuilder.stringToOWLAxiom("Transaction ⊑ meta1 ⊓ meta2 ⊓ meta3"),
+                rosiBuilder.stringToOWLAxiom("Target(t1) @ meta1"),
+                rosiBuilder.stringToOWLAxiom("Target(t2) @ meta2"),
+                rosiBuilder.stringToOWLAxiom("t1≠t2 @ meta3")
+        )));
+    }
+
+    @Test
+    public void testEquivalenceAxiom() throws Exception {
+        System.out.println("Executing testEquivalenceAxiom:");
+
+        OWLOntology ontology = manager.createOntology(Stream.of(
+                builder.stringToOWLAxiom("A ≡ ¬B @ global"),
+                builder.stringToOWLAxiom("A(a) @ global"),
+                builder.stringToOWLAxiom("¬B(b) @ global")
+        ));
+
+        ContextOntology contextOntology = new ContextOntology(ontology, confWithDebug);
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+        reasoner.isConsistent();
+
+    }
+
+    @Test
+    public void testForAllAxiom() throws Exception {
+        System.out.println("Executing testForAllAxiom:");
+
+        OWLOntology ontology = manager.createOntology(Stream.of(
+                builder.stringToOWLAxiom("¬A(a) @ global"),
+                builder.stringToOWLAxiom("∀R.¬C ⊑ A @ global")
+        ));
+
+        ContextOntology contextOntology = new ContextOntology(ontology, confWithDebug);
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+        reasoner.isConsistent();
+
+    }
+
 
     // Helper functions
 
@@ -356,5 +553,16 @@ public class ContextTableauTest {
         return dataFactory.getOWLAnnotationAssertionAxiom(
                 hasIRI.getIRI(),
                 dataFactory.getRDFSLabel("rigid"));
+    }
+
+    private boolean checkBankExample(boolean debug, Stream<OWLAxiom> axioms) throws OWLOntologyCreationException {
+        File file = new File("input/Bank.owl");
+        OWLOntology rootOntology = manager.loadOntologyFromOntologyDocument(file);
+        manager.addAxioms(rootOntology, axioms);
+        ContextOntology contextOntology = new ContextOntology(
+                rootOntology,
+                new Configuration(true, debug, false, false));
+        ContextReasoner reasoner = new ContextReasoner(contextOntology);
+        return reasoner.isConsistent();
     }
 }
