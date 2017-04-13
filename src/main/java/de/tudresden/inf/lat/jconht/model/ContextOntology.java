@@ -130,12 +130,12 @@ public class ContextOntology {
                         owlAxiom -> owlAxiom.getAxiomWithoutAnnotations()));
 
         // Add dual axioms to meta ontology
-        if (configuration.useDualization()){
+        if (configuration.useDualization()) {
             addDualAxiomsToMetaOntology();
         }
 
         // Add repleted axioms to meta ontology
-        if (configuration.useRepletion()){
+        if (configuration.useRepletion()) {
             addRepletionAxiomsToMetaOntology();
         }
 
@@ -192,11 +192,19 @@ public class ContextOntology {
     private void addRepletionAxiomsToMetaOntology() {
 
         // Step 1: Add repletion  axioms to meta ontology
+        // ⊤ ⊑ α ⊔ α*
         ontologyManager.addAxioms(metaOntology,
                 objectAxiomsMap.keySet().stream().map(owlClass ->
                         dataFactory.getOWLSubClassOfAxiom(
                                 dataFactory.getOWLThing(),
                                 dataFactory.getOWLObjectUnionOf(owlClass, getDualClass(owlClass)))));
+
+        // α ⊓ α* ⊑ ⊥
+        ontologyManager.addAxioms(metaOntology,
+                objectAxiomsMap.keySet().stream().map(owlClass ->
+                        dataFactory.getOWLSubClassOfAxiom(
+                                dataFactory.getOWLObjectIntersectionOf(owlClass, getDualClass(owlClass)),
+                                dataFactory.getOWLNothing())));
 
         // Step 2: Add negated Axioms to objectAxiomMap
         objectAxiomsMap.putAll(objectAxiomsMap.entrySet().stream()
@@ -428,8 +436,8 @@ public class ContextOntology {
      */
     public OWLOntology getObjectOntology(List<Type> types) {
 
-        //if (containsRigidNames()) {
-        if (false) {
+        if (containsRigidNames()) {
+            //if (false) {
 
             try {
                 OWLOntology objectOntology = ontologyManager.createOntology();

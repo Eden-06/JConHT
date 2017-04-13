@@ -77,36 +77,6 @@ public class ContextTableau extends Tableau {
         return consistentInterpretations().filter(this::isAdmissible).findAny().isPresent();
     }
 
-//    @Override
-//    protected boolean runCalculus() {
-//
-//        // First run Hypertableau algorithm on meta ontology
-//        if (super.runCalculus()) {
-//
-//            // Possibly a model for meta level is found.
-//            if (debugOutput) {
-//                //System.out.println(contextOntology);
-//                System.out.println("meta ontology is consistent, following context model is found:");
-//                binaryTupleTableEntries(getExtensionManager(), contextOntology.getDataFactory())
-//                        .forEach(System.out::println);
-//                ternaryTupleTableEntries(getExtensionManager()).forEach(System.out::println);
-//            }
-//
-//            if (contextOntology.containsRigidNames()) {
-//                isAdmissibleWithRigid().ifPresent(clashSet -> getExtensionManager().setClash(clashSet));
-//            } else {
-//                isAdmissibleWithoutRigid().ifPresent(clashSet -> getExtensionManager().setClash(clashSet));
-//            }
-//
-//            // All nodes are inner consistent. || Perform actual backtracking.
-//            return !getExtensionManager().containsClash() || runCalculus();
-//        } else {
-//
-//            // The meta-ontology is inconsistent, giving up.
-//            return false;
-//        }
-//
-//    }
 
     /**
      * This method returns the set of OWLClasses that are abstracted meta concepts and must hold for a given node.
@@ -114,8 +84,8 @@ public class ContextTableau extends Tableau {
      * @param node A node.
      * @return The set of positive abstracted meta concepts as {@code Stream<OWLClass>}.
      */
-    private Stream<OWLClass> positiveMetaConceptsOfNode(Node node) {
-        // TODO oder lieber streams zurückgeben?
+    public Stream<OWLClass> positiveMetaConceptsOfNode(Node node) {
+        // TODO oder lieber set zurückgeben?
         return binaryTupleTableEntries(getExtensionManager(), contextOntology.getDataFactory())
                 .filter(entry -> entry.getNode().equals(node))
                 .map(BinaryTupleTableEntry::getClassExpression)
@@ -142,14 +112,14 @@ public class ContextTableau extends Tableau {
      * @param node A node.
      * @return The set of negative abstracted meta concepts as {@code Stream<OWLClass>}.
      */
-    private Stream<OWLClass> negativeMetaConceptsOfNode(Node node) {
-        // TODO Test mit negativem metakonzept cls:C, dass kein outerAbstract ist
+    public Stream<OWLClass> negativeMetaConceptsOfNode(Node node) {
         return binaryTupleTableEntries(getExtensionManager(), contextOntology.getDataFactory())
                 .filter(entry -> entry.getNode().equals(node))
                 .map(BinaryTupleTableEntry::getClassExpression)
                 .filter(owlClassExpression ->
                         owlClassExpression.getClassExpressionType().equals(ClassExpressionType.OBJECT_COMPLEMENT_OF))
-                .flatMap(HasClassesInSignature::classesInSignature);
+                .flatMap(HasClassesInSignature::classesInSignature)
+                .filter(classIsAbstractedMetaConcept);
     }
 
     @Deprecated
@@ -292,6 +262,7 @@ public class ContextTableau extends Tableau {
                         if (debugOutput) {
                             System.out.println("Object ontology for node " + node + ":");
                             reasoner.getRootOntology().axioms().forEach(System.out::println);
+                            ((Reasoner) reasoner).getDLOntology().getDLClauses().forEach(System.out::println);
                             System.out.println(String.join("", Collections.nCopies(100, "-")));
                             if (!isInconsistent) {
                                 System.out.println("--- object ontology for node " + node
