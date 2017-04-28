@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * This class ...
@@ -16,8 +17,8 @@ import java.util.regex.Pattern;
 public class AxiomBuilder {
 
     private final static String regexConceptIRICompliant = "((^[A-Za-z0-9_.]+)|(^[⊥⊤]))";
-    private final static String regexRoleIRICompliant = "((^[A-Za-z0-9_]+)|(^[⊥⊤]))(\\^-1)?";
-    private final static String regexIndividualIRICompliant = "[A-Za-z0-9]+";
+    private final static String regexRoleIRICompliant = "((^[A-Za-z0-9_.]+)|(^[⊥⊤]))(\\^-1)?";
+    private final static String regexIndividualIRICompliant = "[A-Za-z0-9_]+";
     private OWLDataFactory dataFactory;
     private String rolePrefix;
     private String individualPrefix;
@@ -69,9 +70,32 @@ public class AxiomBuilder {
         // Is it a DifferentIndividualAxiom?
         int indexNeq = string.indexOf('≠');
         if (indexNeq != -1) {
-            return dataFactory.getOWLDifferentIndividualsAxiom(
-                    this.stringToIndividual(string.substring(0, indexNeq)),
-                    this.stringToIndividual(string.substring(indexNeq + 1)),
+            if (string.startsWith("≠")) {
+                string = string.substring(1);
+                if (!(string.startsWith("(") && string.endsWith(")")))
+                    throw new AxiomBuilderException(
+                            "\nThis is not a list of individuals: " + string);
+
+                List<OWLIndividual> individuals = Arrays
+                        .stream(string.substring(1, string.length()-1).trim().split(","))
+                        .map(String::trim)
+                        .map(this::stringToIndividual)
+                        .collect(Collectors.toList());
+                return dataFactory.getOWLDifferentIndividualsAxiom(individuals,annotations);
+            } else {
+                return dataFactory.getOWLDifferentIndividualsAxiom(
+                        this.stringToIndividual(string.substring(0, indexNeq)),
+                        this.stringToIndividual(string.substring(indexNeq + 1)),
+                        annotations);
+            }
+        }
+
+        // Is it a SameIndividualAxiom?
+        int indexEq = string.indexOf('=');
+        if (indexEq != -1) {
+            return dataFactory.getOWLSameIndividualAxiom(
+                    this.stringToIndividual(string.substring(0, indexEq)),
+                    this.stringToIndividual(string.substring(indexEq + 1)),
                     annotations);
         }
 
