@@ -437,7 +437,6 @@ public class ContextOntology {
     public OWLOntology getObjectOntology(List<Type> types) {
 
         if (containsRigidNames()) {
-            //if (false) {
 
             try {
                 OWLOntology objectOntology = ontologyManager.createOntology();
@@ -457,15 +456,6 @@ public class ContextOntology {
                     objectOntology.addAxioms(ontologyToBeRenamed.axioms().collect(Collectors.toSet()));
                 }
 
-//                Path path = Paths.get("RigidNames.txt");
-//                try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-//                    objectOntology.axioms().sorted().forEach(owlAxiom -> {
-//                        try {
-//                            writer.write(owlAxiom + "\n");
-//                        } catch (IOException ignored) {}
-//                    });
-//                } catch (IOException ignored) {}
-
                 return objectOntology;
             } catch (OWLOntologyCreationException e) {
 
@@ -482,14 +472,11 @@ public class ContextOntology {
 
             OWLOntology objectOntology = getObjectOntologyForSingleType(types.stream().findAny().get());
 
-//            Path path = Paths.get("NoRigidNames.txt");
-//            try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-//                objectOntology.axioms().sorted().forEach(owlAxiom -> {
-//                    try {
-//                        writer.write(owlAxiom + "\n");
-//                    } catch (IOException ignored) {}
-//                });
-//            } catch (IOException ignored) {}
+            if (configuration.debugOutput()>0) {
+                System.out.print("Axioms in object ontology: ");
+                System.out.println(objectOntology != null ? objectOntology.axioms().count() : 0);
+                System.out.println();
+            }
 
             return objectOntology;
         }
@@ -555,7 +542,7 @@ public class ContextOntology {
         builder.append("\n\n");
 
         // Global Object Ontology
-        builder.append("Object concepts / roles / individuals in Global object ontology: ");
+        builder.append("Object concepts / roles / individuals in global object ontology: ");
         builder.append(globalObjectOntology().flatMap(HasClassesInSignature::classesInSignature)
                 .collect(Collectors.toSet()).size());
         builder.append(" / ");
@@ -564,6 +551,9 @@ public class ContextOntology {
         builder.append(" / ");
         builder.append(globalObjectOntology().flatMap(HasIndividualsInSignature::individualsInSignature)
                 .collect(Collectors.toSet()).size());
+        builder.append('\n');
+        builder.append("Axioms in global object ontology: ");
+        builder.append(globalObjectOntology().count());
 
 
         return builder.toString();

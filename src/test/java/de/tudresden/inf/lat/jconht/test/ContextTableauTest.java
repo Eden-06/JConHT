@@ -46,8 +46,8 @@ public class ContextTableauTest {
                 "http://www.rosi-project.org/ontologies#",
                 "ind:",
                 "http://www.rosi-project.org/ontologies#");
-        confWithDebug = new Configuration(true);
-        confWithoutDebug = new Configuration(false);
+        confWithDebug = new Configuration(2);
+        confWithoutDebug = new Configuration(0);
 
     }
 
@@ -193,7 +193,7 @@ public class ContextTableauTest {
                 builder.stringToOWLAxiom("⊤(a) @ meta3")
         ));
 
-        ContextOntology contextOntology = new ContextOntology(rootOntology, new Configuration(true));
+        ContextOntology contextOntology = new ContextOntology(rootOntology, confWithDebug);
         ContextReasoner reasoner = new ContextReasoner(contextOntology);
 
         assertTrue(reasoner.isConsistent());
@@ -369,7 +369,7 @@ public class ContextTableauTest {
         reasoner.isConsistent();
         ContextTableau contextTableau = (ContextTableau) reasoner.getTableau();
         Node node = contextTableau.getFirstTableauNode();
-        if (contextOntology.getConfiguration().debugOutput()) {
+        if (contextOntology.getConfiguration().debugOutput()>2) {
             contextTableau.positiveMetaConceptsOfNode(node).forEach(System.out::println);
             System.out.println();
             contextTableau.negativeMetaConceptsOfNode(node).forEach(System.out::println);
@@ -452,7 +452,7 @@ public class ContextTableauTest {
     public void testBankExamplePre() throws Exception {
         System.out.println("Executing testBankExamplePre:");
 
-        assertTrue(checkBankExample(true, Stream.of()));
+        assertTrue(checkBankExample(2, Stream.of()));
 
     }
 
@@ -460,7 +460,7 @@ public class ContextTableauTest {
     public void testBankExampleWithBank() throws Exception {
         System.out.println("Executing testBankExampleWithBank:");
 
-        assertTrue(checkBankExample(true, Stream.of(
+        assertTrue(checkBankExample(2, Stream.of(
                 rosiBuilder.stringToOWLAxiom("Bank(c)")
         )));
     }
@@ -469,7 +469,7 @@ public class ContextTableauTest {
     public void testBankExampleWithTransaction() throws Exception {
         System.out.println("Executing testBankExampleWithTransaction:");
 
-        assertTrue(checkBankExample(true, Stream.of(
+        assertTrue(checkBankExample(2, Stream.of(
                 rosiBuilder.stringToOWLAxiom("Transaction(c)")
         )));
     }
@@ -478,7 +478,7 @@ public class ContextTableauTest {
     public void testBankExampleWithTransactionInconsistent1() throws Exception {
         System.out.println("Executing testBankExampleWithTransactionInconsistent1:");
 
-        assertFalse(checkBankExample(false, Stream.of(
+        assertFalse(checkBankExample(2, Stream.of(
                 rosiBuilder.stringToOWLAxiom("Transaction(c)"),
                 rosiBuilder.stringToOWLAxiom("Transaction ⊑ meta1"),
                 rosiBuilder.stringToOWLAxiom("Source ⊑ ⊥ @ meta1")
@@ -489,7 +489,7 @@ public class ContextTableauTest {
     public void testBankExampleWithTransactionInconsistent2() throws Exception {
         System.out.println("Executing testBankExampleWithTransactionInconsistent2:");
 
-        assertFalse(checkBankExample(false, Stream.of(
+        assertFalse(checkBankExample(2, Stream.of(
                 rosiBuilder.stringToOWLAxiom("Transaction(c)"),
                 rosiBuilder.stringToOWLAxiom("Transaction ⊑ meta1"),
                 rosiBuilder.stringToOWLAxiom("Target ⊑ ⊥ @ meta1")
@@ -500,7 +500,7 @@ public class ContextTableauTest {
     public void testBankExampleWithTransactionInconsistent3() throws Exception {
         System.out.println("Executing testBankExampleWithTransactionInconsistent3:");
 
-        assertFalse(checkBankExample(false, Stream.of(
+        assertFalse(checkBankExample(2, Stream.of(
                 rosiBuilder.stringToOWLAxiom("Transaction(c)"),
                 rosiBuilder.stringToOWLAxiom("Transaction ⊑ meta1 ⊓ meta2 ⊓ meta3"),
                 rosiBuilder.stringToOWLAxiom("Target(t1) @ meta1"),
@@ -555,7 +555,7 @@ public class ContextTableauTest {
                 dataFactory.getRDFSLabel("rigid"));
     }
 
-    private boolean checkBankExample(boolean debug, Stream<OWLAxiom> axioms) throws OWLOntologyCreationException {
+    private boolean checkBankExample(int debug, Stream<OWLAxiom> axioms) throws OWLOntologyCreationException {
         File file = new File("input/Bank.owl");
         OWLOntology rootOntology = manager.loadOntologyFromOntologyDocument(file);
         manager.addAxioms(rootOntology, axioms);

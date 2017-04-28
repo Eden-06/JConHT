@@ -26,9 +26,27 @@ public class Main {
 
     public static void main(String[] args) {
 
-        boolean verbose = Arrays.asList(args).contains("-v");
 
-        if (verbose) {
+        if (args.length == 0) {
+            System.out.println("Usage: JConHT.jar [OPTIONS] INPUT");
+            System.out.println("OPTIONS");
+            System.out.println("\t-v\t\tVerbose output");
+            System.out.println("\t-vv\t\tMore verbose output");
+            System.out.println("INPUT");
+            System.out.println("\tthe file location of the .owl file that should be processed");
+            System.out.println("EXIT CODES");
+            System.out.println("\t0\t\tontology is consistent");
+            System.out.println("\t13\t\tOWLOntologyCreationException catched, e.g. when INPUT is not found");
+            System.out.println("\t42\t\tontology is inconsistent");
+            System.out.println("\t127\t\tOutOfMemoryError catched");
+            return;
+        }
+
+
+        int verbose = Arrays.stream(args).filter(arg -> arg.matches("-v*")).findFirst().orElse("-").length() - 1;
+
+
+        if (verbose > 0) {
             System.out.println("Welcome to JConHT!");
         }
 
@@ -38,11 +56,9 @@ public class Main {
         }
 
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-        Configuration confWithoutDebug = new Configuration(true, false, false, false);
-        Configuration confWithDebug = new Configuration(true, true, false, false);
-        if (verbose) {
-            System.out.println("Loading " + file);
-            System.out.println();
+        Configuration conf = new Configuration(true, verbose, false, false);
+        if (verbose > 0) {
+            System.out.print("Loading " + file + " ... ");
         }
         try {
 
@@ -52,16 +68,24 @@ public class Main {
             FileDocumentSource fileDocumentSource = new FileDocumentSource(file, new ManchesterSyntaxDocumentFormatFactory().createFormat());
             OWLOntology rootOntology = manager.loadOntologyFromOntologyDocument(fileDocumentSource);
 
-            ContextOntology contextOntology = verbose ?
-                    new ContextOntology(rootOntology, confWithDebug) :
-                    new ContextOntology(rootOntology, confWithoutDebug);
-            if (verbose) {
-                System.out.println(contextOntology);
-                System.out.println("---------------------------------------------");
+            if (verbose > 0) {
+                System.out.println("done");
+                System.out.println();
+            }
+
+
+            ContextOntology contextOntology = new ContextOntology(rootOntology, conf);
+            if (verbose > 0) {
+                System.out.println(contextOntology.getStatistics());
+                System.out.println();
+                if (verbose > 1) {
+                    System.out.println(contextOntology);
+                    System.out.println("---------------------------------------------");
+                }
             }
 
             ContextReasoner reasoner = new ContextReasoner(contextOntology);
-            if (verbose) {
+            if (verbose > 1) {
                 System.out.println("reasoner.getDLOntology().getDLClauses() = ");
                 reasoner.getDLOntology().getDLClauses().forEach(System.out::println);
                 System.out.println("reasoner.getDLOntology().getPositiveFacts() = " + reasoner.getDLOntology().getPositiveFacts());
@@ -71,10 +95,19 @@ public class Main {
 
             boolean result = reasoner.isConsistent();
 
-            System.out.println(result);
+            if (verbose > 0) {
+                System.out.println("The context ontology is " + (result ? "" : "not ") + "consistent");
+            }
+
+            System.exit(result ? 0 : 42);
 
         } catch (OWLOntologyCreationException e) {
             e.printStackTrace();
+            System.exit(13);
+        //} catch (java.io.FileNotFoundException e) {
+        //    System.err.println("File not found:" + file);
+        } catch (OutOfMemoryError e) {
+            System.exit(127);
         }
     }
 }
