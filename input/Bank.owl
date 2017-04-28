@@ -131,6 +131,12 @@ Class: rosi:RoleTypes
 				Annotations: rdfs:label "objectGlobal"
 				inverse (rosi:plays) exactly 1 owl:Thing
 
+Class: rosi:NaturalTypes
+    SubClassOf:
+        Annotations: rdfs:label "objectGlobal"
+        rosi:plays max 1 rosi:Source and
+        rosi:plays max 1 rosi:Target
+
 ### Source ###
 ##############
 
