@@ -131,7 +131,7 @@ public class CromMapperTest {
     public void test03_CompartmentIsMeta() throws Exception {
         System.out.println("Executing testCompartmentIsMeta: ");
 
-        assertTrue(isInconsistent(Stream.of(
+        assertFalse(isInconsistent(Stream.of(
                 builder.stringToOWLAxiom("CompartmentType(c) @ global")
         )));
 
@@ -1519,7 +1519,7 @@ public class CromMapperTest {
     }
 
 
-    // Further tests about more complex situations
+    // Further tests about more complex compartment constraints
 
     @Test
     public void test63_InconsistentCT1() throws Exception {
@@ -1536,6 +1536,33 @@ public class CromMapperTest {
             assertTrue(isInconsistent(
                     getMetaTypeAssertion(ct, compartment)
             ));
+        }
+    }
+
+
+    // Tests for compartments that play roles
+
+    @Test
+    public void test64_CTWhichPlaysARole() throws Exception {
+        System.out.println("Executing test64_CTWhichPlaysARole:");
+
+        if (nominalMapping) {
+            assertFalse(isInconsistent(//confWithDebug,
+                    Stream.of(
+                            builder.stringToOWLAxiom("CTwithNesting1(c)")
+                    )));
+        }
+    }
+
+    @Test
+    public void test65_CTWhichCantPlayARole() throws Exception {
+        System.out.println("Executing test65_CTWhichCantPlayARole:");
+
+        if (nominalMapping) {
+            assertTrue(isInconsistent(//confWithDebug,
+                    Stream.of(
+                            builder.stringToOWLAxiom("CTwithNesting2(c)")
+                    )));
         }
     }
 
