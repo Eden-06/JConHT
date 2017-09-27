@@ -18,7 +18,7 @@ Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 Prefix: rosi: <http://www.rosi-project.org/ontologies#>
 
-Ontology: <http://www.rosi-project.org/ontologies/2017-04-21/MapperTest>
+Ontology: <http://www.rosi-project.org/ontologies/2017-05-06/MapperTest>
 
 
 
@@ -53,163 +53,284 @@ Class: rosi:CompartmentType
 Class: rosi:NaturalType
 
 Individual: rosi:RTFills1
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTFills2
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RT1
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RT2
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTCantBePlayedTwice
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTDisjoint1
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTDisjoint2
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTRSTDomain
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTRSTRange
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTRSTDomRan
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTOccurrence1
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTOccurrence2
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTOccurrence3
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTOccurrence4
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTCard1
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTCard2
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTCard3
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTCard4
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTCard5
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTCard6
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTImplication1
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTImplication2
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTProhibition1
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTProhibition2
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTEquivalence1
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTEquivalence2
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTRiehle1
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTRiehle2
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTRiehle3
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RT_A
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RT_B
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RT_C
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RT_D
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RT_E
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTIncons1_1
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTIncons1_2
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTIncons1_3
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:RTIncons1_4
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
+
+Individual: rosi:RTNesting1
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
+
+Individual: rosi:RTNestedCT
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
+
+Individual: rosi:RTNesting2
+	Types: 
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType) and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:GeneratedRoleGroup9
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types:
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType)  and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:GeneratedRoleGroup8
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types:
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType)  and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:GeneratedRoleGroup7
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types:
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType)  and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:GeneratedRoleGroup6
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types:
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType)  and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:GeneratedRoleGroup5
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types:
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType)  and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:GeneratedRoleGroup4
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types:
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType)  and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:GeneratedRoleGroup3
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types:
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType)  and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:GeneratedRoleGroup2
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types:
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType)  and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:GeneratedRoleGroup10
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types:
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType)  and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:GeneratedRoleGroup1
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types:
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType)  and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:GeneratedRoleGroup12
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types:
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType)  and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:GeneratedRoleGroup11
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types:
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType)  and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:GeneratedRoleGroup14
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types:
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType)  and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:GeneratedRoleGroup13
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types:
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType)  and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:GeneratedRoleGroup15
-	Types: Annotations: rdfs:label "objectGlobal" not rosi:NaturalType
+	Types:
+		Annotations: rdfs:label "objectGlobal"
+		(not rosi:NaturalType)  and (not rosi:Inconsistent1) and (not rosi:CTNested)
 
 Individual: rosi:occurrenceCounter
 	Types:
@@ -257,6 +378,9 @@ DifferentIndividuals:
 	rosi:RTIncons1_2,
 	rosi:RTIncons1_3,
 	rosi:RTIncons1_4,
+	rosi:RTNesting1,
+	rosi:RTNestedCT,
+	rosi:RTNesting2,
 	rosi:GeneratedRoleGroup9,
 	rosi:GeneratedRoleGroup8,
 	rosi:GeneratedRoleGroup7,
@@ -277,13 +401,10 @@ DifferentIndividuals:
 
 
 ####################################################################################################
-# The declaration of all compartment types that occur in the model                                 #
+# The declaration of all compartment restrictedTypes that occur in the model                                 #
 ####################################################################################################
 
 Class: rosi:CompartmentType
-	SubClassOf:
-		Annotations: rdfs:label "objectGlobal"
-		owl:Nothing
     DisjointUnionOf:
         rosi:EmptyCompartment,
         rosi:FillsTest1,
@@ -304,35 +425,93 @@ Class: rosi:CompartmentType
         rosi:ComplexRiehle,
         rosi:RGsMinMaxTest,
         rosi:OccurrenceRGTest,
-        rosi:Inconsistent1
+        rosi:Inconsistent1,
+        rosi:CTwithNesting1,
+        rosi:CTNested,
+        rosi:CTwithNesting2
 
 Class: rosi:EmptyCompartment
     SubClassOf: owl:Nothing
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:FillsTest1
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:FillsTest2
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:CTDisjoint1
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:CTDisjoint2
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:RSTDomainRange1
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:OccurrenceRTTest1
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:OccurrenceRTTest2
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:OccurrenceRTTest3
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:CardinalConstraints
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:RoleImplication
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:RoleProhibition
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:RoleEquivalence
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:ComplexRiehle
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:RGsMinMaxTest
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:OccurrenceRGTest
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
 Class: rosi:Inconsistent1
+Class: rosi:CTwithNesting1
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
+Class: rosi:CTNested
+Class: rosi:CTwithNesting2
+	SubClassOf: Annotations: rdfs:label "objectGlobal" owl:Nothing
+
+ObjectProperty: rosi:nested
+
+Class: rosi:___CTwithNesting1.CTNestedPlaysNothing
+Class: rosi:___CTwithNesting1.CTNestedPlaysSomething.Def
+Class: rosi:CTwithNesting1
+	SubClassOf:
+		rosi:___CTwithNesting1.CTNestedPlaysNothing or (rosi:nested some rosi:CTNested),
+		rosi:___CTwithNesting1.CTNestedPlaysSomething.Def
+Class: rosi:CTNestedPlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting1.CTNestedPlaysSomething.Def
+		rosi:CTNested and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting1.CTNestedPlaysNothing
+		owl:Nothing
+
+
+Class: rosi:___CTwithNesting2.Inconsistent1PlaysNothing
+Class: rosi:___CTwithNesting2.Inconsistent1PlaysSomething.Def
+Class: rosi:CTwithNesting2
+	SubClassOf:
+		rosi:___CTwithNesting2.Inconsistent1PlaysNothing or (rosi:nested some rosi:Inconsistent1),
+		rosi:___CTwithNesting2.Inconsistent1PlaysSomething.Def
+Class: rosi:Inconsistent1PlaysSomething
+	EquivalentTo:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting2.Inconsistent1PlaysSomething.Def
+		rosi:Inconsistent1 and (rosi:plays some owl:Thing)
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting2.Inconsistent1PlaysNothing
+		owl:Nothing
 
 
 
 
 ####################################################################################################
-# The declaration of all natural types that occur in the model                                     #
+# The declaration of all natural restrictedTypes that occur in the model                                     #
 ####################################################################################################
 
 Class: rosi:NaturalType
@@ -353,7 +532,7 @@ Class: rosi:NTInheritance5
 
 
 ####################################################################################################
-# Natural type inheritance                                                                         #
+# Natural restrictedType inheritance                                                                         #
 ####################################################################################################
 
 Class: rosi:NaturalType
@@ -417,7 +596,7 @@ Class: rosi:NTInheritance5
 
 
 ####################################################################################################
-# The declaration of all role types that occur in the model                                        #
+# The declaration of all role restrictedTypes that occur in the model                                        #
 ####################################################################################################
 
 Class: rosi:RoleType
@@ -460,7 +639,10 @@ Class: rosi:RoleType
 		rosi:RTIncons1_1,
 		rosi:RTIncons1_2,
 		rosi:RTIncons1_3,
-		rosi:RTIncons1_4}
+		rosi:RTIncons1_4,
+		rosi:RTNesting1,
+		rosi:RTNestedCT,
+		rosi:RTNesting2}
 
 
 
@@ -475,7 +657,7 @@ ObjectProperty: owl:bottomObjectProperty
 ObjectProperty: rosi:plays
 	Domain:
 		Annotations: rdfs:label "objectGlobal"
-		rosi:NaturalType
+		rosi:NaturalType or rosi:Inconsistent1 or rosi:CTNested
 	Range:
 		Annotations: rdfs:label "objectGlobal"
 		rosi:RoleType or rosi:RoleGroup
@@ -550,6 +732,15 @@ Class: rosi:OccurrenceRGTest
 Class: rosi:___Inconsistent1.NTFiller1.Fills
 Class: rosi:Inconsistent1
 	SubClassOf: rosi:___Inconsistent1.NTFiller1.Fills
+Class: rosi:___CTwithNesting1.NTFiller1.Fills
+Class: rosi:CTwithNesting1
+	SubClassOf: rosi:___CTwithNesting1.NTFiller1.Fills
+Class: rosi:___CTNested.NTFiller1.Fills
+Class: rosi:CTNested
+	SubClassOf: rosi:___CTNested.NTFiller1.Fills
+Class: rosi:___CTwithNesting2.NTFiller1.Fills
+Class: rosi:CTwithNesting2
+	SubClassOf: rosi:___CTwithNesting2.NTFiller1.Fills
 
 Class: rosi:___EmptyCompartment.NTFiller2.Fills
 Class: rosi:EmptyCompartment
@@ -611,6 +802,15 @@ Class: rosi:OccurrenceRGTest
 Class: rosi:___Inconsistent1.NTFiller2.Fills
 Class: rosi:Inconsistent1
 	SubClassOf: rosi:___Inconsistent1.NTFiller2.Fills
+Class: rosi:___CTwithNesting1.NTFiller2.Fills
+Class: rosi:CTwithNesting1
+	SubClassOf: rosi:___CTwithNesting1.NTFiller2.Fills
+Class: rosi:___CTNested.NTFiller2.Fills
+Class: rosi:CTNested
+	SubClassOf: rosi:___CTNested.NTFiller2.Fills
+Class: rosi:___CTwithNesting2.NTFiller2.Fills
+Class: rosi:CTwithNesting2
+	SubClassOf: rosi:___CTwithNesting2.NTFiller2.Fills
 
 Class: rosi:___EmptyCompartment.BottomNT.Fills
 Class: rosi:EmptyCompartment
@@ -672,6 +872,15 @@ Class: rosi:OccurrenceRGTest
 Class: rosi:___Inconsistent1.BottomNT.Fills
 Class: rosi:Inconsistent1
 	SubClassOf: rosi:___Inconsistent1.BottomNT.Fills
+Class: rosi:___CTwithNesting1.BottomNT.Fills
+Class: rosi:CTwithNesting1
+	SubClassOf: rosi:___CTwithNesting1.BottomNT.Fills
+Class: rosi:___CTNested.BottomNT.Fills
+Class: rosi:CTNested
+	SubClassOf: rosi:___CTNested.BottomNT.Fills
+Class: rosi:___CTwithNesting2.BottomNT.Fills
+Class: rosi:CTwithNesting2
+	SubClassOf: rosi:___CTwithNesting2.BottomNT.Fills
 
 Class: rosi:___EmptyCompartment.DefaultNT.Fills
 Class: rosi:EmptyCompartment
@@ -733,6 +942,15 @@ Class: rosi:OccurrenceRGTest
 Class: rosi:___Inconsistent1.DefaultNT.Fills
 Class: rosi:Inconsistent1
 	SubClassOf: rosi:___Inconsistent1.DefaultNT.Fills
+Class: rosi:___CTwithNesting1.DefaultNT.Fills
+Class: rosi:CTwithNesting1
+	SubClassOf: rosi:___CTwithNesting1.DefaultNT.Fills
+Class: rosi:___CTNested.DefaultNT.Fills
+Class: rosi:CTNested
+	SubClassOf: rosi:___CTNested.DefaultNT.Fills
+Class: rosi:___CTwithNesting2.DefaultNT.Fills
+Class: rosi:CTwithNesting2
+	SubClassOf: rosi:___CTwithNesting2.DefaultNT.Fills
 
 Class: rosi:___EmptyCompartment.NTInheritance1.Fills
 Class: rosi:EmptyCompartment
@@ -794,6 +1012,15 @@ Class: rosi:OccurrenceRGTest
 Class: rosi:___Inconsistent1.NTInheritance1.Fills
 Class: rosi:Inconsistent1
 	SubClassOf: rosi:___Inconsistent1.NTInheritance1.Fills
+Class: rosi:___CTwithNesting1.NTInheritance1.Fills
+Class: rosi:CTwithNesting1
+	SubClassOf: rosi:___CTwithNesting1.NTInheritance1.Fills
+Class: rosi:___CTNested.NTInheritance1.Fills
+Class: rosi:CTNested
+	SubClassOf: rosi:___CTNested.NTInheritance1.Fills
+Class: rosi:___CTwithNesting2.NTInheritance1.Fills
+Class: rosi:CTwithNesting2
+	SubClassOf: rosi:___CTwithNesting2.NTInheritance1.Fills
 
 Class: rosi:___EmptyCompartment.NTInheritance2.Fills
 Class: rosi:EmptyCompartment
@@ -855,6 +1082,15 @@ Class: rosi:OccurrenceRGTest
 Class: rosi:___Inconsistent1.NTInheritance2.Fills
 Class: rosi:Inconsistent1
 	SubClassOf: rosi:___Inconsistent1.NTInheritance2.Fills
+Class: rosi:___CTwithNesting1.NTInheritance2.Fills
+Class: rosi:CTwithNesting1
+	SubClassOf: rosi:___CTwithNesting1.NTInheritance2.Fills
+Class: rosi:___CTNested.NTInheritance2.Fills
+Class: rosi:CTNested
+	SubClassOf: rosi:___CTNested.NTInheritance2.Fills
+Class: rosi:___CTwithNesting2.NTInheritance2.Fills
+Class: rosi:CTwithNesting2
+	SubClassOf: rosi:___CTwithNesting2.NTInheritance2.Fills
 
 Class: rosi:___EmptyCompartment.NTInheritance3.Fills
 Class: rosi:EmptyCompartment
@@ -916,6 +1152,15 @@ Class: rosi:OccurrenceRGTest
 Class: rosi:___Inconsistent1.NTInheritance3.Fills
 Class: rosi:Inconsistent1
 	SubClassOf: rosi:___Inconsistent1.NTInheritance3.Fills
+Class: rosi:___CTwithNesting1.NTInheritance3.Fills
+Class: rosi:CTwithNesting1
+	SubClassOf: rosi:___CTwithNesting1.NTInheritance3.Fills
+Class: rosi:___CTNested.NTInheritance3.Fills
+Class: rosi:CTNested
+	SubClassOf: rosi:___CTNested.NTInheritance3.Fills
+Class: rosi:___CTwithNesting2.NTInheritance3.Fills
+Class: rosi:CTwithNesting2
+	SubClassOf: rosi:___CTwithNesting2.NTInheritance3.Fills
 
 Class: rosi:___EmptyCompartment.NTInheritance4.Fills
 Class: rosi:EmptyCompartment
@@ -977,6 +1222,15 @@ Class: rosi:OccurrenceRGTest
 Class: rosi:___Inconsistent1.NTInheritance4.Fills
 Class: rosi:Inconsistent1
 	SubClassOf: rosi:___Inconsistent1.NTInheritance4.Fills
+Class: rosi:___CTwithNesting1.NTInheritance4.Fills
+Class: rosi:CTwithNesting1
+	SubClassOf: rosi:___CTwithNesting1.NTInheritance4.Fills
+Class: rosi:___CTNested.NTInheritance4.Fills
+Class: rosi:CTNested
+	SubClassOf: rosi:___CTNested.NTInheritance4.Fills
+Class: rosi:___CTwithNesting2.NTInheritance4.Fills
+Class: rosi:CTwithNesting2
+	SubClassOf: rosi:___CTwithNesting2.NTInheritance4.Fills
 
 Class: rosi:___EmptyCompartment.NTInheritance5.Fills
 Class: rosi:EmptyCompartment
@@ -1038,6 +1292,15 @@ Class: rosi:OccurrenceRGTest
 Class: rosi:___Inconsistent1.NTInheritance5.Fills
 Class: rosi:Inconsistent1
 	SubClassOf: rosi:___Inconsistent1.NTInheritance5.Fills
+Class: rosi:___CTwithNesting1.NTInheritance5.Fills
+Class: rosi:CTwithNesting1
+	SubClassOf: rosi:___CTwithNesting1.NTInheritance5.Fills
+Class: rosi:___CTNested.NTInheritance5.Fills
+Class: rosi:CTNested
+	SubClassOf: rosi:___CTNested.NTInheritance5.Fills
+Class: rosi:___CTwithNesting2.NTInheritance5.Fills
+Class: rosi:CTwithNesting2
+	SubClassOf: rosi:___CTwithNesting2.NTInheritance5.Fills
 
 Class: rosi:NTFiller1
 	SubClassOf:
@@ -1101,6 +1364,15 @@ Class: rosi:NTFiller1
 	SubClassOf:
 		Annotations: rdfs:isDefinedBy rosi:___Inconsistent1.NTFiller1.Fills
 		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting1.NTFiller1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTNested.NTFiller1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting2.NTFiller1.Fills
+		rosi:plays only rosi:RoleGroup
 
 Class: rosi:NTFiller2
 	SubClassOf:
@@ -1163,6 +1435,15 @@ Class: rosi:NTFiller2
 		rosi:plays only rosi:RoleGroup
 	SubClassOf:
 		Annotations: rdfs:isDefinedBy rosi:___Inconsistent1.NTFiller2.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting1.NTFiller2.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTNested.NTFiller2.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting2.NTFiller2.Fills
 		rosi:plays only rosi:RoleGroup
 
 Class: rosi:BottomNT
@@ -1228,6 +1509,15 @@ Class: rosi:BottomNT
 		rosi:plays only rosi:RoleGroup
 	SubClassOf:
 		Annotations: rdfs:isDefinedBy rosi:___Inconsistent1.BottomNT.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting1.BottomNT.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTNested.BottomNT.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting2.BottomNT.Fills
 		rosi:plays only rosi:RoleGroup
 
 Class: rosi:DefaultNT
@@ -1325,6 +1615,16 @@ Class: rosi:DefaultNT
 			rosi:RTIncons1_2,
 			rosi:RTIncons1_3,
 			rosi:RTIncons1_4})
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting1.DefaultNT.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTNested.DefaultNT.Fills
+		rosi:plays only (rosi:RoleGroup or
+			{rosi:RTNestedCT})
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting2.DefaultNT.Fills
+		rosi:plays only rosi:RoleGroup
 
 Class: rosi:NTInheritance1
 	SubClassOf:
@@ -1386,6 +1686,15 @@ Class: rosi:NTInheritance1
 		rosi:plays only rosi:RoleGroup
 	SubClassOf:
 		Annotations: rdfs:isDefinedBy rosi:___Inconsistent1.NTInheritance1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting1.NTInheritance1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTNested.NTInheritance1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting2.NTInheritance1.Fills
 		rosi:plays only rosi:RoleGroup
 
 Class: rosi:NTInheritance2
@@ -1449,6 +1758,15 @@ Class: rosi:NTInheritance2
 	SubClassOf:
 		Annotations: rdfs:isDefinedBy rosi:___Inconsistent1.NTInheritance2.Fills
 		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting1.NTInheritance2.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTNested.NTInheritance2.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting2.NTInheritance2.Fills
+		rosi:plays only rosi:RoleGroup
 
 Class: rosi:NTInheritance3
 	SubClassOf:
@@ -1510,6 +1828,15 @@ Class: rosi:NTInheritance3
 		rosi:plays only rosi:RoleGroup
 	SubClassOf:
 		Annotations: rdfs:isDefinedBy rosi:___Inconsistent1.NTInheritance3.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting1.NTInheritance3.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTNested.NTInheritance3.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting2.NTInheritance3.Fills
 		rosi:plays only rosi:RoleGroup
 
 Class: rosi:NTInheritance4
@@ -1573,6 +1900,15 @@ Class: rosi:NTInheritance4
 	SubClassOf:
 		Annotations: rdfs:isDefinedBy rosi:___Inconsistent1.NTInheritance4.Fills
 		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting1.NTInheritance4.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTNested.NTInheritance4.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting2.NTInheritance4.Fills
+		rosi:plays only rosi:RoleGroup
 
 Class: rosi:NTInheritance5
 	SubClassOf:
@@ -1635,12 +1971,305 @@ Class: rosi:NTInheritance5
 	SubClassOf:
 		Annotations: rdfs:isDefinedBy rosi:___Inconsistent1.NTInheritance5.Fills
 		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting1.NTInheritance5.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTNested.NTInheritance5.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting2.NTInheritance5.Fills
+		rosi:plays only rosi:RoleGroup
+
+Class: rosi:___EmptyCompartment.Inconsistent1.Fills
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___EmptyCompartment.Inconsistent1.Fills
+Class: rosi:___FillsTest1.Inconsistent1.Fills
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsTest1.Inconsistent1.Fills
+Class: rosi:___FillsTest2.Inconsistent1.Fills
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsTest2.Inconsistent1.Fills
+Class: rosi:___CTDisjoint1.Inconsistent1.Fills
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___CTDisjoint1.Inconsistent1.Fills
+Class: rosi:___CTDisjoint2.Inconsistent1.Fills
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___CTDisjoint2.Inconsistent1.Fills
+Class: rosi:___RolesCantBePlayedTwice.Inconsistent1.Fills
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___RolesCantBePlayedTwice.Inconsistent1.Fills
+Class: rosi:___RoleTypesAreDisjoint.Inconsistent1.Fills
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___RoleTypesAreDisjoint.Inconsistent1.Fills
+Class: rosi:___RSTDomainRange1.Inconsistent1.Fills
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___RSTDomainRange1.Inconsistent1.Fills
+Class: rosi:___RSTDomainRangeDifferent.Inconsistent1.Fills
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___RSTDomainRangeDifferent.Inconsistent1.Fills
+Class: rosi:___OccurrenceRTTest1.Inconsistent1.Fills
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___OccurrenceRTTest1.Inconsistent1.Fills
+Class: rosi:___OccurrenceRTTest2.Inconsistent1.Fills
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___OccurrenceRTTest2.Inconsistent1.Fills
+Class: rosi:___OccurrenceRTTest3.Inconsistent1.Fills
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___OccurrenceRTTest3.Inconsistent1.Fills
+Class: rosi:___CardinalConstraints.Inconsistent1.Fills
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___CardinalConstraints.Inconsistent1.Fills
+Class: rosi:___RoleImplication.Inconsistent1.Fills
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___RoleImplication.Inconsistent1.Fills
+Class: rosi:___RoleProhibition.Inconsistent1.Fills
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___RoleProhibition.Inconsistent1.Fills
+Class: rosi:___RoleEquivalence.Inconsistent1.Fills
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___RoleEquivalence.Inconsistent1.Fills
+Class: rosi:___ComplexRiehle.Inconsistent1.Fills
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___ComplexRiehle.Inconsistent1.Fills
+Class: rosi:___RGsMinMaxTest.Inconsistent1.Fills
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___RGsMinMaxTest.Inconsistent1.Fills
+Class: rosi:___OccurrenceRGTest.Inconsistent1.Fills
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___OccurrenceRGTest.Inconsistent1.Fills
+Class: rosi:___Inconsistent1.Inconsistent1.Fills
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___Inconsistent1.Inconsistent1.Fills
+Class: rosi:___CTwithNesting1.Inconsistent1.Fills
+Class: rosi:CTwithNesting1
+	SubClassOf: rosi:___CTwithNesting1.Inconsistent1.Fills
+Class: rosi:___CTNested.Inconsistent1.Fills
+Class: rosi:CTNested
+	SubClassOf: rosi:___CTNested.Inconsistent1.Fills
+Class: rosi:___CTwithNesting2.Inconsistent1.Fills
+Class: rosi:CTwithNesting2
+	SubClassOf: rosi:___CTwithNesting2.Inconsistent1.Fills
+
+Class: rosi:___EmptyCompartment.CTNested.Fills
+Class: rosi:EmptyCompartment
+	SubClassOf: rosi:___EmptyCompartment.CTNested.Fills
+Class: rosi:___FillsTest1.CTNested.Fills
+Class: rosi:FillsTest1
+	SubClassOf: rosi:___FillsTest1.CTNested.Fills
+Class: rosi:___FillsTest2.CTNested.Fills
+Class: rosi:FillsTest2
+	SubClassOf: rosi:___FillsTest2.CTNested.Fills
+Class: rosi:___CTDisjoint1.CTNested.Fills
+Class: rosi:CTDisjoint1
+	SubClassOf: rosi:___CTDisjoint1.CTNested.Fills
+Class: rosi:___CTDisjoint2.CTNested.Fills
+Class: rosi:CTDisjoint2
+	SubClassOf: rosi:___CTDisjoint2.CTNested.Fills
+Class: rosi:___RolesCantBePlayedTwice.CTNested.Fills
+Class: rosi:RolesCantBePlayedTwice
+	SubClassOf: rosi:___RolesCantBePlayedTwice.CTNested.Fills
+Class: rosi:___RoleTypesAreDisjoint.CTNested.Fills
+Class: rosi:RoleTypesAreDisjoint
+	SubClassOf: rosi:___RoleTypesAreDisjoint.CTNested.Fills
+Class: rosi:___RSTDomainRange1.CTNested.Fills
+Class: rosi:RSTDomainRange1
+	SubClassOf: rosi:___RSTDomainRange1.CTNested.Fills
+Class: rosi:___RSTDomainRangeDifferent.CTNested.Fills
+Class: rosi:RSTDomainRangeDifferent
+	SubClassOf: rosi:___RSTDomainRangeDifferent.CTNested.Fills
+Class: rosi:___OccurrenceRTTest1.CTNested.Fills
+Class: rosi:OccurrenceRTTest1
+	SubClassOf: rosi:___OccurrenceRTTest1.CTNested.Fills
+Class: rosi:___OccurrenceRTTest2.CTNested.Fills
+Class: rosi:OccurrenceRTTest2
+	SubClassOf: rosi:___OccurrenceRTTest2.CTNested.Fills
+Class: rosi:___OccurrenceRTTest3.CTNested.Fills
+Class: rosi:OccurrenceRTTest3
+	SubClassOf: rosi:___OccurrenceRTTest3.CTNested.Fills
+Class: rosi:___CardinalConstraints.CTNested.Fills
+Class: rosi:CardinalConstraints
+	SubClassOf: rosi:___CardinalConstraints.CTNested.Fills
+Class: rosi:___RoleImplication.CTNested.Fills
+Class: rosi:RoleImplication
+	SubClassOf: rosi:___RoleImplication.CTNested.Fills
+Class: rosi:___RoleProhibition.CTNested.Fills
+Class: rosi:RoleProhibition
+	SubClassOf: rosi:___RoleProhibition.CTNested.Fills
+Class: rosi:___RoleEquivalence.CTNested.Fills
+Class: rosi:RoleEquivalence
+	SubClassOf: rosi:___RoleEquivalence.CTNested.Fills
+Class: rosi:___ComplexRiehle.CTNested.Fills
+Class: rosi:ComplexRiehle
+	SubClassOf: rosi:___ComplexRiehle.CTNested.Fills
+Class: rosi:___RGsMinMaxTest.CTNested.Fills
+Class: rosi:RGsMinMaxTest
+	SubClassOf: rosi:___RGsMinMaxTest.CTNested.Fills
+Class: rosi:___OccurrenceRGTest.CTNested.Fills
+Class: rosi:OccurrenceRGTest
+	SubClassOf: rosi:___OccurrenceRGTest.CTNested.Fills
+Class: rosi:___Inconsistent1.CTNested.Fills
+Class: rosi:Inconsistent1
+	SubClassOf: rosi:___Inconsistent1.CTNested.Fills
+Class: rosi:___CTwithNesting1.CTNested.Fills
+Class: rosi:CTwithNesting1
+	SubClassOf: rosi:___CTwithNesting1.CTNested.Fills
+Class: rosi:___CTNested.CTNested.Fills
+Class: rosi:CTNested
+	SubClassOf: rosi:___CTNested.CTNested.Fills
+Class: rosi:___CTwithNesting2.CTNested.Fills
+Class: rosi:CTwithNesting2
+	SubClassOf: rosi:___CTwithNesting2.CTNested.Fills
+
+Class: rosi:Inconsistent1
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___EmptyCompartment.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsTest1.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsTest2.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTDisjoint1.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTDisjoint2.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___RolesCantBePlayedTwice.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___RoleTypesAreDisjoint.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___RSTDomainRange1.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___RSTDomainRangeDifferent.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___OccurrenceRTTest1.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___OccurrenceRTTest2.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___OccurrenceRTTest3.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CardinalConstraints.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___RoleImplication.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___RoleProhibition.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___RoleEquivalence.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___ComplexRiehle.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___RGsMinMaxTest.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___OccurrenceRGTest.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___Inconsistent1.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting1.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTNested.Inconsistent1.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting2.Inconsistent1.Fills
+		rosi:plays only (rosi:RoleGroup or
+			{rosi:RTNesting2})
+
+Class: rosi:CTNested
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___EmptyCompartment.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsTest1.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___FillsTest2.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTDisjoint1.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTDisjoint2.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___RolesCantBePlayedTwice.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___RoleTypesAreDisjoint.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___RSTDomainRange1.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___RSTDomainRangeDifferent.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___OccurrenceRTTest1.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___OccurrenceRTTest2.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___OccurrenceRTTest3.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CardinalConstraints.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___RoleImplication.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___RoleProhibition.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___RoleEquivalence.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___ComplexRiehle.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___RGsMinMaxTest.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___OccurrenceRGTest.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___Inconsistent1.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting1.CTNested.Fills
+		rosi:plays only (rosi:RoleGroup or
+			{rosi:RTNesting1})
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTNested.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
+	SubClassOf:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting2.CTNested.Fills
+		rosi:plays only rosi:RoleGroup
 
 
 
 
 ####################################################################################################
-# The declaration of all relationship types that occur in the model                                #
+# The declaration of all relationship restrictedTypes that occur in the model                                #
 ####################################################################################################
 
 
@@ -2315,7 +2944,7 @@ Class: rosi:MustPlayGeneratedRoleGroup15
 
 
 ####################################################################################################
-# Cardinal constraints of relationship types                                                       #
+# Cardinal constraints of relationship restrictedTypes                                                       #
 ####################################################################################################
 
 ### RSTDomRan ###
@@ -2437,6 +3066,30 @@ Individual: rosi:RTIncons1_4
 	Types:
 		Annotations: rdfs:isDefinedBy rosi:___Inconsistent1.RTIncons1_4.Occurrence
 		(inverse rosi:plays min 2) and (inverse rosi:plays max 2)
+
+Class: rosi:___CTwithNesting1.RTNesting1.Occurrence
+Class: rosi:CTwithNesting1
+	SubClassOf: rosi:___CTwithNesting1.RTNesting1.Occurrence
+Individual: rosi:RTNesting1
+	Types:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting1.RTNesting1.Occurrence
+		(inverse rosi:plays min 1)
+
+Class: rosi:___CTNested.RTNestedCT.Occurrence
+Class: rosi:CTNested
+	SubClassOf: rosi:___CTNested.RTNestedCT.Occurrence
+Individual: rosi:RTNestedCT
+	Types:
+		Annotations: rdfs:isDefinedBy rosi:___CTNested.RTNestedCT.Occurrence
+		(inverse rosi:plays min 1)
+
+Class: rosi:___CTwithNesting2.RTNesting2.Occurrence
+Class: rosi:CTwithNesting2
+	SubClassOf: rosi:___CTwithNesting2.RTNesting2.Occurrence
+Individual: rosi:RTNesting2
+	Types:
+		Annotations: rdfs:isDefinedBy rosi:___CTwithNesting2.RTNesting2.Occurrence
+		(inverse rosi:plays min 1)
 
 
 Class: rosi:___OccurrenceRGTest.GeneratedRoleGroup7.Occurrence

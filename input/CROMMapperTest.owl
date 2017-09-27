@@ -68,7 +68,7 @@ Individual: rosi:cardinalityCounter
 
 
 #
-# The declaration of all compartment types that occur in the model
+# The declaration of all compartment restrictedTypes that occur in the model
 #
 
 Class: rosi:CompartmentTypes
@@ -114,7 +114,7 @@ Class: rosi:CompartmentType3
 
 
 #
-# The declaration of all natural types that occur in the model
+# The declaration of all natural restrictedTypes that occur in the model
 #
 
 Class: rosi:NaturalTypes
@@ -183,7 +183,7 @@ Class: rosi:NaturalType5
 
 
 #
-# The declaration of all role types that occur in the model
+# The declaration of all role restrictedTypes that occur in the model
 #
 
 Class: rosi:RoleTypes
@@ -320,7 +320,7 @@ ObjectProperty: rosi:plays
 
 
 #
-# The declaration of all relationship types that occur in the model
+# The declaration of all relationship restrictedTypes that occur in the model
 #
 
 Class: rosi:RelationshipType1IsBottom

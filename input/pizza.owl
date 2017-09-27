@@ -985,7 +985,7 @@
 
     <owl:Class rdf:about="#IceCream">
         <rdfs:comment xml:lang="en"
-            >A class to demonstrate mistakes made with setting a property domain. The property hasTopping has a domain of Pizza. This means that the reasoner can infer that all individuals using the hasTopping property must be of type Pizza. Because of the restriction on this class, all members of IceCream must use the hasTopping property, and therefore must also be members of Pizza. However, Pizza and IceCream are disjoint, so this causes an inconsistency. If they were not disjoint, IceCream would be inferred to be a subclass of Pizza.</rdfs:comment>
+            >A class to demonstrate mistakes made with setting a property domain. The property hasTopping has a domain of Pizza. This means that the reasoner can infer that all individuals using the hasTopping property must be of restrictedType Pizza. Because of the restriction on this class, all members of IceCream must use the hasTopping property, and therefore must also be members of Pizza. However, Pizza and IceCream are disjoint, so this causes an inconsistency. If they were not disjoint, IceCream would be inferred to be a subclass of Pizza.</rdfs:comment>
         <rdfs:label xml:lang="pt">Sorvete</rdfs:label>
         <rdfs:subClassOf>
             <owl:Restriction>
@@ -2667,8 +2667,8 @@
     <!-- Object property: http://www.co-ode.org/ontologies/pizza/pizza.owl#hasBase -->
 
     <owl:ObjectProperty rdf:about="#hasBase">
-        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdf:type rdf:resource="&owl;InverseFunctionalProperty"/>
+        <rdf:restrictedType rdf:resource="&owl;FunctionalProperty"/>
+        <rdf:restrictedType rdf:resource="&owl;InverseFunctionalProperty"/>
         <owl:inverseOf>
             <owl:ObjectProperty rdf:about="#isBaseOf"/>
         </owl:inverseOf>
@@ -2693,7 +2693,7 @@
     <owl:ObjectProperty rdf:about="#hasIngredient">
         <rdfs:comment xml:lang="en"
             >NB Transitive - the ingredients of ingredients are ingredients of the whole</rdfs:comment>
-        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
+        <rdf:restrictedType rdf:resource="&owl;TransitiveProperty"/>
         <owl:inverseOf>
             <owl:ObjectProperty rdf:about="#isIngredientOf"/>
         </owl:inverseOf>
@@ -2712,7 +2712,7 @@
     <owl:ObjectProperty rdf:about="#hasSpiciness">
         <rdfs:comment xml:lang="en"
             >A property created to be used with the ValuePartition - Spiciness.</rdfs:comment>
-        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdf:restrictedType rdf:resource="&owl;FunctionalProperty"/>
         <rdfs:range>
             <owl:Class rdf:about="#Spiciness"/>
         </rdfs:range>
@@ -2725,7 +2725,7 @@
     <owl:ObjectProperty rdf:about="#hasTopping">
         <rdfs:comment xml:lang="en"
             >Note that hasTopping is inverse functional because isToppingOf is functional</rdfs:comment>
-        <rdf:type rdf:resource="&owl;InverseFunctionalProperty"/>
+        <rdf:restrictedType rdf:resource="&owl;InverseFunctionalProperty"/>
         <owl:inverseOf>
             <owl:ObjectProperty rdf:about="#isToppingOf"/>
         </owl:inverseOf>
@@ -2742,8 +2742,8 @@
     <!-- Object property: http://www.co-ode.org/ontologies/pizza/pizza.owl#isBaseOf -->
 
     <owl:ObjectProperty rdf:about="#isBaseOf">
-        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdf:type rdf:resource="&owl;InverseFunctionalProperty"/>
+        <rdf:restrictedType rdf:resource="&owl;FunctionalProperty"/>
+        <rdf:restrictedType rdf:resource="&owl;InverseFunctionalProperty"/>
         <owl:inverseOf>
             <owl:ObjectProperty rdf:about="#hasBase"/>
         </owl:inverseOf>
@@ -2762,7 +2762,7 @@
     <owl:ObjectProperty rdf:about="#isIngredientOf">
         <rdfs:comment xml:lang="en"
             >The inverse property tree to hasIngredient - all subproperties and attributes of the properties should reflect those under hasIngredient.</rdfs:comment>
-        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
+        <rdf:restrictedType rdf:resource="&owl;TransitiveProperty"/>
         <owl:inverseOf>
             <owl:ObjectProperty rdf:about="#hasIngredient"/>
         </owl:inverseOf>
@@ -2781,7 +2781,7 @@
     <owl:ObjectProperty rdf:about="#isToppingOf">
         <rdfs:comment xml:lang="en"
             >Any given instance of topping should only be added to a single pizza (no cheap half-measures on our pizzas)</rdfs:comment>
-        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdf:restrictedType rdf:resource="&owl;FunctionalProperty"/>
         <owl:inverseOf>
             <owl:ObjectProperty rdf:about="#hasTopping"/>
         </owl:inverseOf>
@@ -2809,7 +2809,7 @@
     <!-- Individual: http://www.co-ode.org/ontologies/pizza/pizza.owl#America -->
 
     <owl:Thing rdf:about="#America">
-        <rdf:type rdf:resource="#Country"/>
+        <rdf:restrictedType rdf:resource="#Country"/>
     </owl:Thing>
     
 
@@ -2817,7 +2817,7 @@
     <!-- Individual: http://www.co-ode.org/ontologies/pizza/pizza.owl#England -->
 
     <owl:Thing rdf:about="#England">
-        <rdf:type rdf:resource="#Country"/>
+        <rdf:restrictedType rdf:resource="#Country"/>
     </owl:Thing>
     
 
@@ -2825,7 +2825,7 @@
     <!-- Individual: http://www.co-ode.org/ontologies/pizza/pizza.owl#France -->
 
     <owl:Thing rdf:about="#France">
-        <rdf:type rdf:resource="#Country"/>
+        <rdf:restrictedType rdf:resource="#Country"/>
     </owl:Thing>
     
 
@@ -2833,7 +2833,7 @@
     <!-- Individual: http://www.co-ode.org/ontologies/pizza/pizza.owl#Germany -->
 
     <owl:Thing rdf:about="#Germany">
-        <rdf:type rdf:resource="#Country"/>
+        <rdf:restrictedType rdf:resource="#Country"/>
     </owl:Thing>
     
 
@@ -2841,7 +2841,7 @@
     <!-- Individual: http://www.co-ode.org/ontologies/pizza/pizza.owl#Italy -->
 
     <owl:Thing rdf:about="#Italy">
-        <rdf:type rdf:resource="#Country"/>
+        <rdf:restrictedType rdf:resource="#Country"/>
     </owl:Thing>
     
 

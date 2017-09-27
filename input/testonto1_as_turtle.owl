@@ -7,7 +7,7 @@
 @prefix rosi: rosi-project.org/ontologies#> .
 @base rosi-project.org/ontologies/2016/06/testonto1> .
 
-rosi-project.org/ontologies/2016/06/testonto1> rdf:type owl:Ontology ;
+rosi-project.org/ontologies/2016/06/testonto1> rdf:restrictedType owl:Ontology ;
                                                            
                                                            rdfs:label "TestLabel" .
 
@@ -21,7 +21,7 @@ rosi-project.org/ontologies/2016/06/testonto1> rdf:type owl:Ontology ;
 
 ###  http://www.rosi:CT
 
-:CT rdf:type owl:Class ;
+:CT rdf:restrictedType owl:Class ;
     
     owl:disjointWith :NT ,
                      :RT ;
@@ -36,10 +36,10 @@ rosi-project.org/ontologies/2016/06/testonto1> rdf:type owl:Ontology ;
 
 ###  http://www.rosi:CT1
 
-:CT1 rdf:type owl:Class ;
+:CT1 rdf:restrictedType owl:Class ;
      
      rdfs:subClassOf :CT .
-[ rdf:type owl:Axiom ;
+[ rdf:restrictedType owl:Axiom ;
   rdfs:label :RT1 ;
   owl:annotatedTarget :CT ;
   owl:annotatedSource :CT1 ;
@@ -50,7 +50,7 @@ rosi-project.org/ontologies/2016/06/testonto1> rdf:type owl:Ontology ;
 
 ###  http://www.rosi:CT2
 
-:CT2 rdf:type owl:Class ;
+:CT2 rdf:restrictedType owl:Class ;
      
      rdfs:subClassOf :CT .
 
@@ -58,7 +58,7 @@ rosi-project.org/ontologies/2016/06/testonto1> rdf:type owl:Ontology ;
 
 ###  http://www.rosi:CT3
 
-:CT3 rdf:type owl:Class ;
+:CT3 rdf:restrictedType owl:Class ;
      
      rdfs:subClassOf :CT .
 
@@ -66,7 +66,7 @@ rosi-project.org/ontologies/2016/06/testonto1> rdf:type owl:Ontology ;
 
 ###  http://www.rosi:CT4
 
-:CT4 rdf:type owl:Class ;
+:CT4 rdf:restrictedType owl:Class ;
      
      rdfs:subClassOf :CT .
 
@@ -74,7 +74,7 @@ rosi-project.org/ontologies/2016/06/testonto1> rdf:type owl:Ontology ;
 
 ###  http://www.rosi:NT
 
-:NT rdf:type owl:Class ;
+:NT rdf:restrictedType owl:Class ;
     
     owl:disjointWith :RT ;
     
@@ -88,7 +88,7 @@ rosi-project.org/ontologies/2016/06/testonto1> rdf:type owl:Ontology ;
 
 ###  http://www.rosi:NT1
 
-:NT1 rdf:type owl:Class ;
+:NT1 rdf:restrictedType owl:Class ;
      
      rdfs:subClassOf :NT .
 
@@ -96,7 +96,7 @@ rosi-project.org/ontologies/2016/06/testonto1> rdf:type owl:Ontology ;
 
 ###  http://www.rosi:NT2
 
-:NT2 rdf:type owl:Class ;
+:NT2 rdf:restrictedType owl:Class ;
      
      rdfs:subClassOf :NT .
 
@@ -104,7 +104,7 @@ rosi-project.org/ontologies/2016/06/testonto1> rdf:type owl:Ontology ;
 
 ###  http://www.rosi:NT3
 
-:NT3 rdf:type owl:Class ;
+:NT3 rdf:restrictedType owl:Class ;
      
      rdfs:subClassOf :NT .
 
@@ -112,7 +112,7 @@ rosi-project.org/ontologies/2016/06/testonto1> rdf:type owl:Ontology ;
 
 ###  http://www.rosi:NT4
 
-:NT4 rdf:type owl:Class ;
+:NT4 rdf:restrictedType owl:Class ;
      
      rdfs:subClassOf :NT .
 
@@ -120,7 +120,7 @@ rosi-project.org/ontologies/2016/06/testonto1> rdf:type owl:Ontology ;
 
 ###  http://www.rosi:RT
 
-:RT rdf:type owl:Class ;
+:RT rdf:restrictedType owl:Class ;
     
     owl:disjointUnionOf ( :RT1
                           :RT2
@@ -132,7 +132,7 @@ rosi-project.org/ontologies/2016/06/testonto1> rdf:type owl:Ontology ;
 
 ###  http://www.rosi:RT1
 
-:RT1 rdf:type owl:Class ;
+:RT1 rdf:restrictedType owl:Class ;
      
      rdfs:subClassOf :RT .
 
@@ -140,7 +140,7 @@ rosi-project.org/ontologies/2016/06/testonto1> rdf:type owl:Ontology ;
 
 ###  http://www.rosi:RT2
 
-:RT2 rdf:type owl:Class ;
+:RT2 rdf:restrictedType owl:Class ;
      
      rdfs:subClassOf :RT .
 
@@ -148,7 +148,7 @@ rosi-project.org/ontologies/2016/06/testonto1> rdf:type owl:Ontology ;
 
 ###  http://www.rosi:RT3
 
-:RT3 rdf:type owl:Class ;
+:RT3 rdf:restrictedType owl:Class ;
      
      rdfs:subClassOf :RT .
 
@@ -156,7 +156,7 @@ rosi-project.org/ontologies/2016/06/testonto1> rdf:type owl:Ontology ;
 
 ###  http://www.rosi:RT4
 
-:RT4 rdf:type owl:Class ;
+:RT4 rdf:restrictedType owl:Class ;
      
      rdfs:subClassOf :RT .
 

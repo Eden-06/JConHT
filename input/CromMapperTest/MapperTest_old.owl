@@ -76,7 +76,7 @@ Individual: rosi:occurrenceCounter
 
 
 ####################################################################################################
-# The declaration of all compartment types that occur in the model                                 #
+# The declaration of all compartment restrictedTypes that occur in the model                                 #
 ####################################################################################################
 
 Class: rosi:CompartmentType
@@ -131,7 +131,7 @@ Class: rosi:Inconsistent1
 
 
 ####################################################################################################
-# The declaration of all natural types that occur in the model                                     #
+# The declaration of all natural restrictedTypes that occur in the model                                     #
 ####################################################################################################
 
 Class: rosi:NaturalType
@@ -152,7 +152,7 @@ Class: rosi:NTInheritance5
 
 
 ####################################################################################################
-# The declaration of all role types that occur in the model                                        #
+# The declaration of all role restrictedTypes that occur in the model                                        #
 ####################################################################################################
 
 
@@ -1736,7 +1736,7 @@ ObjectProperty: rosi:plays
 
 
 ####################################################################################################
-# Natural type inheritance                                                                         #
+# Natural restrictedType inheritance                                                                         #
 ####################################################################################################
 
 Class: rosi:NaturalType
@@ -2109,7 +2109,7 @@ Class: rosi:RoleType
 
 
 ####################################################################################################
-# The declaration of all relationship types that occur in the model                                #
+# The declaration of all relationship restrictedTypes that occur in the model                                #
 ####################################################################################################
 
 
@@ -2969,7 +2969,7 @@ Class: rosi:MustPlayGeneratedRoleGroup15
 
 
 ####################################################################################################
-# Cardinal constraints of relationship types                                                       #
+# Cardinal constraints of relationship restrictedTypes                                                       #
 ####################################################################################################
 
 
