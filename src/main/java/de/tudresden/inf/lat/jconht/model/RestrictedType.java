@@ -11,12 +11,12 @@ import java.util.stream.Stream;
  * @author Stephan Böhme
  * @author Marcel Lippmann
  */
-public class Type {
+public class RestrictedType {
 
     private Set<OWLClass> positiveConcepts;
     private Set<OWLClass> negativeConcepts;
 
-    public Type(Set<OWLClass> positiveConcepts, Set<OWLClass> negativeConcepts) {
+    public RestrictedType(Set<OWLClass> positiveConcepts, Set<OWLClass> negativeConcepts) {
         this.positiveConcepts = positiveConcepts;
         this.negativeConcepts = negativeConcepts;
     }

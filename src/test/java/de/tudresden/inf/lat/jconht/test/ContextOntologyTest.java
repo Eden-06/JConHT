@@ -519,10 +519,10 @@ public class ContextOntologyTest {
 
     }
 
-    private List<Type> getType(Stream<OWLClass> pos, Stream<OWLClass> neg) {
+    private List<RestrictedType> getType(Stream<OWLClass> pos, Stream<OWLClass> neg) {
 
         return Collections.singletonList(
-                new Type(pos.collect(Collectors.toSet()), neg.collect(Collectors.toSet())));
+                new RestrictedType(pos.collect(Collectors.toSet()), neg.collect(Collectors.toSet())));
     }
 
 }

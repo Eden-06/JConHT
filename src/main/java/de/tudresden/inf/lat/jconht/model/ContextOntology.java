@@ -426,31 +426,31 @@ public class ContextOntology {
 
 
     /**
-     * This method returns an object ontology associated to the given set of types. If the context
+     * This method returns an object ontology associated to the given set of restrictedTypes. If the context
      * ontology does not contain any rigid names, each world is checked separately. Hence, the
      * object ontology is only needed for a single type. If rigid names are present, a combined
-     * object ontology for all types based on the renaming technique is returned.
+     * object ontology for all restrictedTypes based on the renaming technique is returned.
      *
-     * @param types A set types for which the object ontology should be constructed.
+     * @param restrictedTypes A set restrictedTypes for which the object ontology should be constructed.
      * @return The associated object ontology.
      */
-    public OWLOntology getObjectOntology(List<Type> types) {
+    public OWLOntology getObjectOntology(List<RestrictedType> restrictedTypes) {
 
         if (containsRigidNames()) {
 
             try {
                 OWLOntology objectOntology = ontologyManager.createOntology();
 
-//                IntStream.range(0, types.size()).forEach(idx -> {
-//                    OWLOntology ontologyToBeRenamed = getObjectOntologyForSingleType(types.get(idx));
+//                IntStream.range(0, restrictedTypes.size()).forEach(idx -> {
+//                    OWLOntology ontologyToBeRenamed = getObjectOntologyForSingleType(restrictedTypes.get(idx));
 //                    AxiomRenamer renamer = new AxiomRenamer(ontologyToBeRenamed);
 //                    renamer.rename(flexibleNames().collect(Collectors.toSet()), idx);
 //                    objectOntology.addAxioms(ontologyToBeRenamed.axioms().collect(Collectors.toSet()));
 //                });
 
                 // TODO for-loop only for easier debugging, renaming takes ages :(
-                for (int idx = 0; idx < types.size(); idx++) {
-                    OWLOntology ontologyToBeRenamed = getObjectOntologyForSingleType(types.get(idx));
+                for (int idx = 0; idx < restrictedTypes.size(); idx++) {
+                    OWLOntology ontologyToBeRenamed = getObjectOntologyForSingleType(restrictedTypes.get(idx));
                     AxiomRenamer renamer = new AxiomRenamer(ontologyToBeRenamed);
                     renamer.rename(flexibleNames().collect(Collectors.toSet()), idx);
                     objectOntology.addAxioms(ontologyToBeRenamed.axioms().collect(Collectors.toSet()));
@@ -465,12 +465,12 @@ public class ContextOntology {
         } else {
             // no rigid names
 
-            if (types.size() != 1) {
+            if (restrictedTypes.size() != 1) {
                 throw new ContextOntologyException("If no rigid names are present, getObjectOntology() can only " +
                         "be called for a single type!");
             }
 
-            OWLOntology objectOntology = getObjectOntologyForSingleType(types.stream().findAny().get());
+            OWLOntology objectOntology = getObjectOntologyForSingleType(restrictedTypes.stream().findAny().get());
 
             if (configuration.debugOutput()>0) {
                 System.out.print("Axioms in object ontology: ");
@@ -482,15 +482,15 @@ public class ContextOntology {
         }
     }
 
-    private OWLOntology getObjectOntologyForSingleType(Type type) {
+    private OWLOntology getObjectOntologyForSingleType(RestrictedType restrictedType) {
 
         try {
             return ontologyManager.createOntology(Stream.of(
                     globalObjectOntology(),
-                    type.positiveConcepts()
+                    restrictedType.positiveConcepts()
                             .filter(classIsAbstractedMetaConcept)
                             .map(objectAxiomsMap::get),
-                    type.negativeConcepts()
+                    restrictedType.negativeConcepts()
                             .filter(classIsAbstractedMetaConcept)
                             .map(objectAxiomsMap::get)
                             .map(axiom -> axiom.accept(new AxiomNegator(dataFactory))))

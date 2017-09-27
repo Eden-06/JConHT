@@ -2,7 +2,7 @@ package de.tudresden.inf.lat.jconht.tableau;
 
 import de.tudresden.inf.lat.jconht.model.ContextOntology;
 import de.tudresden.inf.lat.jconht.model.PreModel;
-import de.tudresden.inf.lat.jconht.model.Type;
+import de.tudresden.inf.lat.jconht.model.RestrictedType;
 import org.semanticweb.HermiT.Configuration;
 import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.HermiT.ReasonerFactory;
@@ -133,15 +133,15 @@ public class ContextTableau extends Tableau {
                 .collect(Collectors.toSet());
     }
 
-    private Type typeOfNode(Node node) {
+    private RestrictedType typeOfNode(Node node) {
 
-        Type type = new Type(
+        RestrictedType restrictedType = new RestrictedType(
                 positiveMetaConceptsOfNode(node).collect(Collectors.toSet()),
                 negativeMetaConceptsOfNode(node).collect(Collectors.toSet()));
         if (debugOutput > 1) {
-            System.out.println("types for node " + node + ":\n" + type);
+            System.out.println("types for node " + node + ":\n" + restrictedType);
         }
-        return type;
+        return restrictedType;
     }
 
     /**
