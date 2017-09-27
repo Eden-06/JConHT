@@ -1,0 +1,161 @@
+Prefix: dc: <http://purl.org/dc/elements/1.1/>
+Prefix: owl: <http://www.w3.org/2002/07/owl#>
+Prefix: rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+Prefix: xml: <http://www.w3.org/XML/1998/namespace>
+Prefix: xsd: <http://www.w3.org/2001/XMLSchema#>
+Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+Prefix: rosi: <http://www.rosi-project.org/ontologies#>
+
+
+
+Ontology: <http://www.rosi-project.org/ontologies/2016/7/hermit-testonto-1>
+
+
+AnnotationProperty: <rosi:isMeta>
+
+    
+AnnotationProperty: rdfs:label
+
+
+AnnotationProperty: rdfs:comment
+
+    
+AnnotationProperty: <rosi:rigidity>
+
+    Range: 
+        <http://www.w3.org/2001/XMLSchema#boolean>
+    
+    
+Datatype: xsd:boolean
+
+    
+Datatype: rdf:PlainLiteral
+
+    
+ObjectProperty: <rosi:plays>
+
+    Domain: 
+        
+            Annotations: rdfs:comment <http://www.rosi-project.org/ontologies#A>
+        <rosi:NaturalTypes>
+    
+    Range: 
+        
+            Annotations: rdfs:comment <http://www.rosi-project.org/ontologies#A>
+        <rosi:RoleTypes>
+    
+    Characteristics: 
+        Functional,
+        InverseFunctional
+    
+    SubPropertyOf: 
+        owl:topObjectProperty
+    
+    
+ObjectProperty: owl:topObjectProperty
+
+    
+Class: <rosi:RoleTypes>
+
+    SubClassOf: 
+         inverse (<rosi:plays>) exactly 1 owl:Thing
+    
+    
+Class: owl:Thing
+
+    
+Class: rosi:B2
+
+    SubClassOf: 
+        
+            Annotations: rdfs:comment "blub"
+        rosi:D1,
+        
+            Annotations: rdfs:comment "test test"
+        rosi:D2
+    
+    
+Class: rosi:D2
+
+    
+Class: rosi:C1
+
+    
+Class: rosi:C2
+
+    
+Class: rosi:B1
+
+    
+Class: rosi:D1
+
+    
+Class: <rosi:RT3>
+
+    SubClassOf: 
+        <rosi:RoleTypes>
+    
+    
+Class: <rosi:RT2>
+
+    SubClassOf: 
+        <rosi:RoleTypes>
+    
+    
+Class: owl:Nothing
+
+    EquivalentTo: 
+        rosi:B1
+         and rosi:C1
+         and rosi:D1
+    
+    
+Class: <rosi:NominalA>
+
+    
+Class: <rosi:NT1>
+
+    SubClassOf: 
+        <rosi:NaturalTypes>
+    
+    
+Class: rosi:A
+
+    Annotations: 
+        <rosi:rigidity> true,
+        <rosi:isMeta> false
+    
+    SubClassOf: 
+        rosi:C1 or rosi:C2,
+        rosi:B1 or rosi:B2 or rosi:C1,
+        rosi:D1 or rosi:D2
+    
+    
+Class: <rosi:RT1>
+
+    SubClassOf: 
+        <rosi:NominalA>
+         and <rosi:RoleTypes>
+    
+    
+Class: <rosi:NT3>
+
+    SubClassOf: 
+        <rosi:NaturalTypes>
+    
+    
+Class: <rosi:NaturalTypes>
+
+    
+Class: <rosi:NT2>
+
+    SubClassOf: 
+        <rosi:NaturalTypes>
+    
+    
+Individual: rosi:a
+
+    Types: 
+        rosi:A
+    
+    

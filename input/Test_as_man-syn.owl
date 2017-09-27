@@ -1,0 +1,29 @@
+Prefix: owl: w3.org/2002/07/owl#>
+Prefix: rdf: w3.org/1999/02/22-rdf-syntax-ns#>
+Prefix: xml: w3.org/XML/1998/namespace>
+Prefix: xsd: w3.org/2001/XMLSchema#>
+Prefix: rdfs: w3.org/2000/01/rdf-schema#>
+Prefix: rosi: rosi-project.org/ontologies#>
+
+
+Ontology: semanticweb.org/boehme/ontologies/2016/6/untitled-ontology-6>
+
+
+Annotations: 
+    rdfs:label "TestLabel"
+
+AnnotationProperty: rdfs:label
+
+    
+Class: rosi:NatType2
+
+    DisjointWith: 
+        rosi:NatType1
+    
+    
+Class: rosi:NatType1
+
+    DisjointWith: 
+        rosi:NatType2
+    
+    
