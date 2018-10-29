@@ -14,3 +14,7 @@ src/main/java/de/tudresden/inf/lat/jconht/playground/
 out/*
 input/Benchmark/*
 input/CromMapperTest/test*.owl
+/bin/
+/target/
+/.classpath
+/.settings
