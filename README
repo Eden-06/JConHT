@@ -1,3 +1,5 @@
+JConHT is a reasoner based on HermiT, and needs to inherit from HermiT's Tableau class. Unfortunately this is defined as a final class which we cannot inherit from without changing the source code of HermiT.
+
 How to change things in HermiT:
 
   1. download source via Maven
@@ -7,7 +9,7 @@ How to change things in HermiT:
 
       javac -cp org.semanticweb.hermit-1.3.8.500.jar src/org/semanticweb/Hermit/tableau/Tableau.java
 
-  5. update the .jar in the Maven directory, e.g. (executed from the /src-directory where the changed code is
+  5. update the .jar in the Maven directory, e.g. (executed from the /src-directory where the changed code is)
 
       jar uf ~/.m2/repository/net/sourceforge/owlapi/org.semanticweb.hermit/1.3.8.500/org.semanticweb.hermit-1.3.8.500.jar org/semanticweb/HermiT/tableau/Tableau.class
 
@@ -16,6 +18,6 @@ Things changed in HermiT so far:
 
   1. Removed final modifier of class org.semanticweb.HermiT.tableau.Tableau
 
-Things that should be changed:
+Things that should be changed (maybe):
 
   1. Add Visitor for Hermit concepts and roles.
